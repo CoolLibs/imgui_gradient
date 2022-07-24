@@ -4,7 +4,7 @@
 
 // TODO(ASG) Don't lose selected mark when deleting a mark
 // TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
-// TODO(ASG) When hovering the + button, explain all the methods to add a mark
+
 namespace Gradient {
 
 void tooltip(const char* text)
@@ -241,7 +241,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         }
         modified = true;
     }
-    Gradient::tooltip("Add a mark");
+    Gradient::tooltip("Add a mark here\nor click on the gradient to choose its position");
     ImGui::SameLine();
     if (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags))
     {
