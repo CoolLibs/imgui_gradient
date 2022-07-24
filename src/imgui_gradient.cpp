@@ -2,7 +2,6 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
-// TODO(ASG) Don't lose selected mark when deleting a mark
 // TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
 
 namespace Gradient {
@@ -91,6 +90,7 @@ static void draw_gradient_marks(Gradient::GradientMarks& gradient, Mark*& draggi
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
+    Gradient::Mark* mark_to_delete = nullptr; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Gradient::Mark& mark = *markIt;
@@ -108,7 +108,7 @@ static void draw_gradient_marks(Gradient::GradientMarks& gradient, Mark*& draggi
             {
                 dragging_mark = &mark;
             }
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || ImGui::IsMouseClicked(ImGuiPopupFlags_MouseButtonMiddle) || ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
             {
                 selected_mark = &mark;
             }
@@ -116,6 +116,24 @@ static void draw_gradient_marks(Gradient::GradientMarks& gradient, Mark*& draggi
             {
                 ImGui::OpenPopup("picker");
             }
+            if ((ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle) && ImGui::IsItemHovered()))
+            {
+                mark_to_delete = &mark;
+            }
+        }
+    }
+    if (mark_to_delete)
+    {
+        if (selected_mark && *selected_mark == *mark_to_delete)
+        {
+            gradient.remove_mark(*mark_to_delete);
+            mark_to_delete = nullptr;
+            selected_mark  = nullptr;
+        }
+        else
+        {
+            gradient.remove_mark(*mark_to_delete);
+            mark_to_delete = nullptr;
         }
     }
 
@@ -189,8 +207,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     ImGui::EndGroup();
 
     if (!gradient.get_list().empty() &&
-        ((ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle) && ImGui::IsItemHovered()) ||
-         ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
+        (ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
         selected_mark)
     {
         gradient.remove_mark(*selected_mark);
