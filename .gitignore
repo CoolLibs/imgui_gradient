@@ -1,0 +1,8 @@
+﻿tests/build
+build
+.vs
+.vscode/*
+!.vscode/settings.json
+
+.DS_Store
+__pycache__
