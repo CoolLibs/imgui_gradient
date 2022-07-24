@@ -41,3 +41,13 @@ if(GIT_FOUND)
 else()
     message("Git executable not found.")
 endif()
+
+# ---Add quick_imgui---
+include(FetchContent)
+FetchContent_Declare(
+    quick_imgui
+    GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
+    GIT_TAG b02caa355c7ba18d21aa2a6205602a93fe44db08
+)
+FetchContent_MakeAvailable(quick_imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
