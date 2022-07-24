@@ -145,9 +145,9 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
 
     internal::draw_border_widget(
         bar_pos - ImVec2(horizontal_margin, ImGui::CalcTextSize(name.data()).y * 1.5f),
-        ImVec2(width + horizontal_margin * 3.f, bar_bottom + variables::button_size() * 3.f),
+        ImVec2(bar_pos.x + width + horizontal_margin, bar_bottom + variables::button_size() * 3.f),
         variables::border_color()
-    ); // TODO(ASG) fix border when the window is not in the left corner
+    );
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
