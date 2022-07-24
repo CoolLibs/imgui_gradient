@@ -9,6 +9,7 @@
 int main()
 {
     quick_imgui::loop("Quick ImGui", []() {
-        ImGui::ShowDemoWindow();
+        static ImGuiGradient::GradientWidget gradient;
+        gradient.gradient_editor("Gradient", 10.f, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR);
     });
 }

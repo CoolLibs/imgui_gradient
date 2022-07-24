@@ -50,4 +50,5 @@ FetchContent_Declare(
     GIT_TAG b02caa355c7ba18d21aa2a6205602a93fe44db08
 )
 FetchContent_MakeAvailable(quick_imgui)
+target_include_directories(imgui_gradient PRIVATE ${quick_imgui_SOURCE_DIR}/lib) # TODO(ASG) Put this in the readme of quick_imgui, and in the readme of this lib
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
