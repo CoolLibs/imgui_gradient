@@ -14,16 +14,9 @@ float rand() // TODO(ASG) the user could choose the generator
     return distribution(generator);
 }
 
-static float r_empty_color = variables::rand();
-static float g_empty_color = variables::rand();
-static float b_empty_color = variables::rand();
-
 static auto random_color() -> ImVec4
 {
-    const auto color         = ImVec4{variables::r_empty_color, variables::g_empty_color, variables::b_empty_color, 1.f};
-    variables::r_empty_color = variables::rand();
-    variables::g_empty_color = variables::rand();
-    variables::b_empty_color = variables::rand();
+    const auto color = ImVec4{variables::rand(), variables::rand(), variables::rand(), 1.f};
     return color;
 }
 
