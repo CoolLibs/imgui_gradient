@@ -8,7 +8,7 @@
 
 int main()
 {
-    quick_imgui::loop("Quick ImGui", []() {
+    quick_imgui::loop("Test Gradient Widget", []() {
         static ImGuiGradient::GradientWidget gradient;
         gradient.gradient_editor("Gradient", 10.f, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR);
     });
