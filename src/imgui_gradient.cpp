@@ -3,6 +3,7 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
+
 // TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
 
 namespace ImGuiGradient {
@@ -14,69 +15,6 @@ void tooltip(const char* text)
         ImGui::BeginTooltip();
         ImGui::Text("%s", text);
         ImGui::EndTooltip();
-    }
-}
-
-Gradient::Gradient()
-{
-    add_mark(Mark{0.f, ImVec4{0.f, 0.f, 0.f, 1.f}});
-    add_mark(Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}});
-}
-
-ImVec4 Gradient::get_color_at(float position) const
-{
-    return compute_color_at(RelativePosition{
-        ImClamp(position, 0.f, 1.f)}); // TODO(ASG) Offer more options: repeat, mirror, clamp, etc.
-}
-
-static auto random_color() -> ImVec4
-{
-    const auto color = ImVec4{utils::rand(), utils::rand(), utils::rand(), 1.f};
-    return color;
-}
-
-ImVec4 Gradient::compute_color_at(RelativePosition position) const
-{
-    const Mark* lower = nullptr;
-    const Mark* upper = nullptr;
-    for (const Mark& mark : m_marks.m_list)
-    {
-        if (mark.position > position &&
-            (!upper || mark.position < upper->position))
-        {
-            upper = &mark;
-        }
-        if (mark.position < position &&
-            (!lower || mark.position > lower->position))
-        {
-            lower = &mark;
-        }
-    }
-    if (!lower && !upper)
-    {
-        return random_color();
-    }
-    else if (upper && !lower)
-    {
-        lower = upper;
-    }
-    else if (!upper && lower)
-    {
-        upper = lower;
-    }
-
-    if (upper == lower)
-    {
-        return upper->color;
-    }
-    else
-    {
-        float distance = upper->get_position() - lower->get_position();
-        float mix      = (position.get() - lower->get_position()) / distance;
-
-        // lerp
-        return ImVec4{(1.f - mix), (1.f - mix), (1.f - mix), (1.f - mix)} * lower->color +
-               ImVec4{mix, mix, mix, mix} * upper->color;
     }
 }
 

@@ -6,9 +6,8 @@ target_compile_features(imgui_gradient PUBLIC cxx_std_20)
 
 # ---Add source files---
 target_include_directories(imgui_gradient PUBLIC include)
-target_sources(imgui_gradient PRIVATE
-    src/imgui_gradient.cpp
-)
+file(GLOB SRC_FILES src/*.cpp)
+target_sources(imgui_gradient PRIVATE ${SRC_FILES})
 
 # ---Setup warnings---
 if (IMGUI_GRADIENT_ENABLE_WARNINGS_AS_ERRORS)
