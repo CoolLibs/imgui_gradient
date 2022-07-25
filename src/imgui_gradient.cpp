@@ -3,7 +3,7 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
-// TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
+// TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectly ???) apperas when adding a new mark in empty gradient
 
 namespace ImGuiGradient {
 
@@ -36,6 +36,7 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
     Mark* mark_to_delete = nullptr; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
+    // TODO(ASG) add  it un class to use it to hide it when dragging down
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Mark& mark = *markIt;
