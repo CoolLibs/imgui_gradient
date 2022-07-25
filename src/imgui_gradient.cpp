@@ -97,6 +97,34 @@ bool gradient_button(Gradient& gradient)
     return clicked;
 }
 
+float closer_position(Gradient& gradient, Mark* selected_mark, const float select_pos)
+{
+    float closer_pos = 0.f;
+    if (gradient.get_list().size() == 1)
+    {
+        closer_pos = (select_pos < 1.f - select_pos) ? 0.f : 1.f;
+    }
+    else if (*selected_mark == gradient.get_list().front())
+    {
+        closer_pos = 0.f;
+    }
+    else if (*selected_mark == gradient.get_list().back())
+    {
+        closer_pos = 1.f;
+    }
+    else
+    {
+        closer_pos =
+            (abs(select_pos - ImClamp(
+                                  gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f
+                              )) >
+             abs(ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f) - select_pos))
+                ? ImClamp(gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f)
+                : ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f);
+    }
+    return closer_pos;
+}
+
 bool GradientWidget::gradient_editor(std::string_view name, float horizontal_margin, ImGuiColorEditFlags flags)
 {
     ImGui::Text("%s", name.data());
@@ -169,30 +197,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         if (selected_mark)
         {
             const float select_pos = ImClamp(selected_mark->get_position(), 0.f, 1.f);
-
-            float closer_pos = 0.f;
-            if (gradient.get_list().size() == 1)
-            {
-                closer_pos = (select_pos < 1.f - select_pos) ? 0.f : 1.f;
-            }
-            else if (*selected_mark == gradient.get_list().front())
-            {
-                closer_pos = 0.f;
-            }
-            else if (*selected_mark == gradient.get_list().back())
-            {
-                closer_pos = 1.f;
-            }
-            else
-            {
-                closer_pos =
-                    (abs(select_pos - ImClamp(
-                                          gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f
-                                      )) >
-                     abs(ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f) - select_pos))
-                        ? ImClamp(gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f)
-                        : ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f);
-            }
+            const float closer_pos = closer_position(gradient, selected_mark, select_pos);
             add_mark((select_pos + closer_pos) / 2.f);
         }
         else
