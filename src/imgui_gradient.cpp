@@ -31,6 +31,31 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
 
+static void mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& mark)
+{
+    if (ImGui::IsItemHovered())
+    {
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        {
+            dragging_mark = &mark;
+        }
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
+            ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
+        {
+            selected_mark = &mark;
+        }
+        if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
+        {
+            ImGui::OpenPopup("picker");
+        }
+        if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
+        {
+            // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
+            mark_to_delete = &mark;
+        }
+    }
+}
+
 static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
@@ -38,35 +63,13 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Mark& mark = *markIt;
-
         mark_button(
             draw_list,
             bar_pos + ImVec2(mark.get_position() * width, height),
             ImGui::ColorConvertFloat4ToU32(mark.color),
             selected_mark == &mark
         );
-
-        if (ImGui::IsItemHovered())
-        {
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-            {
-                dragging_mark = &mark;
-            }
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
-                ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
-            {
-                selected_mark = &mark;
-            }
-            if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
-            {
-                ImGui::OpenPopup("picker");
-            }
-            if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
-            {
-                // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
-                mark_to_delete = &mark;
-            }
-        }
+        mark_hovered(dragging_mark, selected_mark, mark_to_delete, mark);
     }
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
 }
