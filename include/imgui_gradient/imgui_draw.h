@@ -38,6 +38,7 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
     }
 
     if (!gradient.get_list().empty() && gradient.get_list().back().position != 1.f)
+    // If last element not at the end position extend its color to the end position
     {
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_list().back().color);
         utils::draw_uniform_square(draw_list, ImVec2(current_starting_x, bar_pos.y), ImVec2(bar_pos.x + width, bar_bottom), colorBU32);

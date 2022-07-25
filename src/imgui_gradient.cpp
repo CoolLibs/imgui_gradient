@@ -159,7 +159,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         dragging_mark = nullptr;
         modified      = true;
     }
-    tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
+    tooltip("Select a mark to remove it\nor middle click on it\nor drag it down"); // TODO(ASG) don't display when empty gradient
 
     if (!gradient.empty())
     {
