@@ -7,9 +7,9 @@
 
 namespace ImGuiGradient {
 
-void tooltip(const char* text)
+void tooltip_if(const char* text, const bool cond)
 {
-    if (ImGui::IsItemHovered())
+    if (ImGui::IsItemHovered() && cond)
     {
         ImGui::BeginTooltip();
         ImGui::Text("%s", text);
@@ -144,7 +144,6 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         {
             gradient.remove_mark(*dragging_mark); // TODO(ASG) hide it when dragging and remove it when released
             dragging_mark = nullptr;
-            selected_mark = nullptr;
             modified      = true;
         }
     }
@@ -159,7 +158,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         dragging_mark = nullptr;
         modified      = true;
     }
-    tooltip("Select a mark to remove it\nor middle click on it\nor drag it down"); // TODO(ASG) don't display when empty gradient
+    tooltip_if("Select a mark to remove it\nor middle click on it\nor drag it down", !gradient.empty());
 
     if (!gradient.empty())
     {
@@ -202,7 +201,8 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         }
         modified = true;
     }
-    tooltip("Add a mark here\nor click on the gradient to choose its position");
+    tooltip_if("Add a mark here\nor click on the gradient to choose its position", true);
+
     ImGui::SameLine();
     if (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags))
     {
@@ -216,6 +216,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         gradient.get_marks().sorted();
         modified = true;
     }
+    tooltip_if("Choose a precise position", !gradient.empty() && selected_mark);
 
     if (ImGui::BeginPopup("picker") && selected_mark)
     {
