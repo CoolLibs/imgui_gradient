@@ -53,13 +53,12 @@ public:
     GradientWidget() = default;
     const Gradient& get_gradient() const { return gradient; }
     Gradient&       get_gradient() { return gradient; }
-    void            add_mark(const float position)
+    bool            add_mark(const float position)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
         const ImVec4 new_mark_col = gradient.get_color_at(pos);
-        selected_mark             = gradient.add_mark(Mark{pos, new_mark_col});
+        return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
-
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:

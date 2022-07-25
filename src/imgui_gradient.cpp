@@ -142,9 +142,10 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
 
+    bool modified = false;
     if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
-        add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width);
+        modified = add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width);
         ImGui::OpenPopup("picker");
     }
 
@@ -156,7 +157,6 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         dragging_mark = nullptr;
     }
 
-    bool modified = false;
     if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && dragging_mark)
     {
         const float map = ImClamp((ImGui::GetIO().MousePos.x - bar_pos.x) / width, 0.f, 1.f);
@@ -198,13 +198,12 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         {
             const float select_pos = ImClamp(selected_mark->get_position(), 0.f, 1.f);
             const float closer_pos = closer_position(gradient, selected_mark, select_pos);
-            add_mark((select_pos + closer_pos) / 2.f);
+            modified               = add_mark((select_pos + closer_pos) / 2.f);
         }
         else
         {
-            add_mark(utils::rand());
+            modified = add_mark(utils::rand());
         }
-        modified = true;
     }
     tooltip_if("Add a mark here\nor click on the gradient to choose its position", true);
 
