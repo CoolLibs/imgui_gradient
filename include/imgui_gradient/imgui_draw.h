@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GradientMarks.h"
+#include "Gradient.h"
 #include "gradient_variables.h"
 
 namespace internal {
@@ -34,7 +34,7 @@ static void draw_uniform_square(ImDrawList& draw_list, const ImVec2 vec1, const 
     draw_list.AddRectFilled(vec1, vec2, color, 1.0f, ImDrawFlags_Closed);
 }
 
-static void draw_gradient(ImGuiGradient::GradientMarks& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
+static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
 {
     float current_starting_x = bar_pos.x;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)

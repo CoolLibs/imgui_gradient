@@ -8,7 +8,6 @@
 #include "RelativePosition.h"
 
 namespace ImGuiGradient {
-
 struct Mark {
     RelativePosition position{0.f};
     ImVec4           color{0.f, 0.f, 0.f, 1.f};
@@ -60,9 +59,9 @@ struct Marks {
     friend auto operator==(const Marks& a, const Marks& b) -> bool { return a.m_list == b.m_list; }
 };
 
-class GradientMarks {
+class Gradient {
 public:
-    GradientMarks();
+    Gradient();
     ImVec4 get_color_at(float position) const;
     Mark*  add_mark(const Mark& mark)
     {
@@ -78,7 +77,7 @@ public:
     std::list<Mark>& get_list() { return m_marks.m_list; }
     Marks&           get_marks() { return m_marks; }
 
-    friend auto operator==(const GradientMarks& a, const GradientMarks& b) -> bool { return a.m_marks.m_list == b.m_marks.m_list; }
+    friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a.m_marks.m_list == b.m_marks.m_list; }
 
 private:
     ImVec4 compute_color_at(RelativePosition position) const;

@@ -25,12 +25,12 @@
  gradient.getColorAt(0.3f, color); //position from 0 to 1
 
  ::MODIFY GRADIENT WITH CODE::
- gradient.getMarks().clear();
+ gradient.get().clear();
  gradient.add_mark(0.0f, ImColor(0.2f, 0.1f, 0.0f));
  gradient.add_mark(0.7f, ImColor(120, 200, 255));
 
  ::WOOD BROWNS PRESET::
- gradient.getMarks().clear();
+ gradient.get().clear();
  gradient.add_mark(0.0f, ImColor(0xA0, 0x79, 0x3D));
  gradient.add_mark(0.2f, ImColor(0xAA, 0x83, 0x47));
  gradient.add_mark(0.3f, ImColor(0xB4, 0x8D, 0x51));
@@ -44,16 +44,16 @@
 
 #pragma once
 
-#include "GradientMarks.h"
+#include "Gradient.h"
 
 namespace ImGuiGradient {
 
 class GradientWidget {
 public:
     GradientWidget() = default;
-    const GradientMarks& get_gradient() const { return gradient; }
-    GradientMarks&       get_gradient() { return gradient; }
-    void                 add_mark(const float position)
+    const Gradient& get_gradient() const { return gradient; }
+    Gradient&       get_gradient() { return gradient; }
+    void            add_mark(const float position)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
         const ImVec4 new_mark_col = gradient.get_color_at(pos);
@@ -63,11 +63,11 @@ public:
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
-    GradientMarks gradient{};
-    Mark*         dragging_mark{};
-    Mark*         selected_mark{};
+    Gradient gradient{};
+    Mark*    dragging_mark{};
+    Mark*    selected_mark{};
 };
 
-bool gradient_button(GradientMarks* gradient);
+bool gradient_button(Gradient* gradient);
 
 } // namespace ImGuiGradient
