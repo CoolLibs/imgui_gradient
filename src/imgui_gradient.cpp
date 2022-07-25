@@ -72,15 +72,9 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     {
         if (selected_mark && *selected_mark == *mark_to_delete)
         {
-            gradient.remove_mark(*mark_to_delete);
-            mark_to_delete = nullptr;
-            selected_mark  = nullptr;
+            selected_mark = nullptr;
         }
-        else
-        {
-            gradient.remove_mark(*mark_to_delete);
-            mark_to_delete = nullptr;
-        }
+        gradient.remove_mark(*mark_to_delete);
     }
 
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
@@ -171,8 +165,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         if (diffY >= variables::GRADIENT_MARK_DELETE_DIFFY)
         {
             gradient.remove_mark(*dragging_mark); // TODO(ASG) hide it when dragging and remove it when released
-            dragging_mark = nullptr;
-            modified      = true;
+            modified = true;
         }
     }
     ImGui::EndGroup();
@@ -182,9 +175,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         selected_mark)
     {
         gradient.remove_mark(*selected_mark);
-        selected_mark = nullptr;
-        dragging_mark = nullptr;
-        modified      = true;
+        modified = true;
     }
     tooltip_if("Select a mark to remove it\nor middle click on it\nor drag it down", !gradient.empty());
 

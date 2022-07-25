@@ -59,6 +59,11 @@ public:
         const ImVec4 new_mark_col = gradient.get_color_at(pos);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
+    void remove_mark(const Mark* mark)
+    {
+        gradient.remove_mark(*mark);
+        mark = nullptr;
+    }
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
