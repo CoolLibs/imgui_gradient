@@ -1,7 +1,5 @@
 #pragma once
 
-#include "random.h"
-
 namespace variables {
 static constexpr float GRADIENT_BAR_WIDGET_HEIGHT = 25.f;
 static constexpr float GRADIENT_BAR_EDITOR_HEIGHT = 40.f;

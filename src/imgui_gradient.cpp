@@ -1,4 +1,5 @@
 #include <imgui_gradient/imgui_draw.h>
+#include <imgui_gradient/random.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
