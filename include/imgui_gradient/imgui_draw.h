@@ -2,6 +2,7 @@
 
 #include "Gradient.h"
 #include "gradient_variables.h"
+#include "imgui_draw_utils.h"
 
 namespace internal {
 
@@ -25,15 +26,6 @@ static void draw_background_if(ImDrawList& draw_list, const ImVec2 vec1, const I
     }
 }
 
-static void draw_gradient_partial(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor colorA, ImColor colorB)
-{
-    draw_list.AddRectFilledMultiColor(vec1, vec2, colorA, colorB, colorB, colorA);
-}
-static void draw_uniform_square(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
-{
-    draw_list.AddRectFilled(vec1, vec2, color, 1.0f, ImDrawFlags_Closed);
-}
-
 static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
 {
     float current_starting_x = bar_pos.x;
@@ -48,7 +40,7 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
         const float to   = bar_pos.x + mark.position.get() * width;
         if (mark.position != 0.f)
         {
-            internal::draw_gradient_partial(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
+            utils::draw_gradient_partial(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
         }
         current_starting_x = to;
     }
@@ -56,13 +48,8 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
     if (!gradient.get_list().empty() && gradient.get_list().back().position != 1.f)
     {
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_list().back().color);
-        internal::draw_uniform_square(draw_list, ImVec2(current_starting_x, bar_pos.y), ImVec2(bar_pos.x + width, bar_bottom), colorBU32);
+        utils::draw_uniform_square(draw_list, ImVec2(current_starting_x, bar_pos.y), ImVec2(bar_pos.x + width, bar_bottom), colorBU32);
     }
-}
-
-static void draw_triangle(ImDrawList& draw_list, const ImVec2 vec_triangle_up, const ImVec2 vec_triangle_down_left, const ImVec2 vec_triangle_down_right, ImColor color)
-{
-    draw_list.AddTriangleFilled(vec_triangle_up, vec_triangle_down_left, vec_triangle_down_right, color);
 }
 
 static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor border_color, ImColor inside_border_color, const float arrow_border, const float offset)
@@ -77,9 +64,9 @@ static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColo
     const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
     const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
 
-    draw_triangle(draw_list, pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, border_color);
-    draw_uniform_square(draw_list, pos - arrow_border_x, pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y, border_color);
-    draw_uniform_square(draw_list, pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, inside_border_color);
+    utils::draw_triangle(draw_list, pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, border_color);
+    utils::draw_uniform_square(draw_list, pos - arrow_border_x, pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y, border_color);
+    utils::draw_uniform_square(draw_list, pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, inside_border_color);
 }
 
 static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor selected_color, const float arrow_inside_border, const float arrow_selected, const float offset)
@@ -92,7 +79,7 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
     const auto arrow_selected_x = ImVec2{arrow_selected, 0.f};
     const auto arrow_selected_y = ImVec2{0.f, arrow_selected};
 
-    draw_triangle(draw_list, pos - arrow_selected_y - offset_y, pos + offset_y - arrow_selected_x, pos + arrow_selected_x + offset_y, selected_color);
+    utils::draw_triangle(draw_list, pos - arrow_selected_y - offset_y, pos + offset_y - arrow_selected_x, pos + arrow_selected_x + offset_y, selected_color);
     draw_list.AddRect(pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed);
 }
 
@@ -129,7 +116,7 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
     const auto square_height   = 3.f;
     const auto square_height_x = ImVec2{square_height, 0.f};
     const auto square_height_y = ImVec2{0.f, square_height};
-    internal::draw_uniform_square(
+    utils::draw_uniform_square(
         draw_list,
         pos - square_height_x + square_height_y,
         pos + square_height_x + square_height_y * square_height_y,
