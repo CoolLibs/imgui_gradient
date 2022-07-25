@@ -18,7 +18,10 @@ public:
     };
     Mark next_mark(Mark* mark) { return m_marks.next_mark(mark); };         // Be carefull do not use if there is no next mark
     Mark previous_mark(Mark* mark) { return m_marks.previous_mark(mark); }; // Be carefull do not use if there is no previous mark
-
+    auto empty() -> bool
+    {
+        return m_marks.m_list.empty();
+    }
     std::list<Mark>& get_list() { return m_marks.m_list; }
     Marks&           get_marks() { return m_marks; }
 

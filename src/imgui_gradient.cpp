@@ -23,7 +23,7 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     const float bar_bottom = bar_pos.y + height;
 
     draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
-    if (!Gradient.get_list().empty())
+    if (!Gradient.empty())
     {
         draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
     }
@@ -150,7 +150,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     }
     ImGui::EndGroup();
 
-    if (!gradient.get_list().empty() &&
+    if (!gradient.empty() &&
         (ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
         selected_mark)
     {
@@ -161,7 +161,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     }
     tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
 
-    if (!gradient.get_list().empty())
+    if (!gradient.empty())
     {
         ImGui::SameLine();
     }
