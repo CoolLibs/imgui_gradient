@@ -31,12 +31,10 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
 
-static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
-    Mark* mark_to_delete = nullptr; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
-    // TODO(ASG) add  it un class to use it to hide it when dragging down
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Mark& mark = *markIt;
@@ -54,7 +52,8 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
             {
                 dragging_mark = &mark;
             }
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) || ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
+                ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
             {
                 selected_mark = &mark;
             }
@@ -62,21 +61,13 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
             {
                 ImGui::OpenPopup("picker");
             }
-            if ((ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle) && ImGui::IsItemHovered()))
+            if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
             {
+                // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
                 mark_to_delete = &mark;
             }
         }
     }
-    if (mark_to_delete)
-    {
-        if (selected_mark && *selected_mark == *mark_to_delete)
-        {
-            selected_mark = nullptr;
-        }
-        gradient.remove_mark(*mark_to_delete);
-    }
-
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
 }
 
@@ -144,7 +135,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     }
 
     draw_gradient_bar(gradient, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
-    draw_gradient_marks(gradient, dragging_mark, selected_mark, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+    draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && dragging_mark)
     {
@@ -167,6 +158,14 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
             gradient.remove_mark(*dragging_mark); // TODO(ASG) hide it when dragging and remove it when released
             modified = true;
         }
+    }
+    if (mark_to_delete)
+    {
+        if (selected_mark && *selected_mark == *mark_to_delete)
+        {
+            selected_mark = nullptr;
+        }
+        gradient.remove_mark(*mark_to_delete);
     }
     ImGui::EndGroup();
 
