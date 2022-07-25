@@ -28,6 +28,12 @@ ImVec4 GradientMarks::get_color_at(float position) const
         ImClamp(position, 0.f, 1.f)}); // TODO(ASG) Offer more options: repeat, mirror, clamp, etc.
 }
 
+static auto random_color() -> ImVec4
+{
+    const auto color = ImVec4{utils::rand(), utils::rand(), utils::rand(), 1.f};
+    return color;
+}
+
 ImVec4 GradientMarks::compute_color_at(RelativePosition position) const
 {
     const Mark* lower = nullptr;
@@ -47,7 +53,7 @@ ImVec4 GradientMarks::compute_color_at(RelativePosition position) const
     }
     if (!lower && !upper)
     {
-        return variables::random_color();
+        return random_color();
     }
     else if (upper && !lower)
     {
@@ -254,7 +260,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         }
         else
         {
-            add_mark(variables::rand());
+            add_mark(utils::rand());
         }
         modified = true;
     }

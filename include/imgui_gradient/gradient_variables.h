@@ -1,24 +1,11 @@
 #pragma once
 
-#include <random>
+#include "random.h"
 
 namespace variables {
 static constexpr float GRADIENT_BAR_WIDGET_HEIGHT = 25.f;
 static constexpr float GRADIENT_BAR_EDITOR_HEIGHT = 40.f;
 static constexpr float GRADIENT_MARK_DELETE_DIFFY = 40.f;
-
-float rand() // TODO(ASG) the user could choose the generator
-{
-    static std::default_random_engine     generator{std::random_device{}()};
-    std::uniform_real_distribution<float> distribution{0.f, 1.f};
-    return distribution(generator);
-}
-
-static auto random_color() -> ImVec4
-{
-    const auto color = ImVec4{variables::rand(), variables::rand(), variables::rand(), 1.f};
-    return color;
-}
 
 static auto button_size() -> float
 {
