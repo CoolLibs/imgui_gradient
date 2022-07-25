@@ -4,7 +4,7 @@
 
 // TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
 
-namespace Gradient {
+namespace ImGuiGradient {
 
 void tooltip(const char* text)
 {
@@ -79,7 +79,7 @@ ImVec4 GradientMarks::compute_color_at(RelativePosition position) const
     }
 }
 
-static void draw_gradient_bar(Gradient::GradientMarks& GradientMarks, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_bar(GradientMarks& GradientMarks, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
@@ -92,14 +92,14 @@ static void draw_gradient_bar(Gradient::GradientMarks& GradientMarks, const ImVe
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
 
-static void draw_gradient_marks(Gradient::GradientMarks& gradient, Mark*& dragging_mark, Mark*& selected_mark, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_marks(GradientMarks& gradient, Mark*& dragging_mark, Mark*& selected_mark, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
-    Gradient::Mark* mark_to_delete = nullptr; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
+    Mark* mark_to_delete = nullptr; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
-        Gradient::Mark& mark = *markIt;
+        Mark& mark = *markIt;
 
         internal::mark_button(
             draw_list,
@@ -145,10 +145,8 @@ static void draw_gradient_marks(Gradient::GradientMarks& gradient, Mark*& draggi
 
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
 }
-} // namespace Gradient
 
-namespace ImGuiGradient {
-bool gradient_button(Gradient::GradientMarks& gradient)
+bool gradient_button(GradientMarks& gradient)
 {
     const ImVec2 widget_pos = ImGui::GetCursorScreenPos();
     const float  width      = ImMax(250.0f, ImGui::GetContentRegionAvail().x - 100.0f);
@@ -221,7 +219,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         dragging_mark = nullptr;
         modified      = true;
     }
-    Gradient::tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
+    tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
 
     if (!gradient.get_list().empty())
     {
@@ -264,7 +262,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         }
         modified = true;
     }
-    Gradient::tooltip("Add a mark here\nor click on the gradient to choose its position");
+    tooltip("Add a mark here\nor click on the gradient to choose its position");
     ImGui::SameLine();
     if (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags))
     {

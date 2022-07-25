@@ -51,23 +51,23 @@ namespace ImGuiGradient {
 class GradientWidget {
 public:
     GradientWidget() = default;
-    const Gradient::GradientMarks& get_gradient() const { return gradient; }
-    Gradient::GradientMarks&       get_gradient() { return gradient; }
-    void                           add_mark(const float position)
+    const GradientMarks& get_gradient() const { return gradient; }
+    GradientMarks&       get_gradient() { return gradient; }
+    void                 add_mark(const float position)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
         const ImVec4 new_mark_col = gradient.get_color_at(pos);
-        selected_mark             = gradient.add_mark(Gradient::Mark{pos, new_mark_col});
+        selected_mark             = gradient.add_mark(Mark{pos, new_mark_col});
     }
 
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
-    Gradient::GradientMarks gradient{};
-    Gradient::Mark*         dragging_mark{};
-    Gradient::Mark*         selected_mark{};
+    GradientMarks gradient{};
+    Mark*         dragging_mark{};
+    Mark*         selected_mark{};
 };
 
-bool gradient_button(Gradient::GradientMarks* gradient);
+bool gradient_button(GradientMarks* gradient);
 
 } // namespace ImGuiGradient

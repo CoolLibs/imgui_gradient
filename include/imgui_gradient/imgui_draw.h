@@ -34,12 +34,12 @@ static void draw_uniform_square(ImDrawList& draw_list, const ImVec2 vec1, const 
     draw_list.AddRectFilled(vec1, vec2, color, 1.0f, ImDrawFlags_Closed);
 }
 
-static void draw_gradient(Gradient::GradientMarks& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
+static void draw_gradient(ImGuiGradient::GradientMarks& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
 {
     float current_starting_x = bar_pos.x;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
-        Gradient::Mark& mark = *markIt;
+        ImGuiGradient::Mark& mark = *markIt;
 
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(mark.color);
         ImU32 colorAU32 = (markIt != gradient.get_list().begin()) ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color) : colorBU32;

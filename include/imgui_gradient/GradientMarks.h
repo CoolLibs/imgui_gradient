@@ -7,8 +7,7 @@
 #include <imgui/imgui_internal.h>
 #include "RelativePosition.h"
 
-
-namespace Gradient {
+namespace ImGuiGradient {
 
 struct Mark {
     RelativePosition position{0.f};
@@ -85,4 +84,4 @@ private:
     ImVec4 compute_color_at(RelativePosition position) const;
     Marks  m_marks{};
 };
-} // namespace Gradient
+} // namespace ImGuiGradient
