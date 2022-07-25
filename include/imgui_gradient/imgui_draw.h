@@ -9,21 +9,13 @@ namespace ImGuiGradient {
 static void draw_border_widget(const ImVec2 vec1, const ImVec2 vec2, ImColor color)
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
-    draw_list.AddRect(vec1, vec2, color, 1.f, ImDrawFlags_None, 2.f);
+    utils::draw_border(draw_list, vec1, vec2, color);
 }
 
 static void draw_bar_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
 {
     const auto margin = ImVec2{2.f, 2.f};
-    draw_list.AddRectFilled(vec1 - margin, vec2 + margin, color);
-}
-
-static void draw_background_if(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color, bool condition)
-{
-    if (condition)
-    {
-        draw_list.AddRectFilled(vec1, vec2, color);
-    }
+    utils::draw_border(draw_list, vec1 - margin, vec2 + margin, color);
 }
 
 static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)

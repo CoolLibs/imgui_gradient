@@ -4,6 +4,13 @@
 
 namespace utils {
 
+static void draw_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
+{
+    const float rounding  = 1.f;
+    const float thickness = 2.f;
+    draw_list.AddRect(vec1, vec2, color, rounding, ImDrawFlags_None, thickness);
+}
+
 static void draw_uniform_square(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
 {
     draw_list.AddRectFilled(vec1, vec2, color, 1.0f, ImDrawFlags_Closed);

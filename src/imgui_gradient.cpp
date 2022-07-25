@@ -3,7 +3,6 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
-
 // TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectlyt ???)
 
 namespace ImGuiGradient {
@@ -24,9 +23,10 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     const float bar_bottom = bar_pos.y + height;
 
     draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
-    draw_background_if(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::empty_backgroung_color(), Gradient.get_list().empty());
-
-    draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
+    if (!Gradient.get_list().empty())
+    {
+        draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
+    }
 
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
