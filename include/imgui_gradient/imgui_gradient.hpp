@@ -71,6 +71,7 @@ private:
     Mark*    dragging_mark{};
     Mark*    selected_mark{};
     Mark*    mark_to_delete{};
+    Mark*    mark_to_hide{};
 };
 
 bool gradient_button(Gradient* gradient);

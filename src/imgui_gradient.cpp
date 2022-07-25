@@ -56,19 +56,22 @@ static void mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark
     }
 }
 
-static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark*& mark_to_hide, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Mark& mark = *markIt;
-        mark_button(
-            draw_list,
-            bar_pos + ImVec2(mark.get_position() * width, height),
-            ImGui::ColorConvertFloat4ToU32(mark.color),
-            selected_mark == &mark
-        );
+        if (!(mark_to_hide && *mark_to_hide == mark))
+        {
+            mark_button(
+                draw_list,
+                bar_pos + ImVec2(mark.get_position() * width, height),
+                ImGui::ColorConvertFloat4ToU32(mark.color),
+                selected_mark == &mark
+            );
+        }
         mark_hovered(dragging_mark, selected_mark, mark_to_delete, mark);
     }
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
@@ -138,7 +141,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     }
 
     draw_gradient_bar(gradient, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
-    draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+    draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && dragging_mark)
     {
@@ -158,9 +161,23 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         float diffY = ImGui::GetIO().MousePos.y - bar_bottom;
         if (diffY >= variables::GRADIENT_MARK_DELETE_DIFFY)
         {
-            gradient.remove_mark(*dragging_mark); // TODO(ASG) hide it when dragging and remove it when released
-            modified = true;
+            mark_to_hide = dragging_mark;
         }
+        if (mark_to_hide && diffY <= variables::GRADIENT_MARK_DELETE_DIFFY)
+        {
+            dragging_mark = mark_to_hide;
+            mark_to_hide  = nullptr;
+        }
+    }
+    if (mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
+    {
+        if (dragging_mark && *dragging_mark == *mark_to_hide)
+        {
+            dragging_mark = nullptr;
+        }
+        mark_to_delete = mark_to_hide;
+        mark_to_hide   = nullptr;
+        modified       = true;
     }
     if (mark_to_delete)
     {
