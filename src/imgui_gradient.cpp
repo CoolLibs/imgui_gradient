@@ -85,10 +85,10 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
 
-    internal::draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
-    internal::draw_background_if(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::empty_backgroung_color(), Gradient.get_list().empty());
+    draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
+    draw_background_if(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::empty_backgroung_color(), Gradient.get_list().empty());
 
-    internal::draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
+    draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
 
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
@@ -102,7 +102,7 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     {
         Mark& mark = *markIt;
 
-        internal::mark_button(
+        mark_button(
             draw_list,
             bar_pos + ImVec2(mark.get_position() * width, height),
             ImGui::ColorConvertFloat4ToU32(mark.color),
@@ -166,7 +166,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     const ImVec2 bar_pos    = variables::bar_position(horizontal_margin);
     const float  bar_bottom = bar_pos.y + variables::GRADIENT_BAR_EDITOR_HEIGHT;
 
-    internal::draw_border_widget(
+    draw_border_widget(
         bar_pos - ImVec2(horizontal_margin, ImGui::CalcTextSize(name.data()).y * 1.5f),
         ImVec2(bar_pos.x + width + horizontal_margin, bar_bottom + variables::button_size() * 3.f),
         variables::border_color()

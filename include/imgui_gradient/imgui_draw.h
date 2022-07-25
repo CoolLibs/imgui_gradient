@@ -4,7 +4,7 @@
 #include "gradient_variables.h"
 #include "imgui_draw_utils.h"
 
-namespace internal {
+namespace ImGuiGradient {
 
 static void draw_border_widget(const ImVec2 vec1, const ImVec2 vec2, ImColor color)
 {
@@ -94,7 +94,7 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
 {
     const float offset = 1.f;
 
-    internal::draw_background_mark(
+    ImGuiGradient::draw_background_mark(
         draw_list,
         pos,
         variables::border_color(), variables::inside_arrow_border_color(),
@@ -105,7 +105,7 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
         const float arrow_selected      = 4.f;
         const float arrow_inside_border = arrow_border - offset;
 
-        internal::arrow_selected(
+        ImGuiGradient::arrow_selected(
             draw_list,
             pos,
             variables::selected_mark_color(),
@@ -128,7 +128,7 @@ static void mark_button(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_co
 {
     const float arrow_border = 6.f;
     draw_mark(draw_list, pos, mark_color, arrow_border, cond);
-    internal::mark_button(pos, arrow_border);
+    ImGuiGradient::mark_button(pos, arrow_border);
 }
 
-} // namespace internal
+} // namespace ImGuiGradient
