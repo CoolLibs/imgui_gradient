@@ -1,6 +1,5 @@
 // https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112
 
-// TODO(ASG) Is there a good reason to depend on the rest of Cool or can we create a standalone library
 /* TODO(ASG) Replace this with our own documentation
 
  Usage:
