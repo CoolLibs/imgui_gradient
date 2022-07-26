@@ -189,7 +189,8 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         {
             selected_mark = nullptr;
         }
-        gradient.remove_mark(*mark_to_delete);
+        remove_mark(mark_to_delete);
+        mark_to_delete = nullptr;
     }
     ImGui::EndGroup();
 
@@ -197,8 +198,9 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         (ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
         selected_mark)
     {
-        gradient.remove_mark(*selected_mark);
-        modified = true;
+        remove_mark(selected_mark);
+        selected_mark = nullptr;
+        modified      = true;
     }
     tooltip_if("Select a mark to remove it\nor middle click on it\nor drag it down", !gradient.empty());
 
