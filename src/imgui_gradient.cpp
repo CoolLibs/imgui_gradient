@@ -31,9 +31,10 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
 
-static void mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& mark)
+static bool mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& mark)
 {
-    if (ImGui::IsItemHovered())
+    bool is_hovered = ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+    if (is_hovered)
     {
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
         {
@@ -54,12 +55,13 @@ static void mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark
             mark_to_delete = &mark;
         }
     }
+    return is_hovered;
 }
 
-static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark*& mark_to_hide, const ImVec2& bar_pos, float width, float height)
+static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark*& mark_to_hide, const ImVec2& bar_pos, float width, float height)
 {
-    ImDrawList& draw_list = *ImGui::GetWindowDrawList();
-
+    ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
+    bool        hitbox_is_hovered = false;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         Mark& mark = *markIt;
@@ -72,9 +74,10 @@ static void draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
                 selected_mark == &mark
             );
         }
-        mark_hovered(dragging_mark, selected_mark, mark_to_delete, mark);
+        hitbox_is_hovered |= mark_hovered(dragging_mark, selected_mark, mark_to_delete, mark);
     }
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
+    return hitbox_is_hovered;
 }
 
 bool gradient_button(Gradient& gradient)
@@ -132,16 +135,17 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
+    draw_gradient_bar(gradient, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+
+    const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
     bool modified = false;
-    if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    if (add_mark_possible && !mark_hitbox_is_hovered)
     {
         modified = add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width);
         ImGui::OpenPopup("picker");
     }
-
-    draw_gradient_bar(gradient, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
-    draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && dragging_mark)
     {
