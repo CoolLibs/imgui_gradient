@@ -18,7 +18,7 @@ public:
     };
     Mark next_mark(Mark* mark) { return m_marks.next_mark(mark); };         // Be carefull do not use if there is no next mark
     Mark previous_mark(Mark* mark) { return m_marks.previous_mark(mark); }; // Be carefull do not use if there is no previous mark
-    auto empty() -> bool
+    auto is_empty() -> bool
     {
         return m_marks.m_list.empty();
     }
