@@ -1,5 +1,6 @@
 #include <imgui_gradient/Gradient.h>
 #include <imgui_gradient/random.h>
+#include <imgui_gradient/utils.h>
 
 namespace ImGuiGradient {
 
@@ -19,13 +20,13 @@ ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
             ImClamp(position, 0.f, 1.f)});
     case PositionMode::repeat:
         return compute_color_at(RelativePosition{
-            ImClamp(position, 0.f, 1.f)});
+            utils::repeat_position(position)});
     case PositionMode::mirror_clamp:
         return compute_color_at(RelativePosition{
-            ImClamp(position, 0.f, 1.f)});
+            utils::mirror_clamp_position(position)});
     case PositionMode::mirror_repeat:
         return compute_color_at(RelativePosition{
-            ImClamp(position, 0.f, 1.f)});
+            utils::mirror_repeat_position(position)});
     }
 }
 
