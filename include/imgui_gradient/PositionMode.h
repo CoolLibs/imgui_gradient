@@ -1,4 +1,5 @@
 #pragma once
+
 namespace ImGuiGradient {
 
 enum class PositionMode {
@@ -8,4 +9,4 @@ enum class PositionMode {
     mirror_repeat
 };
 
-}
+} // namespace ImGuiGradient
