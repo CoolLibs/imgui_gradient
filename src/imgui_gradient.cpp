@@ -51,6 +51,39 @@ bool position_mode_combo(PositionMode& position_mode)
     }
 }
 
+bool gradient_interpolation_mode(Interpolation& interpolation_mode)
+{
+    int current_combo_item = [&]() {
+        switch (interpolation_mode)
+        {
+        case Interpolation::linear:
+            return 0;
+        case Interpolation::constant:
+            return 1;
+        default:
+            return 0;
+        }
+    }();
+    const char* interpolation_mode_items = " Linear\0 Constant\0\0";
+    if (ImGui::Combo("Interpolation Mode", &current_combo_item, interpolation_mode_items))
+    {
+        switch (current_combo_item)
+        {
+        case 0:
+            interpolation_mode = Interpolation::linear;
+            break;
+        case 1:
+            interpolation_mode = Interpolation::constant;
+            break;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void tooltip_if(const char* text, const bool cond)
 {
     if (ImGui::IsItemHovered() && cond)
@@ -61,7 +94,7 @@ void tooltip_if(const char* text, const bool cond)
     }
 }
 
-static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpolation_mode, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
@@ -69,7 +102,7 @@ static void draw_gradient_bar(Gradient& Gradient, const ImVec2& bar_pos, float w
     draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
     if (!Gradient.is_empty())
     {
-        draw_gradient(Gradient, draw_list, bar_pos, bar_bottom, width);
+        draw_gradient(Gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
     }
 
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
@@ -124,13 +157,13 @@ static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     return hitbox_is_hovered;
 }
 
-bool gradient_button(Gradient& gradient)
+bool gradient_button(Gradient& gradient, const Interpolation& interpolation)
 {
     const ImVec2 widget_pos = ImGui::GetCursorScreenPos();
     const float  width      = ImMax(250.0f, ImGui::GetContentRegionAvail().x - 100.0f);
     const bool   clicked    = ImGui::InvisibleButton("gradient_bar", ImVec2(widget_pos.x + width, variables::GRADIENT_BAR_WIDGET_HEIGHT));
 
-    draw_gradient_bar(gradient, widget_pos, width, variables::GRADIENT_BAR_WIDGET_HEIGHT);
+    draw_gradient_bar(gradient, interpolation, widget_pos, width, variables::GRADIENT_BAR_WIDGET_HEIGHT);
 
     return clicked;
 }
@@ -179,7 +212,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
-    draw_gradient_bar(gradient, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+    draw_gradient_bar(gradient, interpolation_mode, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
     const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
@@ -287,7 +320,10 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     tooltip_if("Add mark with random color", true);
 
     ImGui::SameLine();
-    modified = position_mode_combo(position_mode);
+    modified |= position_mode_combo(position_mode);
+    ImGui::SameLine();
+    modified |= gradient_interpolation_mode(interpolation_mode);
+
     if (ImGui::BeginPopup("picker") && selected_mark)
     {
         ImGui::SetNextItemWidth(variables::button_size() * 12.f);

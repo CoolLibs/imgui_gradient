@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Gradient.h"
+#include "Interpolation.h"
 #include "gradient_variables.h"
 #include "imgui_draw_utils.h"
 
@@ -18,7 +19,7 @@ static void draw_bar_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVe
     utils::draw_border(draw_list, vec1 - margin, vec2 + margin, color);
 }
 
-static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const ImVec2& bar_pos, const float bar_bottom, float width)
+static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const Interpolation& interpolation_mode, const ImVec2& bar_pos, const float bar_bottom, float width)
 {
     float current_starting_x = bar_pos.x;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
@@ -32,7 +33,14 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
         const float to   = bar_pos.x + mark.position.get() * width;
         if (mark.position != 0.f)
         {
-            utils::draw_gradient_partial(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
+            if (interpolation_mode == Interpolation::linear)
+            {
+                utils::draw_gradient_partial(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
+            }
+            else
+            {
+                utils::draw_uniform_square(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorBU32);
+            }
         }
         current_starting_x = to;
     }

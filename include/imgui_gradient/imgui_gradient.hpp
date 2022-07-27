@@ -45,6 +45,7 @@
 
 #include <imgui_gradient/random.h>
 #include "Gradient.h"
+#include "Interpolation.h"
 
 namespace ImGuiGradient {
 
@@ -72,15 +73,16 @@ public:
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
-    Gradient     gradient{};
-    Mark*        dragging_mark{};
-    Mark*        selected_mark{};
-    Mark*        mark_to_delete{};
-    Mark*        mark_to_hide{};
-    PositionMode position_mode = PositionMode::clamp;
-    bool         random_mode   = false;
+    Gradient      gradient{};
+    Mark*         dragging_mark{};
+    Mark*         selected_mark{};
+    Mark*         mark_to_delete{};
+    Mark*         mark_to_hide{};
+    PositionMode  position_mode      = PositionMode::clamp;
+    Interpolation interpolation_mode = Interpolation::linear;
+    bool          random_mode        = false;
 };
 
-bool gradient_button(Gradient* gradient);
+bool gradient_button(Gradient* gradient, const Interpolation& interpolation);
 
 } // namespace ImGuiGradient
