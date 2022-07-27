@@ -1,5 +1,4 @@
 #include <imgui_gradient/Gradient.h>
-#include <imgui_gradient/random.h>
 #include <imgui_gradient/utils.h>
 
 namespace ImGuiGradient {
@@ -30,12 +29,6 @@ ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
     }
 }
 
-static auto random_color() -> ImVec4
-{
-    const auto color = ImVec4{utils::rand(), utils::rand(), utils::rand(), 1.f};
-    return color;
-}
-
 ImVec4 Gradient::compute_color_at(RelativePosition position) const
 {
     const Mark* lower = nullptr;
@@ -55,7 +48,7 @@ ImVec4 Gradient::compute_color_at(RelativePosition position) const
     }
     if (!lower && !upper)
     {
-        return random_color();
+        return ImVec4{0.f, 0.f, 0.f, 1.f};
     }
     else if (upper && !lower)
     {

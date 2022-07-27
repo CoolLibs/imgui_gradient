@@ -31,8 +31,7 @@ public:
 private:
     ImVec4 compute_color_at(RelativePosition position) const;
     Marks  m_marks{};
-}; // TODO(ASG) random mode to add a mark
-   // TODO(ASG) check button "+" bugs
-   // TODO(ASG) do not call random_color in compute_color_at but in Gradient Widget add_mark method
+};
+// TODO(ASG) check button "+" bugs
 
 } // namespace ImGuiGradient

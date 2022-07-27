@@ -281,6 +281,11 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         modified = true;
     }
     tooltip_if("Choose a precise position", !gradient.is_empty() && selected_mark);
+
+    ImGui::SameLine();
+    modified |= ImGui::Checkbox("Random Mode", &random_mode);
+    tooltip_if("Add mark with random color", true);
+
     ImGui::SameLine();
     modified = position_mode_combo(position_mode);
     if (ImGui::BeginPopup("picker") && selected_mark)

@@ -43,9 +43,16 @@
 
 #pragma once
 
+#include <imgui_gradient/random.h>
 #include "Gradient.h"
 
 namespace ImGuiGradient {
+
+static auto random_color() -> ImVec4
+{
+    const auto color = ImVec4{utils::rand(), utils::rand(), utils::rand(), 1.f};
+    return color;
+}
 
 class GradientWidget {
 public:
@@ -55,7 +62,7 @@ public:
     bool            add_mark(const float position)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = gradient.get_color_at(pos, position_mode);
+        const ImVec4 new_mark_col = (random_mode || gradient.is_empty()) ? random_color() : gradient.get_color_at(pos, position_mode);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
     void remove_mark(Mark* mark)
@@ -71,6 +78,7 @@ private:
     Mark*        mark_to_delete{};
     Mark*        mark_to_hide{};
     PositionMode position_mode = PositionMode::clamp;
+    bool         random_mode   = false;
 };
 
 bool gradient_button(Gradient* gradient);
