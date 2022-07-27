@@ -55,7 +55,7 @@ public:
     bool            add_mark(const float position)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = gradient.get_color_at(pos);
+        const ImVec4 new_mark_col = gradient.get_color_at(pos, position_mode);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
     void remove_mark(Mark* mark)
@@ -65,11 +65,12 @@ public:
     bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
-    Gradient gradient{};
-    Mark*    dragging_mark{};
-    Mark*    selected_mark{};
-    Mark*    mark_to_delete{};
-    Mark*    mark_to_hide{};
+    Gradient     gradient{};
+    Mark*        dragging_mark{};
+    Mark*        selected_mark{};
+    Mark*        mark_to_delete{};
+    Mark*        mark_to_hide{};
+    PositionMode position_mode = PositionMode::clamp;
 };
 
 bool gradient_button(Gradient* gradient);

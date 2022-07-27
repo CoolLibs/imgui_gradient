@@ -9,10 +9,24 @@ Gradient::Gradient()
     add_mark(Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}});
 }
 
-ImVec4 Gradient::get_color_at(float position) const
+ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
 {
-    return compute_color_at(RelativePosition{
-        ImClamp(position, 0.f, 1.f)}); // TODO(ASG) Offer more options: repeat, mirror, clamp, etc.
+    // TODO(ASG) Offer more options: repeat, mirror, clamp, etc.
+    switch (mode)
+    {
+    case PositionMode::clamp:
+        return compute_color_at(RelativePosition{
+            ImClamp(position, 0.f, 1.f)});
+    case PositionMode::repeat:
+        return compute_color_at(RelativePosition{
+            ImClamp(position, 0.f, 1.f)});
+    case PositionMode::mirror_clamp:
+        return compute_color_at(RelativePosition{
+            ImClamp(position, 0.f, 1.f)});
+    case PositionMode::mirror_repeat:
+        return compute_color_at(RelativePosition{
+            ImClamp(position, 0.f, 1.f)});
+    }
 }
 
 static auto random_color() -> ImVec4

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Marks.h"
+#include "PositionMode.h"
 
 namespace ImGuiGradient {
 
 class Gradient {
 public:
     Gradient();
-    ImVec4 get_color_at(float position) const;
+    ImVec4 get_color_at(float position, PositionMode mode) const;
     Mark*  add_mark(const Mark& mark)
     {
         return m_marks.add_mark(mark);
