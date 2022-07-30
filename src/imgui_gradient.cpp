@@ -21,6 +21,7 @@ bool position_mode_combo(PositionMode& position_mode)
         case PositionMode::mirror_repeat:
             return 3;
         default:
+            assert(false);
             return -1;
         }
     }();
@@ -61,6 +62,7 @@ bool gradient_interpolation_mode(Interpolation& interpolation_mode)
         case Interpolation::constant:
             return 1;
         default:
+            assert(false);
             return 0;
         }
     }();

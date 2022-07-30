@@ -25,6 +25,8 @@ ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
     case PositionMode::mirror_repeat:
         return compute_color_at(RelativePosition{
             utils::mirror_repeat_position(position)});
+    default:
+        assert(false);
     }
 }
 
