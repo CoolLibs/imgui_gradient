@@ -13,9 +13,9 @@ static auto fract(float x) -> float
     return x - std::floor(x);
 }
 
-static auto modulo(float x, float y) -> float
+static auto modulo(float x, float mod) -> float
 {
-    return fract(x / y) * y;
+    return fract(x / mod) * mod;
 }
 
 static auto repeat_position(float position) -> float
