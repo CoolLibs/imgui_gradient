@@ -1,27 +1,31 @@
 #pragma once
 
+// https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf p260
+
+#include <imgui/imgui_internal.h>
 #include <cmath>
 
 namespace utils {
 
-static float repeat_position(float position)
+/// Always returns a number between 0.f and 1.f, even if x is negative.
+static auto fract(float x) -> float
 {
-    return fmodf(position, 1.f);
+    return x - std::floor(x);
 }
 
-static float mirror_clamp_position(float position)
+static auto repeat_position(float position) -> float
 {
-    return fmodf(abs(position - 1.f), 1.f);
+    return fract(position);
 }
 
-static float mirror_repeat_position(float position)
+static auto mirror_clamp_position(float position) -> float
 {
-    const float Abs    = abs(position);
-    const float Floor  = floor(Abs);
-    const float Clamp  = fmodf(Floor, 2.f);
-    const float Rest   = Abs - Floor;
-    const float Mirror = Clamp + Rest;
-    return (Mirror >= 1.f) ? Rest : 1.f - Rest;
+    return ImClamp(abs(position), 0.f, 1.f);
+}
+
+static auto mirror_repeat_position(float position) -> float
+{
+    return 1.f - (fract(abs(fmodf(position, 2.f) - 1.f)));
 }
 
 } // namespace utils
