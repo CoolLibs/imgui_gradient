@@ -11,7 +11,6 @@ Gradient::Gradient()
 
 ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
 {
-    // TODO(ASG) Offer more options: repeat, mirror, clamp, etc.
     switch (mode)
     {
     case PositionMode::clamp:
