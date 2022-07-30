@@ -13,6 +13,11 @@ static auto fract(float x) -> float
     return x - std::floor(x);
 }
 
+static auto modulo(float x, float y) -> float
+{
+    return fract(x / y) * y;
+}
+
 static auto repeat_position(float position) -> float
 {
     return fract(position);
@@ -25,7 +30,7 @@ static auto mirror_clamp_position(float position) -> float
 
 static auto mirror_repeat_position(float position) -> float
 {
-    return 1.f - (fract(abs(fmodf(position, 2.f) - 1.f)));
+    return 1.f - (fract(abs(modulo(position, 2.f) - 1.f)));
 }
 
 } // namespace utils
