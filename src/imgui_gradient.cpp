@@ -170,32 +170,38 @@ bool gradient_button(Gradient& gradient, const Interpolation& interpolation)
     return clicked;
 }
 
-float closer_position(Gradient& gradient, Mark* selected_mark, const float select_pos)
+// TODO(ASG) Add a reset button (and a flag to prevent this behaviour)
+
+float position_where_add_mark(Gradient& gradient)
 {
-    float closer_pos = 0.f;
-    if (gradient.get_list().size() == 1)
+    if (gradient.is_empty())
     {
-        closer_pos = (select_pos < 1.f - select_pos) ? 0.f : 1.f;
+        return 0.5f;
     }
-    else if (*selected_mark == gradient.get_list().front())
+    else if (gradient.get_list().size() == 1)
     {
-        closer_pos = 0.f;
-    }
-    else if (*selected_mark == gradient.get_list().back())
-    {
-        closer_pos = 1.f;
+        return (gradient.get_list().begin()->get_position() > 1.f - gradient.get_list().begin()->get_position()) ? 0.f : 1.f;
     }
     else
     {
-        closer_pos =
-            (abs(select_pos - ImClamp(
-                                  gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f
-                              )) >
-             abs(ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f) - select_pos))
-                ? ImClamp(gradient.previous_mark(selected_mark).get_position(), 0.f, 1.f)
-                : ImClamp(gradient.next_mark(selected_mark).get_position(), 0.f, 1.f);
+        float max_value_mark_position     = 0;
+        float max_value_between_two_marks = gradient.get_list().begin()->get_position();
+        for (auto markIt = gradient.get_list().begin(); markIt != std::prev(gradient.get_list().end()); ++markIt)
+        {
+            Mark& mark = *markIt;
+            if (max_value_between_two_marks < abs(std::next(markIt)->get_position() - mark.get_position()))
+            {
+                max_value_mark_position     = mark.get_position();
+                max_value_between_two_marks = abs(std::next(markIt)->get_position() - max_value_mark_position);
+            }
+        }
+        if (max_value_between_two_marks < abs(1.f - std::prev(gradient.get_list().end())->get_position()))
+        {
+            max_value_mark_position     = std::prev(gradient.get_list().end())->get_position();
+            max_value_between_two_marks = abs(1.f - max_value_mark_position);
+        }
+        return max_value_mark_position + max_value_between_two_marks / 2.f;
     }
-    return closer_pos;
 }
 
 bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, ImGuiColorEditFlags flags)
@@ -288,16 +294,8 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
     if (ImGui::Button("+", ImVec2(variables::button_size(), variables::button_size())))
     {
-        if (selected_mark)
-        {
-            const float select_pos = ImClamp(selected_mark->get_position(), 0.f, 1.f);
-            const float closer_pos = closer_position(gradient, selected_mark, select_pos);
-            modified               = add_mark((select_pos + closer_pos) / 2.f, generator);
-        }
-        else
-        {
-            modified = add_mark(utils::rand(generator), generator);
-        }
+        // Add a mark where there is the greater space in the gradient
+        modified = add_mark(position_where_add_mark(gradient), generator);
     }
     tooltip("Add a mark here\nor click on the gradient to choose its position");
 
