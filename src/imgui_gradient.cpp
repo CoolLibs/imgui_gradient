@@ -196,7 +196,7 @@ float closer_position(Gradient& gradient, Mark* selected_mark, const float selec
     return closer_pos;
 }
 
-bool GradientWidget::gradient_editor(std::string_view name, float horizontal_margin, ImGuiColorEditFlags flags)
+bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, ImGuiColorEditFlags flags)
 {
     ImGui::Text("%s", name.data());
 
@@ -220,7 +220,7 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)
     {
-        modified = add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width);
+        modified = add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width, generator);
         ImGui::OpenPopup("picker");
     }
 
@@ -291,11 +291,11 @@ bool GradientWidget::gradient_editor(std::string_view name, float horizontal_mar
         {
             const float select_pos = ImClamp(selected_mark->get_position(), 0.f, 1.f);
             const float closer_pos = closer_position(gradient, selected_mark, select_pos);
-            modified               = add_mark((select_pos + closer_pos) / 2.f);
+            modified               = add_mark((select_pos + closer_pos) / 2.f, generator);
         }
         else
         {
-            modified = add_mark(utils::rand());
+            modified = add_mark(utils::rand(generator), generator);
         }
     }
     tooltip_if("Add a mark here\nor click on the gradient to choose its position", true);

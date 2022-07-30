@@ -49,9 +49,9 @@
 
 namespace ImGuiGradient {
 
-static auto random_color() -> ImVec4
+static auto random_color(std::default_random_engine& generator) -> ImVec4
 {
-    const auto color = ImVec4{utils::rand(), utils::rand(), utils::rand(), 1.f};
+    const auto color = ImVec4{utils::rand(generator), utils::rand(generator), utils::rand(generator), 1.f};
     return color;
 }
 
@@ -60,17 +60,17 @@ public:
     GradientWidget() = default;
     const Gradient& get_gradient() const { return gradient; }
     Gradient&       get_gradient() { return gradient; }
-    bool            add_mark(const float position)
+    bool            add_mark(const float position, std::default_random_engine& generator)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = (random_mode || gradient.is_empty()) ? random_color() : gradient.get_color_at(pos, position_mode);
+        const ImVec4 new_mark_col = (random_mode || gradient.is_empty()) ? random_color(generator) : gradient.get_color_at(pos, position_mode);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
     void remove_mark(Mark* mark)
     {
         gradient.remove_mark(*mark);
     }
-    bool gradient_editor(std::string_view name, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
+    bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
     Gradient      gradient{};
