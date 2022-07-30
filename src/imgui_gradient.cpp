@@ -86,9 +86,9 @@ bool gradient_interpolation_mode(Interpolation& interpolation_mode)
     }
 }
 
-void tooltip_if(const char* text, const bool cond)
+void tooltip(const char* text)
 {
-    if (ImGui::IsItemHovered() && cond)
+    if (ImGui::IsItemHovered())
     {
         ImGui::BeginTooltip();
         ImGui::Text("%s", text);
@@ -273,20 +273,19 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     }
     ImGui::EndGroup();
 
-    if (!gradient.is_empty() &&
-        (ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
-        selected_mark)
-    {
-        remove_mark(selected_mark);
-        selected_mark = nullptr;
-        modified      = true;
-    }
-    tooltip_if("Select a mark to remove it\nor middle click on it\nor drag it down", !gradient.is_empty());
-
     if (!gradient.is_empty())
     {
+        if ((ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
+            selected_mark)
+        {
+            remove_mark(selected_mark);
+            selected_mark = nullptr;
+            modified      = true;
+        }
+        tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
         ImGui::SameLine();
     }
+
     if (ImGui::Button("+", ImVec2(variables::button_size(), variables::button_size())))
     {
         if (selected_mark)
@@ -300,7 +299,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             modified = add_mark(utils::rand(generator), generator);
         }
     }
-    tooltip_if("Add a mark here\nor click on the gradient to choose its position", true);
+    tooltip("Add a mark here\nor click on the gradient to choose its position");
 
     ImGui::SameLine();
     if (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags))
@@ -310,16 +309,22 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
     ImGui::PushItemWidth(width * .25f);
     ImGui::SameLine();
-    if (selected_mark && ImGui::DragFloat("##3", &selected_mark->get_position(), 1.f / width, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
+    if (selected_mark)
     {
-        gradient.get_marks().sorted();
-        modified = true;
+        if (ImGui::DragFloat("##3", &selected_mark->get_position(), 1.f / width, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
+        {
+            gradient.get_marks().sorted();
+            modified = true;
+        }
+        if (!gradient.is_empty())
+        {
+            tooltip("Choose a precise position");
+        }
     }
-    tooltip_if("Choose a precise position", !gradient.is_empty() && selected_mark);
 
     ImGui::SameLine();
     modified |= ImGui::Checkbox("Random Mode", &random_mode);
-    tooltip_if("Add mark with random color", true);
+    tooltip("Add mark with random color");
 
     ImGui::SameLine();
     modified |= position_mode_combo(position_mode);
