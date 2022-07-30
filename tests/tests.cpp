@@ -39,6 +39,34 @@ TEST_CASE(
 
         CHECK(doctest::Approx(repeat_pos) == 0.8f);
     }
+    SUBCASE("repeat_position() when position just before 1")
+    {
+        float position   = .99f;
+        float repeat_pos = utils::repeat_position(position);
+
+        CHECK(doctest::Approx(repeat_pos) == .99f);
+    }
+    SUBCASE("repeat_position() when position just after 1")
+    {
+        float position   = 1.01f;
+        float repeat_pos = utils::repeat_position(position);
+
+        CHECK(doctest::Approx(repeat_pos) == .01f);
+    }
+    SUBCASE("repeat_position() when position just before 0")
+    {
+        float position   = -0.01f;
+        float repeat_pos = utils::repeat_position(position);
+
+        CHECK(doctest::Approx(repeat_pos) == 0.99f);
+    }
+    SUBCASE("repeat_position() when position just after 0")
+    {
+        float position   = 0.01f;
+        float repeat_pos = utils::repeat_position(position);
+
+        CHECK(doctest::Approx(repeat_pos) == 0.01f);
+    }
 
     SUBCASE("mirror_clamp_position() when position in the range [0,1]")
     {
@@ -68,6 +96,20 @@ TEST_CASE(
 
         CHECK(doctest::Approx(mirror_clamp_pos) == 1.f);
     }
+    SUBCASE("mirror_clamp_position() when position = 1")
+    {
+        float position         = 1.f;
+        float mirror_clamp_pos = utils::mirror_clamp_position(position);
+
+        CHECK(doctest::Approx(mirror_clamp_pos) == 1.f);
+    }
+    SUBCASE("mirror_clamp_position() when position = 0")
+    {
+        float position         = 0.f;
+        float mirror_clamp_pos = utils::mirror_clamp_position(position);
+
+        CHECK(doctest::Approx(mirror_clamp_pos) == 0.f);
+    }
 
     SUBCASE("mirror_repeat_position() when position in the range [0,1]")
     {
@@ -96,6 +138,37 @@ TEST_CASE(
         float mirror_repeat_pos = utils::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.2f);
+    }
+    SUBCASE("mirror_repeat_position() when position = 1")
+    {
+        float position          = 1.f;
+        float mirror_repeat_pos = utils::mirror_repeat_position(position);
+
+        CHECK(doctest::Approx(mirror_repeat_pos) == 1.f);
+    }
+    SUBCASE("mirror_repeat_position() when position = 0")
+    {
+        float position          = 0.f;
+        float mirror_repeat_pos = utils::mirror_repeat_position(position);
+
+        CHECK(doctest::Approx(mirror_repeat_pos) == 0.f);
+    }
+
+    SUBCASE("test intermediate functions : modulo(x,mod) when x = 0")
+    {
+        float x          = 0.f;
+        float mod        = 2.f;
+        float modulo_res = utils::modulo(x, mod);
+
+        CHECK(doctest::Approx(modulo_res) == 0.f);
+    }
+    SUBCASE("test intermediate functions : modulo(x,mod) when x = 1")
+    {
+        float x          = 1.f;
+        float mod        = 2.f;
+        float modulo_res = utils::modulo(x, mod);
+
+        CHECK(doctest::Approx(modulo_res) == 1.f);
     }
 }
 
