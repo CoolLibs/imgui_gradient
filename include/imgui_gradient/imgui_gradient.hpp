@@ -67,18 +67,11 @@ public:
         const ImVec4 new_mark_col = (random_mode || gradient.is_empty()) ? random_color(generator) : gradient.get_color_at(pos, position_mode);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
-    auto remove_mark(Mark* mark) -> bool
-    {
-        gradient.remove_mark(*mark);
-        mark = nullptr;
-        return true;
-    }
     void reset_widget()
     {
         gradient.reset();
         dragging_mark      = nullptr;
         selected_mark      = nullptr;
-        mark_to_delete     = nullptr;
         mark_to_hide       = nullptr;
         position_mode      = PositionMode::clamp;
         interpolation_mode = Interpolation::linear;
@@ -91,7 +84,6 @@ private:
     Gradient      gradient{};
     Mark*         dragging_mark{};
     Mark*         selected_mark{};
-    Mark*         mark_to_delete{};
     Mark*         mark_to_hide{};
     PositionMode  position_mode      = PositionMode::clamp;
     Interpolation interpolation_mode = Interpolation::linear;

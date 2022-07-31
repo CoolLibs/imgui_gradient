@@ -168,6 +168,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
     draw_gradient_bar(gradient, interpolation_mode, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
+    Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
     const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
 
@@ -197,7 +198,8 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             selected_mark = nullptr;
         }
-        modified |= remove_mark(mark_to_delete);
+        gradient.remove_mark(*mark_to_delete);
+        modified |= true;
     }
     ImGui::EndGroup();
 
@@ -207,7 +209,9 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
-            modified |= remove_mark(selected_mark);
+            gradient.remove_mark(*selected_mark);
+            selected_mark = nullptr;
+            modified |= true;
         }
         ImGui::SameLine();
     }
