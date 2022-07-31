@@ -33,6 +33,5 @@ private:
     ImVec4 compute_color_at(RelativePosition position) const;
     Marks  m_marks{};
 };
-// TODO(ASG) check button "+" bugs
 
 } // namespace ImGuiGradient
