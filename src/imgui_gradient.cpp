@@ -193,7 +193,8 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
     if (!gradient.is_empty())
     {
-        if ((ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) &&
+        if (((ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) ||
+             ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
             remove_mark(selected_mark);
