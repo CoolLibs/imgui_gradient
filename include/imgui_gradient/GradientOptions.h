@@ -15,6 +15,6 @@ enum GradientOptions_ {
     GradientOptions_NoPositionModeCombo  = 1 << 9,
     GradientOptions_NoInterpolationCombo = 1 << 10,
     GradientOptions_NoDragDowntoDelete   = 1 << 11,
-    GradientOptions_NoAddAndLessButton   = GradientOptions_NoAddButton | GradientOptions_NoLessButton | GradientOptions_NoColorButton,
+    GradientOptions_NoAddAndLessButton   = GradientOptions_NoAddButton | GradientOptions_NoLessButton,
     GradientOptions_NoCombo              = GradientOptions_NoInterpolationCombo | GradientOptions_NoPositionModeCombo,
 };
