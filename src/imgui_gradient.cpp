@@ -202,26 +202,16 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::EndGroup();
 
     if (!gradient.is_empty())
+    if (!(options & GradientOptions_NoAddButton))
     {
-        if (((delete_button(variables::button_size())) ||
-             ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
-            selected_mark)
+        if (add_button(variables::button_size()))
         {
-            gradient.remove_mark(*selected_mark);
-            selected_mark = nullptr;
-            modified |= true;
+            // Add a mark where there is the greater space in the gradient
+            modified = add_mark(position_where_add_mark(gradient), generator);
         }
+
         ImGui::SameLine();
     }
-
-    if (!(options & GradientOptions_NoAddButton) &&
-        add_button(variables::button_size()))
-    {
-        // Add a mark where there is the greater space in the gradient
-        modified = add_mark(position_where_add_mark(gradient), generator);
-    }
-
-    ImGui::SameLine();
     modified |= color_button(selected_mark, flags);
 
     ImGui::SameLine();
@@ -238,11 +228,13 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::SameLine();
     modified |= gradient_interpolation_mode(interpolation_mode);
 
-    if (!(options & GradientOptions_NoResetButton) &&
-        reset_button())
+    if (!(options & GradientOptions_NoResetButton))
     {
-        reset_widget();
-        modified |= true;
+        if (reset_button())
+        {
+            reset_widget();
+            modified |= true;
+        }
     }
     modified |= popup(selected_mark, variables::button_size(), flags);
 
