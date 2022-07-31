@@ -214,7 +214,8 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         ImGui::SameLine();
     }
 
-    if (add_button(variables::button_size()))
+    if (!(options & GradientOptions_NoAddButton) &&
+        add_button(variables::button_size()))
     {
         // Add a mark where there is the greater space in the gradient
         modified = add_mark(position_where_add_mark(gradient), generator);
