@@ -184,7 +184,7 @@ int main()
             "Gradient",
             generator,
             10.f,
-            GradientOptions_NoAddButton |
+            GradientOptions_NoAddAndRemoveButton,
             ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR
         );
     });

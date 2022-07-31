@@ -202,6 +202,20 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::EndGroup();
 
     if (!gradient.is_empty())
+    {
+        const bool remove_button_exists = (options & GradientOptions_NoRemoveButton);
+        if (((!remove_button_exists &&
+              delete_button(variables::button_size())) ||
+             ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
+            selected_mark)
+        {
+            gradient.remove_mark(*selected_mark);
+            selected_mark = nullptr;
+            modified |= true;
+        }
+        if (!remove_button_exists)
+            ImGui::SameLine();
+    }
     if (!(options & GradientOptions_NoAddButton))
     {
         if (add_button(variables::button_size()))
