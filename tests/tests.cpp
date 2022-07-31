@@ -1,5 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
+#include <imgui_gradient/GradientOptions.h>
 #include <imgui_gradient/utils.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 
@@ -179,6 +180,12 @@ int main()
     quick_imgui::loop("Test Gradient Widget", []() {
         static std::default_random_engine    generator{std::random_device{}()};
         static ImGuiGradient::GradientWidget gradient;
-        gradient.gradient_editor("Gradient", generator, 10.f, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR);
+        gradient.gradient_editor(
+            "Gradient",
+            generator,
+            10.f,
+            GradientOptions_NoResetButton,
+            ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR
+        );
     });
 }

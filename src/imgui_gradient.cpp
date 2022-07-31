@@ -82,8 +82,6 @@ bool gradient_button(Gradient& gradient, const Interpolation& interpolation)
     return clicked;
 }
 
-// TODO(ASG) Add a reset button (and a flag to prevent this behaviour)
-
 float position_where_add_mark(Gradient& gradient)
 {
     if (gradient.is_empty())
@@ -149,7 +147,6 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
     return dragging;
 }
 
-bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, ImGuiColorEditFlags flags)
 {
     ImGui::Text("%s", name.data());
 
@@ -231,7 +228,8 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::SameLine();
     modified |= gradient_interpolation_mode(interpolation_mode);
 
-    if (reset_button())
+    if (!(options & GradientOptions_NoResetButton) &&
+        reset_button())
     {
         reset_widget();
         modified |= true;
