@@ -241,6 +241,12 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     ImGui::SameLine();
     modified |= gradient_interpolation_mode(interpolation_mode);
 
+    if (ImGui::Button("Reset"))
+    {
+        reset_widget();
+    }
+    tooltip("Reset gradient to the default value");
+
     if (ImGui::BeginPopup("picker") && selected_mark)
     {
         ImGui::SetNextItemWidth(variables::button_size() * 12.f);

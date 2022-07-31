@@ -48,6 +48,10 @@ struct Marks {
         m_list.remove(mark);
         sorted();
     };
+    void clear()
+    {
+        m_list.clear();
+    }
     Mark next_mark(Mark* mark) const // Be carefull do not use if there is no next mark
     {
         return *std::next(mark);

@@ -17,6 +17,7 @@ public:
     {
         m_marks.remove_mark(mark);
     };
+    void reset();
     Mark next_mark(Mark* mark) { return m_marks.next_mark(mark); };         // Be carefull do not use if there is no next mark
     Mark previous_mark(Mark* mark) { return m_marks.previous_mark(mark); }; // Be carefull do not use if there is no previous mark
     auto is_empty() -> bool

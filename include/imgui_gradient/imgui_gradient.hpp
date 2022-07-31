@@ -70,6 +70,17 @@ public:
     {
         gradient.remove_mark(*mark);
     }
+    void reset_widget()
+    {
+        gradient.reset();
+        dragging_mark      = nullptr;
+        selected_mark      = nullptr;
+        mark_to_delete     = nullptr;
+        mark_to_hide       = nullptr;
+        position_mode      = PositionMode::clamp;
+        interpolation_mode = Interpolation::linear;
+        random_mode        = false;
+    }
     bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
 private:
