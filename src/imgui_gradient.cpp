@@ -147,8 +147,12 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
     return dragging;
 }
 
+bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, GradientOptions options, ImGuiColorEditFlags flags)
 {
-    ImGui::Text("%s", name.data());
+    if (!(options & GradientOptions_NoLabel))
+    {
+        ImGui::Text("%s", name.data());
+    }
 
     const float  width      = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
     const ImVec2 bar_pos    = variables::bar_position(horizontal_margin);
@@ -220,8 +224,11 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
     ImGui::SameLine();
     modified |= precise_position(gradient, selected_mark, width);
 
-    ImGui::SameLine();
-    modified |= random_mode_box(random_mode);
+    if (!(options & GradientOptions_NoRandomMode))
+    {
+        ImGui::SameLine();
+        modified |= random_mode_box(random_mode);
+    }
 
     ImGui::SameLine();
     modified |= position_mode_combo(position_mode);

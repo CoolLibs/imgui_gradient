@@ -184,7 +184,9 @@ int main()
             "Gradient",
             generator,
             10.f,
-            GradientOptions_NoResetButton,
+            GradientOptions_NoResetButton |
+                GradientOptions_NoLabel |
+                GradientOptions_NoRandomMode,
             ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR
         );
     });
