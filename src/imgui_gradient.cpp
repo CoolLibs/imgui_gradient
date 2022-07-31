@@ -186,8 +186,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             selected_mark = nullptr;
         }
-        remove_mark(mark_to_delete);
-        mark_to_delete = nullptr;
+        modified |= remove_mark(mark_to_delete);
     }
     ImGui::EndGroup();
 
@@ -197,9 +196,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
-            remove_mark(selected_mark);
-            selected_mark = nullptr;
-            modified      = true;
+            modified |= remove_mark(selected_mark);
         }
         ImGui::SameLine();
     }

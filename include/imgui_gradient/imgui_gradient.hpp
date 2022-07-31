@@ -66,9 +66,11 @@ public:
         const ImVec4 new_mark_col = (random_mode || gradient.is_empty()) ? random_color(generator) : gradient.get_color_at(pos, position_mode);
         return selected_mark      = gradient.add_mark(Mark{pos, new_mark_col});
     }
-    void remove_mark(Mark* mark)
+    auto remove_mark(Mark* mark) -> bool
     {
         gradient.remove_mark(*mark);
+        mark = nullptr;
+        return true;
     }
     void reset_widget()
     {
