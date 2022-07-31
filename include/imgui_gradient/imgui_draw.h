@@ -30,7 +30,7 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
         ImU32 colorAU32 = (markIt != gradient.get_list().begin()) ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color) : colorBU32;
 
         const float from = current_starting_x;
-        const float to   = bar_pos.x + mark.position.get() * width;
+        const float to   = bar_pos.x + mark.position.get() * (width + 1.f);
         if (mark.position != 0.f)
         {
             if (interpolation_mode == Interpolation::linear)

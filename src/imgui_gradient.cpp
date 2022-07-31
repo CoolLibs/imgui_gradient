@@ -4,8 +4,6 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 
-// TODO(ASG) Fix small line above marks that happens sometimes (maybe because two marks are overlapping perfectly ???) apperas when adding a new mark in empty gradient
-
 namespace ImGuiGradient {
 
 static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpolation_mode, const ImVec2& bar_pos, float width, float height)
