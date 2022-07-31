@@ -2,11 +2,30 @@
 
 #include <imgui/imgui.h>
 #include <cassert>
+#include <string_view>
+#include "Gradient.h"
 #include "Interpolation.h"
 #include "PositionMode.h"
-
+#include "gradient_variables.h"
 
 namespace ImGuiGradient {
+
+void tooltip(const char* text)
+{
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("%s", text);
+        ImGui::EndTooltip();
+    }
+}
+
+auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}) -> bool
+{
+    const bool clicked = ImGui::Button(name.data(), size);
+    tooltip(tooltip_message.data());
+    return clicked;
+}
 
 bool position_mode_combo(PositionMode& position_mode)
 {
@@ -87,13 +106,74 @@ bool gradient_interpolation_mode(Interpolation& interpolation_mode)
     }
 }
 
-void tooltip(const char* text)
+auto delete_button(const float size) -> bool
 {
-    if (ImGui::IsItemHovered())
+    return button(
+        "-",
+        "Select a mark to remove it\nor middle click on it\nor drag it down",
+        ImVec2{size, size}
+    );
+}
+
+auto add_button(const float size) -> bool
+{
+    return button(
+        "+",
+        "Add a mark here\nor click on the gradient to choose its position",
+        ImVec2{size, size}
+    );
+}
+
+auto color_button(Mark* selected_mark, ImGuiColorEditFlags flags) -> bool
+{
+    return (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags));
+}
+
+auto precise_position(Gradient gradient, Mark* selected_mark, const float width) -> bool
+{
+    bool modified = false;
+    ImGui::PushItemWidth(width * .25f);
+    if (selected_mark)
     {
-        ImGui::BeginTooltip();
-        ImGui::Text("%s", text);
-        ImGui::EndTooltip();
+        const float speed = 1.f / width;
+        if (ImGui::DragFloat("##3", &selected_mark->get_position(), speed, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
+        {
+            gradient.get_marks().sorted();
+            modified = true;
+        }
+        if (!gradient.is_empty())
+        {
+            tooltip("Choose a precise position");
+        }
+    }
+    return modified;
+}
+
+auto random_mode_box(bool& random_mode) -> bool
+{
+    const bool activate = ImGui::Checkbox("Random Mode", &random_mode);
+    tooltip("Add mark with random color");
+    return activate;
+}
+
+auto reset_button() -> bool
+{
+    return button("Reset", "Reset gradient to the default value");
+}
+
+auto popup(Mark* selected_mark, const float item_size, ImGuiColorEditFlags flags) -> bool
+{
+    const float popup_size = item_size * 12.f;
+    if (ImGui::BeginPopup("picker") && selected_mark)
+    {
+        ImGui::SetNextItemWidth(popup_size);
+        const bool modified = ImGui::ColorPicker4("##picker2", reinterpret_cast<float*>(&selected_mark->color), flags);
+        ImGui::EndPopup();
+        return modified;
+    }
+    else
+    {
+        return false;
     }
 }
 

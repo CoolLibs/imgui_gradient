@@ -193,7 +193,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
     if (!gradient.is_empty())
     {
-        if (((ImGui::Button("-", ImVec2(variables::button_size(), variables::button_size()))) ||
+        if (((delete_button(variables::button_size())) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
@@ -201,63 +201,36 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             selected_mark = nullptr;
             modified      = true;
         }
-        tooltip("Select a mark to remove it\nor middle click on it\nor drag it down");
         ImGui::SameLine();
     }
 
-    if (ImGui::Button("+", ImVec2(variables::button_size(), variables::button_size())))
+    if (add_button(variables::button_size()))
     {
         // Add a mark where there is the greater space in the gradient
         modified = add_mark(position_where_add_mark(gradient), generator);
     }
-    tooltip("Add a mark here\nor click on the gradient to choose its position");
 
     ImGui::SameLine();
-    if (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags))
-    {
-        modified = true;
-    }
-
-    ImGui::PushItemWidth(width * .25f);
-    ImGui::SameLine();
-    if (selected_mark)
-    {
-        if (ImGui::DragFloat("##3", &selected_mark->get_position(), 1.f / width, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
-        {
-            gradient.get_marks().sorted();
-            modified = true;
-        }
-        if (!gradient.is_empty())
-        {
-            tooltip("Choose a precise position");
-        }
-    }
+    modified |= color_button(selected_mark, flags);
 
     ImGui::SameLine();
-    modified |= ImGui::Checkbox("Random Mode", &random_mode);
-    tooltip("Add mark with random color");
+    modified |= precise_position(gradient, selected_mark, width);
+
+    ImGui::SameLine();
+    modified |= random_mode_box(random_mode);
 
     ImGui::SameLine();
     modified |= position_mode_combo(position_mode);
     ImGui::SameLine();
     modified |= gradient_interpolation_mode(interpolation_mode);
 
-    if (ImGui::Button("Reset"))
+    if (reset_button())
     {
         reset_widget();
+        modified |= true;
     }
-    tooltip("Reset gradient to the default value");
+    modified |= popup(selected_mark, variables::button_size(), flags);
 
-    if (ImGui::BeginPopup("picker") && selected_mark)
-    {
-        ImGui::SetNextItemWidth(variables::button_size() * 12.f);
-        bool colorModified = ImGui::ColorPicker4("##picker2", reinterpret_cast<float*>(&selected_mark->color), flags);
-        if (selected_mark && colorModified)
-        {
-            modified = true;
-        }
-        ImGui::EndPopup();
-    }
     return modified;
 }
 
