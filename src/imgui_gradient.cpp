@@ -147,12 +147,10 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
 
 bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, GradientOptions options, ImGuiColorEditFlags flags)
 {
-    float y_space_over_bar = 8.f;
     if (!(options & GradientOptions_NoLabel))
     {
         ImGui::Text("%s", name.data());
         ImGui::Dummy(ImVec2{0.f, 1.5f});
-        y_space_over_bar = ImGui::CalcTextSize(name.data()).y * 2.3f;
     }
 
     const ImVec2 bar_pos    = variables::bar_position(horizontal_margin);
@@ -198,8 +196,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     }
     ImGui::EndGroup();
 
-    float      number_of_line_under_bar = 0.f;
-    const bool remove_button_exists     = !(options & GradientOptions_NoRemoveButton);
+    const bool remove_button_exists = !(options & GradientOptions_NoRemoveButton);
     if (!gradient.is_empty())
     {
         if (((remove_button_exists &&
@@ -243,10 +240,6 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
         modified |= precise_position(gradient, selected_mark, width);
     }
-    if (!(options & GradientOptions_NoMarkOptions & GradientOptions_NoAddAndRemoveButton))
-    {
-        number_of_line_under_bar += 1.f;
-    }
 
     const bool interpolation_combo_exists = !(options & GradientOptions_NoInterpolationCombo);
     if (interpolation_combo_exists)
@@ -271,10 +264,6 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         }
         modified |= random_mode_box(random_mode);
     }
-    if (!(options & GradientOptions_NoCombo & GradientOptions_NoRandomMode))
-    {
-        number_of_line_under_bar += 1.f;
-    }
 
     if (!(options & GradientOptions_NoResetButton))
     {
@@ -283,17 +272,37 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             reset_widget();
             modified |= true;
         }
-        number_of_line_under_bar += 1.f;
     }
 
     modified |= popup(selected_mark, variables::button_size(), flags);
 
-    const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar * 1.8f;
-    draw_border_widget(
-        bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
-        ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar),
-        variables::border_color()
-    );
+    if (!(options & GradientOptions_NoBorder))
+    {
+        float y_space_over_bar = 8.f;
+        if (!(options & GradientOptions_NoLabel))
+        {
+            y_space_over_bar = ImGui::CalcTextSize(name.data()).y * 2.3f;
+        }
+        float number_of_line_under_bar = 0.f;
+        if (!(options & GradientOptions_NoCombo & GradientOptions_NoRandomMode))
+        {
+            number_of_line_under_bar += 1.f;
+        }
+        if (!(options & GradientOptions_NoResetButton))
+        {
+            number_of_line_under_bar += 1.f;
+        }
+        if (!(options & GradientOptions_NoMarkOptions & GradientOptions_NoAddAndRemoveButton))
+        {
+            number_of_line_under_bar += 1.f;
+        }
+        const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar * 1.8f;
+        draw_border_widget(
+            bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
+            ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar),
+            variables::border_color()
+        );
+    }
 
     return modified;
 }
