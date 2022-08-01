@@ -47,7 +47,7 @@ bool position_mode_combo(PositionMode& position_mode)
         case PositionMode::mirror_repeat:
             return 3;
         default:
-            assert(false);
+            assert(false && "[ImGuiGradient::position_mode_combo] Invalid enum value");
             return -1;
         }
     }();
@@ -90,7 +90,7 @@ bool gradient_interpolation_mode(Interpolation& interpolation_mode)
         case Interpolation::constant:
             return 1;
         default:
-            assert(false);
+            assert(false && "[ImGuiGradient::gradient_interpolation_mode] Invalid enum value");
             return 0;
         }
     }();
