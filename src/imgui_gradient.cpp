@@ -216,7 +216,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     const bool add_button_exists = !(options & GradientOptions_NoAddButton);
     if (add_button_exists)
     {
-        if (remove_button_exists)
+        if (remove_button_exists && !gradient.is_empty())
         {
             ImGui::SameLine();
         }
