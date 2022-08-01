@@ -36,7 +36,8 @@ ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
         return compute_color_at(RelativePosition{
             utils::mirror_repeat_position(position)});
     default:
-        assert(false);
+        assert(false && "[Gradient::get_color_at] Invalid enum value");
+        return ImVec4{-1.f, -1.f, -1.f, -1.f};
     }
 }
 
