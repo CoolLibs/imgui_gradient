@@ -29,6 +29,8 @@ auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size
 
 bool position_mode_combo(PositionMode& position_mode)
 {
+    // Take the greater word to choose combo size
+    ImGui::PushItemWidth(ImGui::CalcTextSize("Mirror Repeat").x * 1.5f);
     int current_combo_item = [&]() {
         switch (position_mode)
         {
@@ -74,6 +76,8 @@ bool position_mode_combo(PositionMode& position_mode)
 
 bool gradient_interpolation_mode(Interpolation& interpolation_mode)
 {
+    // Take the greater word to choose combo size
+    ImGui::PushItemWidth(ImGui::CalcTextSize("Constant").x * 2.f);
     int current_combo_item = [&]() {
         switch (interpolation_mode)
         {
