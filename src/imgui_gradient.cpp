@@ -147,20 +147,17 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
 
 bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, GradientOptions options, ImGuiColorEditFlags flags)
 {
+    float y_space_over_bar = 8.f;
     if (!(options & GradientOptions_NoLabel))
     {
         ImGui::Text("%s", name.data());
+        ImGui::Dummy(ImVec2{0.f, 1.5f});
+        y_space_over_bar = ImGui::CalcTextSize(name.data()).y * 2.3f;
     }
 
-    const float  width      = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
     const ImVec2 bar_pos    = variables::bar_position(horizontal_margin);
+    const float  width      = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
     const float  bar_bottom = bar_pos.y + variables::GRADIENT_BAR_EDITOR_HEIGHT;
-
-    draw_border_widget(
-        bar_pos - ImVec2(horizontal_margin, ImGui::CalcTextSize(name.data()).y * 1.5f),
-        ImVec2(bar_pos.x + width + horizontal_margin, bar_bottom + variables::button_size() * 3.f),
-        variables::border_color()
-    );
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
@@ -201,6 +198,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     }
     ImGui::EndGroup();
 
+    float number_of_line_under_bar = 0.f;
     if (!gradient.is_empty())
     {
         const bool remove_button_exists = (options & GradientOptions_NoRemoveButton);
@@ -227,20 +225,20 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         ImGui::SameLine();
     }
     modified |= color_button(selected_mark, flags);
-
     ImGui::SameLine();
     modified |= precise_position(gradient, selected_mark, width);
+    number_of_line_under_bar += 1.f;
+
+    modified |= gradient_interpolation_mode(interpolation_mode);
+    ImGui::SameLine();
+    modified |= position_mode_combo(position_mode);
 
     if (!(options & GradientOptions_NoRandomMode))
     {
         ImGui::SameLine();
         modified |= random_mode_box(random_mode);
     }
-
-    ImGui::SameLine();
-    modified |= position_mode_combo(position_mode);
-    ImGui::SameLine();
-    modified |= gradient_interpolation_mode(interpolation_mode);
+    number_of_line_under_bar += 1.f;
 
     if (!(options & GradientOptions_NoResetButton))
     {
@@ -249,8 +247,17 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             reset_widget();
             modified |= true;
         }
+        number_of_line_under_bar += 1.f;
     }
+
     modified |= popup(selected_mark, variables::button_size(), flags);
+
+    const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar * 1.8f;
+    draw_border_widget(
+        bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
+        ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar),
+        variables::border_color()
+    );
 
     return modified;
 }
