@@ -288,7 +288,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             y_space_over_bar = ImGui::CalcTextSize(name.data()).y * 2.3f;
         }
         float number_of_line_under_bar = 0.f;
-        if (!(options & GradientOptions_NoCombo & GradientOptions_NoRandomMode))
+        if (!(options & GradientOptions_NoComboAndRandomMode))
         {
             number_of_line_under_bar += 1.f;
         }
@@ -296,14 +296,14 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             number_of_line_under_bar += 1.f;
         }
-        if (!(options & GradientOptions_NoMarkOptions & GradientOptions_NoAddAndRemoveButton))
+        if (!(options & GradientOptions_NoButtonAndMarkOptions))
         {
             number_of_line_under_bar += 1.f;
         }
-        const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar * 1.8f;
+        const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar;
         draw_border_widget(
             bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
-            ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar),
+            ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar * 1.25f),
             variables::border_color()
         );
     }
