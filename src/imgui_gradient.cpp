@@ -204,7 +204,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     if (!gradient.is_empty())
     {
         if (((remove_button_exists &&
-              delete_button(variables::button_size())) ||
+              delete_button(variables::button_size(), options)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
@@ -220,7 +220,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             ImGui::SameLine();
         }
-        if (add_button(variables::button_size()))
+        if (add_button(variables::button_size(), options))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_add_mark(gradient), generator);
@@ -233,7 +233,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             ImGui::SameLine();
         }
-        modified |= color_button(selected_mark, flags);
+        modified |= color_button(selected_mark, options, flags);
     }
     if (!(options & GradientOptions_NoDragSlider))
     {
@@ -242,7 +242,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             ImGui::SameLine();
         }
 
-        modified |= precise_position(gradient, selected_mark, width);
+        modified |= precise_position(gradient, selected_mark, width, options);
     }
 
     const bool interpolation_combo_exists = !(options & GradientOptions_NoInterpolationCombo);
@@ -266,19 +266,19 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             ImGui::SameLine();
         }
-        modified |= random_mode_box(random_mode);
+        modified |= random_mode_box(random_mode, options);
     }
 
     if (!(options & GradientOptions_NoResetButton))
     {
-        if (reset_button())
+        if (reset_button(options))
         {
             reset_widget();
             modified |= true;
         }
     }
 
-    modified |= popup(selected_mark, variables::button_size(), flags);
+    modified |= popup(selected_mark, variables::button_size(), options, flags);
 
     if (!(options & GradientOptions_NoBorder))
     {

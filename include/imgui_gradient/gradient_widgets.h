@@ -4,6 +4,7 @@
 #include <cassert>
 #include <string_view>
 #include "Gradient.h"
+#include "GradientOptions.h"
 #include "Interpolation.h"
 #include "PositionMode.h"
 #include "gradient_variables.h"
@@ -20,10 +21,13 @@ void tooltip(const char* text)
     }
 }
 
-auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}) -> bool
+auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}, GradientOptions options = GradientOptions_None) -> bool
 {
     const bool clicked = ImGui::Button(name.data(), size);
-    tooltip(tooltip_message.data());
+    if (!(options & GradientOptions_NoTooltip))
+    {
+        tooltip(tooltip_message.data());
+    }
     return clicked;
 }
 
@@ -110,30 +114,32 @@ bool gradient_interpolation_mode(Interpolation& interpolation_mode)
     }
 }
 
-auto delete_button(const float size) -> bool
+auto delete_button(const float size, GradientOptions options = GradientOptions_None) -> bool
 {
     return button(
         "-",
         "Select a mark to remove it\nor middle click on it\nor drag it down",
-        ImVec2{size, size}
+        ImVec2{size, size},
+        options
     );
 }
 
-auto add_button(const float size) -> bool
+auto add_button(const float size, GradientOptions options = GradientOptions_None) -> bool
 {
     return button(
         "+",
         "Add a mark here\nor click on the gradient to choose its position",
-        ImVec2{size, size}
+        ImVec2{size, size},
+        options
     );
 }
 
-auto color_button(Mark* selected_mark, ImGuiColorEditFlags flags) -> bool
+auto color_button(Mark* selected_mark, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool
 {
-    return (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), ImGuiColorEditFlags_NoInputs | flags));
+    return (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), !(options & GradientOptions_NoTooltip) ? ImGuiColorEditFlags_NoInputs | flags : ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | flags));
 }
 
-auto precise_position(Gradient gradient, Mark* selected_mark, const float width) -> bool
+auto precise_position(Gradient gradient, Mark* selected_mark, const float width, GradientOptions options = GradientOptions_None) -> bool
 {
     bool modified = false;
     ImGui::PushItemWidth(width * .25f);
@@ -145,7 +151,7 @@ auto precise_position(Gradient gradient, Mark* selected_mark, const float width)
             gradient.get_marks().sorted();
             modified = true;
         }
-        if (!gradient.is_empty())
+        if (!gradient.is_empty() && !(options & GradientOptions_NoTooltip))
         {
             tooltip("Choose a precise position");
         }
@@ -153,25 +159,28 @@ auto precise_position(Gradient gradient, Mark* selected_mark, const float width)
     return modified;
 }
 
-auto random_mode_box(bool& random_mode) -> bool
+auto random_mode_box(bool& random_mode, GradientOptions options = GradientOptions_None) -> bool
 {
     const bool activate = ImGui::Checkbox("Random Mode", &random_mode);
-    tooltip("Add mark with random color");
+    if (!(options & GradientOptions_NoTooltip))
+    {
+        tooltip("Add mark with random color");
+    }
     return activate;
 }
 
-auto reset_button() -> bool
+auto reset_button(GradientOptions options = GradientOptions_None) -> bool
 {
-    return button("Reset", "Reset gradient to the default value");
+    return button("Reset", "Reset gradient to the default value", ImVec2{0.f, 0.f}, options);
 }
 
-auto popup(Mark* selected_mark, const float item_size, ImGuiColorEditFlags flags) -> bool
+auto popup(Mark* selected_mark, const float item_size, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool
 {
     const float popup_size = item_size * 12.f;
     if (ImGui::BeginPopup("picker") && selected_mark)
     {
         ImGui::SetNextItemWidth(popup_size);
-        const bool modified = ImGui::ColorPicker4("##picker2", reinterpret_cast<float*>(&selected_mark->color), flags);
+        const bool modified = ImGui::ColorPicker4("##picker2", reinterpret_cast<float*>(&selected_mark->color), !(options & GradientOptions_NoTooltip) ? flags : ImGuiColorEditFlags_NoTooltip | flags);
         ImGui::EndPopup();
         return modified;
     }
