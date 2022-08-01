@@ -3,9 +3,6 @@
 #include <imgui/imgui.h>
 #include "GradientOptions.h"
 
-// TODO(ASG) unwanted behaviour when "+" and "-" button does not exists
-// TODO(ASG) often when dragging a mark a black line appears
-
 auto gradient_options_debug() -> GradientOptions
 {
     GradientOptions options = GradientOptions_None;
