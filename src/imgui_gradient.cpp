@@ -112,7 +112,7 @@ float position_where_add_mark(Gradient& gradient)
     }
 }
 
-auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float bar_pos_x) -> bool
+auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float bar_pos_x, GradientOptions options) -> bool
 {
     bool dragging = false;
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && dragging_mark)
@@ -129,17 +129,19 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
             gradient.get_marks().sorted();
             dragging = true;
         }
-        // hide dragging mark when mouse under gradient bar
-        float diffY = ImGui::GetIO().MousePos.y - bar_bottom;
-        if (diffY >= variables::GRADIENT_MARK_DELETE_DIFFY)
-        {
-            mark_to_hide = dragging_mark;
-        }
-        // do not hide it anymore when mouse on gradient bar
-        if (mark_to_hide && diffY <= variables::GRADIENT_MARK_DELETE_DIFFY)
-        {
-            dragging_mark = mark_to_hide;
-            mark_to_hide  = nullptr;
+        if (!(options & GradientOptions_NoDragDowntoDelete))
+        { // hide dragging mark when mouse under gradient bar
+            float diffY = ImGui::GetIO().MousePos.y - bar_bottom;
+            if (diffY >= variables::GRADIENT_MARK_DELETE_DIFFY)
+            {
+                mark_to_hide = dragging_mark;
+            }
+            // do not hide it anymore when mouse on gradient bar
+            if (mark_to_hide && diffY <= variables::GRADIENT_MARK_DELETE_DIFFY)
+            {
+                dragging_mark = mark_to_hide;
+                mark_to_hide  = nullptr;
+            }
         }
     }
     return dragging;
@@ -172,17 +174,19 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         ImGui::OpenPopup("picker");
     }
 
-    modified |= mouse_dragging(bar_bottom, width, bar_pos.x);
-    // If mouse released and there is still a mark hidden, then it become a mark to delete
-    if (mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
-    {
-        if (dragging_mark && *dragging_mark == *mark_to_hide)
+    modified |= mouse_dragging(bar_bottom, width, bar_pos.x, options);
+    if (!(options & GradientOptions_NoDragDowntoDelete))
+    { // If mouse released and there is still a mark hidden, then it become a mark to delete
+        if (mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
-            dragging_mark = nullptr;
+            if (dragging_mark && *dragging_mark == *mark_to_hide)
+            {
+                dragging_mark = nullptr;
+            }
+            mark_to_delete = mark_to_hide;
+            mark_to_hide   = nullptr;
+            modified |= true;
         }
-        mark_to_delete = mark_to_hide;
-        mark_to_hide   = nullptr;
-        modified |= true;
     }
     // Remove mark_to_delete if it exists
     if (mark_to_delete)
