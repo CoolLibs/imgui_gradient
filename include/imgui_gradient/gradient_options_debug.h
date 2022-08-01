@@ -106,5 +106,17 @@ auto gradient_options_debug() -> GradientOptions
     {
         options |= GradientOptions_NoCombo;
     }
+    static bool no_combo_and_random_mode = false;
+    ImGui::Checkbox("GradientOptions_NoComboAndRandomMode", &no_combo_and_random_mode);
+    if (no_combo_and_random_mode)
+    {
+        options |= GradientOptions_NoComboAndRandomMode;
+    }
+    static bool no_button_and_mark_options = false;
+    ImGui::Checkbox("GradientOptions_NoButtonAndMarkOptions", &no_button_and_mark_options);
+    if (no_button_and_mark_options)
+    {
+        options |= GradientOptions_NoButtonAndMarkOptions;
+    }
     return options;
 }
