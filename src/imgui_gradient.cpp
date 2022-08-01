@@ -198,11 +198,11 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     }
     ImGui::EndGroup();
 
-    float number_of_line_under_bar = 0.f;
+    float      number_of_line_under_bar = 0.f;
+    const bool remove_button_exists     = !(options & GradientOptions_NoRemoveButton);
     if (!gradient.is_empty())
     {
-        const bool remove_button_exists = (options & GradientOptions_NoRemoveButton);
-        if (((!remove_button_exists &&
+        if (((remove_button_exists &&
               delete_button(variables::button_size())) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
@@ -211,34 +211,70 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             selected_mark = nullptr;
             modified |= true;
         }
-        if (!remove_button_exists)
-            ImGui::SameLine();
     }
-    if (!(options & GradientOptions_NoAddButton))
+    const bool add_button_exists = !(options & GradientOptions_NoAddButton);
+    if (add_button_exists)
     {
+        if (remove_button_exists)
+        {
+            ImGui::SameLine();
+        }
         if (add_button(variables::button_size()))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_add_mark(gradient), generator);
         }
-
-        ImGui::SameLine();
     }
-    modified |= color_button(selected_mark, flags);
-    ImGui::SameLine();
-    modified |= precise_position(gradient, selected_mark, width);
-    number_of_line_under_bar += 1.f;
+    const bool color_edit_exists = !(options & GradientOptions_NoColorEdit);
+    if (color_edit_exists)
+    {
+        if ((remove_button_exists || add_button_exists) && selected_mark)
+        {
+            ImGui::SameLine();
+        }
+        modified |= color_button(selected_mark, flags);
+    }
+    if (!(options & GradientOptions_NoDragSlider))
+    {
+        if ((remove_button_exists || add_button_exists || color_edit_exists) && selected_mark)
+        {
+            ImGui::SameLine();
+        }
 
-    modified |= gradient_interpolation_mode(interpolation_mode);
-    ImGui::SameLine();
-    modified |= position_mode_combo(position_mode);
+        modified |= precise_position(gradient, selected_mark, width);
+    }
+    if (!(options & GradientOptions_NoMarkOptions & GradientOptions_NoAddAndRemoveButton))
+    {
+        number_of_line_under_bar += 1.f;
+    }
+
+    const bool interpolation_combo_exists = !(options & GradientOptions_NoInterpolationCombo);
+    if (interpolation_combo_exists)
+    {
+        modified |= gradient_interpolation_mode(interpolation_mode);
+    }
+    const bool position_mode_combo_exists = !(options & GradientOptions_NoPositionModeCombo);
+    if (position_mode_combo_exists)
+    {
+        if (interpolation_combo_exists)
+        {
+            ImGui::SameLine();
+        }
+        modified |= position_mode_combo(position_mode);
+    }
 
     if (!(options & GradientOptions_NoRandomMode))
     {
-        ImGui::SameLine();
+        if (position_mode_combo_exists || interpolation_combo_exists)
+        {
+            ImGui::SameLine();
+        }
         modified |= random_mode_box(random_mode);
     }
-    number_of_line_under_bar += 1.f;
+    if (!(options & GradientOptions_NoCombo & GradientOptions_NoRandomMode))
+    {
+        number_of_line_under_bar += 1.f;
+    }
 
     if (!(options & GradientOptions_NoResetButton))
     {
