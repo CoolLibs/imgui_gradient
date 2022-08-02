@@ -11,8 +11,8 @@ static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpola
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
 
-    draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
     if (!Gradient.is_empty())
+    draw_gradient_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
     {
         draw_gradient(Gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
     }

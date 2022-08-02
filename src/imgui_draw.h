@@ -13,7 +13,7 @@ static void draw_border_widget(const ImVec2 vec1, const ImVec2 vec2, ImColor col
     utils::draw_border(draw_list, vec1, vec2, color);
 }
 
-static void draw_bar_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
+static void draw_gradient_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
 {
     const auto margin = ImVec2{2.f, 2.f};
     utils::draw_border(draw_list, vec1 - margin, vec2 + margin, color);
