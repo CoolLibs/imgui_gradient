@@ -131,11 +131,11 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
     return dragging;
 }
 
-bool GradientWidget::gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin, GradientOptions options, ImGuiColorEditFlags flags)
+bool GradientWidget::gradient_editor(std::string_view label, std::default_random_engine& generator, float horizontal_margin, GradientOptions options, ImGuiColorEditFlags flags)
 {
     if (!(options & GradientOptions_NoLabel))
     {
-        ImGui::Text("%s", name.data());
+        ImGui::Text("%s", label.data());
         ImGui::Dummy(ImVec2{0.f, 1.5f});
     }
 
@@ -273,7 +273,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         float y_space_over_bar = 8.f;
         if (!(options & GradientOptions_NoLabel))
         {
-            y_space_over_bar = ImGui::CalcTextSize(name.data()).y * 2.3f;
+            y_space_over_bar = ImGui::CalcTextSize(label.data()).y * 2.3f;
         }
         float number_of_line_under_bar = 0.f;
         if (!(options & GradientOptions_NoComboAndRandomMode))
