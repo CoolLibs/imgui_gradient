@@ -7,8 +7,10 @@ namespace ImGuiGradient {
 
 class Gradient {
 public:
-    ImVec4 get_color_at(float position, PositionMode mode) const;
-    Mark*  add_mark(const Mark& mark)
+    ImVec4 compute_color_at(float position, PositionMode mode) const;
+    ImVec4 compute_color_at(RelativePosition position) const;
+
+    Mark* add_mark(const Mark& mark)
     {
         return m_marks.add_mark(mark);
     };
@@ -16,7 +18,6 @@ public:
     {
         m_marks.remove_mark(mark);
     };
-    void reset();
     auto is_empty() -> bool
     {
         return m_marks.m_list.empty();
@@ -27,7 +28,6 @@ public:
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a.m_marks.m_list == b.m_marks.m_list; }
 
 private:
-    ImVec4 compute_color_at(RelativePosition position) const;
     Marks  m_marks{};
 };
 

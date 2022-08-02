@@ -64,7 +64,7 @@ public:
     bool            add_mark(const float position, std::default_random_engine& generator)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : gradient.get_color_at(pos, position_mode);
+        const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : gradient.compute_color_at(pos, position_mode);
         return (selected_mark = gradient.add_mark(Mark{pos, new_mark_col}));
     }
     void reset_widget()

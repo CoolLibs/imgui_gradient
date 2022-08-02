@@ -3,29 +3,37 @@
 
 namespace ImGuiGradient {
 
-ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
+auto Gradient::compute_color_at(float position, PositionMode mode) const -> ImVec4
 {
-    switch (mode)
-    {
-    case PositionMode::clamp:
-        return compute_color_at(RelativePosition{
-            ImClamp(position, 0.f, 1.f)});
-    case PositionMode::repeat:
-        return compute_color_at(RelativePosition{
-            utils::repeat_position(position)});
-    case PositionMode::mirror_clamp:
-        return compute_color_at(RelativePosition{
-            utils::mirror_clamp_position(position)});
-    case PositionMode::mirror_repeat:
-        return compute_color_at(RelativePosition{
-            utils::mirror_repeat_position(position)});
-    default:
-        assert(false && "[Gradient::get_color_at] Invalid enum value");
-        return ImVec4{-1.f, -1.f, -1.f, -1.f};
-    }
+    const auto relative_pos = RelativePosition{[&] {
+        switch (mode)
+        {
+        case PositionMode::clamp:
+        {
+            return ImClamp(position, 0.f, 1.f);
+        }
+        case PositionMode::repeat:
+        {
+            return utils::repeat_position(position);
+        }
+        case PositionMode::mirror_clamp:
+        {
+            return utils::mirror_clamp_position(position);
+        }
+        case PositionMode::mirror_repeat:
+        {
+            return utils::mirror_repeat_position(position);
+        }
+        default:
+            assert(false && "[Gradient::get_color_at] Invalid enum value");
+            return 0.5f;
+        }
+    }()};
+
+    return compute_color_at(relative_pos);
 }
 
-ImVec4 Gradient::compute_color_at(RelativePosition position) const
+auto Gradient::compute_color_at(RelativePosition position) const -> ImVec4
 {
     const Mark* lower = nullptr;
     const Mark* upper = nullptr;
@@ -48,11 +56,11 @@ ImVec4 Gradient::compute_color_at(RelativePosition position) const
     }
     else if (upper && !lower)
     {
-        lower = upper;
+        return upper->color;
     }
     else if (!upper && lower)
     {
-        upper = lower;
+        return lower->color;
     }
 
     if (upper == lower)
@@ -61,12 +69,9 @@ ImVec4 Gradient::compute_color_at(RelativePosition position) const
     }
     else
     {
-        float distance = upper->get_position() - lower->get_position();
-        float mix      = (position.get() - lower->get_position()) / distance;
-
-        // lerp
-        return ImVec4{(1.f - mix), (1.f - mix), (1.f - mix), (1.f - mix)} * lower->color +
-               ImVec4{mix, mix, mix, mix} * upper->color;
+        float mix = (position.get() - lower->get_position()) /
+                    (upper->get_position() - lower->get_position());
+        return ImLerp(lower->color, upper->color, mix);
     }
 };
 
