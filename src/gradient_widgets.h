@@ -148,7 +148,7 @@ auto precise_position(Gradient gradient, Mark* selected_mark, const float width,
         const float speed = 1.f / width;
         if (ImGui::DragFloat("##3", &selected_mark->get_position(), speed, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
         {
-            gradient.get_marks().sorted();
+            gradient.get_marks().sort();
             modified = true;
         }
         if (!gradient.is_empty() && !(options & GradientOptions_NoTooltip))

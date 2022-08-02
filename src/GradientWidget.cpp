@@ -12,7 +12,7 @@ static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpola
     const float bar_bottom = bar_pos.y + height;
 
     if (!Gradient.is_empty())
-    draw_gradient_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
+        draw_gradient_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
     {
         draw_gradient(Gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
     }
@@ -126,7 +126,7 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
         if (dragging_mark->get_position() != map)
         {
             dragging_mark->position.set(map);
-            gradient.get_marks().sorted();
+            gradient.get_marks().sort();
             dragging = true;
         }
         if (!(options & GradientOptions_NoDragDowntoDelete))

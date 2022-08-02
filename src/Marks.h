@@ -41,7 +41,7 @@ struct Marks {
     // Use std::list instead of vector because it is easier to remove a mark when we do not know the index
     std::list<Mark> m_list{};
 
-    void sorted()
+    void sort()
     {
         m_list.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
     }
@@ -49,25 +49,17 @@ struct Marks {
     {
         m_list.push_back(mark);
         Mark* ptr = &m_list.back();
-        sorted();
+        sort();
         return ptr;
     }
     void remove_mark(const Mark& mark)
     {
         m_list.remove(mark);
-        sorted();
+        sort();
     };
     void clear()
     {
         m_list.clear();
-    }
-    Mark next_mark(Mark* mark) const // Be carefull do not use if there is no next mark
-    {
-        return *std::next(mark);
-    }
-    Mark previous_mark(Mark* mark) const // Be carefull do not use if there is no previous mark
-    {
-        return *std::prev(mark);
     }
     friend auto operator==(const Marks& a, const Marks& b) -> bool { return a.m_list == b.m_list; }
 };
