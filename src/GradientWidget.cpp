@@ -39,7 +39,15 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
     }
 }
 
-static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark*& mark_to_hide, const ImVec2& bar_pos, float width, float height)
+static bool draw_gradient_marks(
+    Gradient&     gradient, // TODO(ASG) Use State&
+    Mark*&        dragging_mark,
+    Mark*&        selected_mark,
+    Mark*&        mark_to_delete,
+    Mark*&        mark_to_hide,
+    const ImVec2& bar_pos,
+    float width, float height
+)
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
@@ -60,7 +68,7 @@ static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
             }
         }
     }
-    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
+    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f)); // TODO(ASG) Rename bar as gradient where it tmakse sense
     return hitbox_is_hovered;
 }
 
@@ -261,6 +269,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
     {
         if (ImGui::Button("Reset"))
         {
+            // state = GradientState{};
             reset_widget();
             modified |= true;
         }

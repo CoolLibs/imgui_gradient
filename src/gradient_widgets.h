@@ -11,7 +11,9 @@
 
 namespace ImGuiGradient {
 
-void tooltip(const char* text)
+// TODO(ASG) Move in .cpp, and mark as static
+
+static void tooltip(const char* text)
 {
     if (ImGui::IsItemHovered())
     {
@@ -21,10 +23,15 @@ void tooltip(const char* text)
     }
 }
 
-auto button_with_tooltip(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}, GradientOptions options = GradientOptions_None) -> bool
+auto button_with_tooltip(
+    std::string_view name,
+    std::string_view tooltip_message,
+    ImVec2           size    = ImVec2{0.f, 0.f},
+    GradientOptions  options = GradientOptions_None
+) -> bool
 {
     const bool clicked = ImGui::Button(name.data(), size);
-    if (!(options & GradientOptions_NoTooltip))
+    if (!(options & GradientOptions_NoTooltip)) // TODO(ASG) Use just a bool should_show_tooltip
     {
         tooltip(tooltip_message.data());
     }
