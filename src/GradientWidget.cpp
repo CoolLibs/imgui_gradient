@@ -6,18 +6,17 @@
 
 namespace ImGuiGradient {
 
-static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpolation_mode, const ImVec2& bar_pos, float width, float height)
+static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mode, ImVec2 bar_pos, float width, float height)
 {
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
 
-    if (!Gradient.is_empty())
-        draw_gradient_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
+    draw_gradient_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
+    if (!gradient.is_empty())
     {
-        draw_gradient(Gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
+        draw_gradient(gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
     }
-
-    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
+    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height));
 }
 
 static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& hovered_mark)
@@ -68,7 +67,8 @@ static bool draw_gradient_marks(
             }
         }
     }
-    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f)); // TODO(ASG) Rename bar as gradient where it tmakse sense
+    static constexpr float space_between_gradient_marks_and_options = 20.f;
+    ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + space_between_gradient_marks_and_options)); // TODO(ASG) Rename bar as gradient where it tmakse sense
     return hitbox_is_hovered;
 }
 
