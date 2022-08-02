@@ -69,12 +69,11 @@ static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     return hitbox_is_hovered;
 }
 
-
-float position_where_add_mark(Gradient& gradient)
+float position_where_to_add_next_mark(Gradient& gradient)
 {
     if (gradient.is_empty())
     {
-        return 0.5f;
+        return 0.f;
     }
     else if (gradient.get_list().size() == 1)
     {
@@ -213,7 +212,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         if (add_button(internal::button_size(), options))
         {
             // Add a mark where there is the greater space in the gradient
-            modified = add_mark(position_where_add_mark(gradient), generator);
+            modified = add_mark(position_where_to_add_next_mark(gradient), generator);
         }
     }
     const bool color_edit_exists = !(options & GradientOptions_NoColorEdit);
