@@ -3,22 +3,6 @@
 
 namespace ImGuiGradient {
 
-static void default_gradient_value(Marks& marks)
-{
-    marks.add_mark(Mark{0.f, ImVec4{0.f, 0.f, 0.f, 1.f}});
-    marks.add_mark(Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}});
-}
-
-Gradient::Gradient()
-{
-    default_gradient_value(m_marks);
-}
-void Gradient::reset()
-{
-    m_marks.clear();
-    default_gradient_value(m_marks);
-}
-
 ImVec4 Gradient::get_color_at(float position, PositionMode mode) const
 {
     switch (mode)

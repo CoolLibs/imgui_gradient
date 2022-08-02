@@ -7,7 +7,6 @@ namespace ImGuiGradient {
 
 class Gradient {
 public:
-    Gradient();
     ImVec4 get_color_at(float position, PositionMode mode) const;
     Mark*  add_mark(const Mark& mark)
     {

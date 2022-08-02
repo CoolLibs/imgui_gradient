@@ -48,7 +48,6 @@
 #include "Interpolation.h"
 #include "random.h"
 
-
 namespace ImGuiGradient {
 
 static auto random_color(std::default_random_engine& generator) -> ImVec4
@@ -70,7 +69,7 @@ public:
     }
     void reset_widget()
     {
-        gradient.reset();
+        gradient           = Gradient{};
         dragging_mark      = nullptr;
         selected_mark      = nullptr;
         mark_to_hide       = nullptr;

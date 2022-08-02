@@ -39,7 +39,7 @@ struct Mark {
 
 struct Marks {
     // Use std::list instead of vector because it is easier to remove a mark when we do not know the index
-    std::list<Mark> m_list{};
+    std::list<Mark> m_list{Mark{0.f, ImVec4{0.f, 0.f, 0.f, 1.f}}, Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}}};
 
     void sort()
     {
