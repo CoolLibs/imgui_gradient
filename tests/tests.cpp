@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
-#include <imgui_gradient/GradientOptions.h>
-#include <imgui_gradient/utils.h>
 #include <imgui_gradient/imgui_gradient.hpp>
+#include "../src/GradientOptions.h"
+#include "../src/utils.h"
 #include "gradient_options_debug.h"
 
 // Check out doctest's documentation: https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md

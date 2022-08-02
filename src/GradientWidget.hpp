@@ -43,10 +43,11 @@
 
 #pragma once
 
-#include <imgui_gradient/GradientOptions.h>
-#include <imgui_gradient/random.h>
 #include "Gradient.h"
+#include "GradientOptions.h"
 #include "Interpolation.h"
+#include "random.h"
+
 
 namespace ImGuiGradient {
 

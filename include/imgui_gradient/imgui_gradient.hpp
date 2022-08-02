@@ -1,3 +1,3 @@
 #pragma once
 
-#include <imgui_gradient/GradientWidget.hpp>
+#include "../src/GradientWidget.hpp"
