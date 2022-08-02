@@ -84,7 +84,14 @@ auto add_button(const float size, GradientOptions options = GradientOptions_None
 
 auto color_button(Mark* selected_mark, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool
 {
-    return (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), !(options & GradientOptions_NoTooltip) ? ImGuiColorEditFlags_NoInputs | flags : ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | flags));
+    return selected_mark &&
+           ImGui::ColorEdit4(
+               "##picker1",
+               reinterpret_cast<float*>(&selected_mark->color),
+               !(options & GradientOptions_NoTooltip)
+                   ? ImGuiColorEditFlags_NoInputs | flags
+                   : ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | flags
+           );
 }
 
 auto precise_position(Mark& selected_mark, const float width) -> bool
@@ -102,12 +109,12 @@ auto precise_position(Mark& selected_mark, const float width) -> bool
 
 auto random_mode_box(bool& random_mode, GradientOptions options = GradientOptions_None) -> bool
 {
-    const bool activate = ImGui::Checkbox("Random Mode", &random_mode);
+    const bool modified = ImGui::Checkbox("Random Mode", &random_mode);
     if (!(options & GradientOptions_NoTooltip))
     {
         tooltip("Add mark with random color");
     }
-    return activate;
+    return modified;
 }
 
 
@@ -117,7 +124,13 @@ auto popup(Mark* selected_mark, const float item_size, GradientOptions options =
     if (ImGui::BeginPopup("picker") && selected_mark)
     {
         ImGui::SetNextItemWidth(popup_size);
-        const bool modified = ImGui::ColorPicker4("##picker2", reinterpret_cast<float*>(&selected_mark->color), !(options & GradientOptions_NoTooltip) ? flags : ImGuiColorEditFlags_NoTooltip | flags);
+        const bool modified = ImGui::ColorPicker4(
+            "##picker2",
+            reinterpret_cast<float*>(&selected_mark->color),
+            !(options & GradientOptions_NoTooltip)
+                ? flags
+                : ImGuiColorEditFlags_NoTooltip | flags
+        );
         ImGui::EndPopup();
         return modified;
     }
