@@ -3,10 +3,10 @@
 namespace ImGuiGradient {
 
 enum class PositionMode {
-    clamp,
-    repeat,
-    mirror_clamp,
-    mirror_repeat
+    Clamp,
+    Repeat,
+    MirrorClamp,
+    MirrorRepeat
 };
 
 } // namespace ImGuiGradient

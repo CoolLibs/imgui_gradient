@@ -33,7 +33,7 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
         const float to   = bar_pos.x + mark.position.get() * (width);
         if (mark.position != 0.f)
         {
-            if (interpolation_mode == Interpolation::linear)
+            if (interpolation_mode == Interpolation::Linear)
             {
                 utils::draw_gradient_between_two_colors(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
             }

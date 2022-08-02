@@ -73,8 +73,8 @@ public:
         dragging_mark      = nullptr;
         selected_mark      = nullptr;
         mark_to_hide       = nullptr;
-        position_mode      = PositionMode::clamp;
-        interpolation_mode = Interpolation::linear;
+        position_mode      = PositionMode::Clamp;
+        interpolation_mode = Interpolation::Linear;
         random_mode        = false;
     }
     auto mouse_dragging(const float bar_bottom, float width, float bar_pos_x, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool;
@@ -85,8 +85,8 @@ private:
     Mark*         dragging_mark{};
     Mark*         selected_mark{};
     Mark*         mark_to_hide{};
-    PositionMode  position_mode      = PositionMode::clamp;
-    Interpolation interpolation_mode = Interpolation::linear;
+    PositionMode  position_mode      = PositionMode::Clamp;
+    Interpolation interpolation_mode = Interpolation::Linear;
     bool          random_mode        = false;
 };
 

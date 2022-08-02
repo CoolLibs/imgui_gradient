@@ -8,19 +8,19 @@ auto Gradient::compute_color_at(float position, PositionMode mode) const -> ImVe
     const auto relative_pos = RelativePosition{[&] {
         switch (mode)
         {
-        case PositionMode::clamp:
+        case PositionMode::Clamp:
         {
             return ImClamp(position, 0.f, 1.f);
         }
-        case PositionMode::repeat:
+        case PositionMode::Repeat:
         {
             return utils::repeat_position(position);
         }
-        case PositionMode::mirror_clamp:
+        case PositionMode::MirrorClamp:
         {
             return utils::mirror_clamp_position(position);
         }
-        case PositionMode::mirror_repeat:
+        case PositionMode::MirrorRepeat:
         {
             return utils::mirror_repeat_position(position);
         }
