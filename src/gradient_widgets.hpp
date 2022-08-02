@@ -24,14 +24,14 @@ static void tooltip(const char* text)
 }
 
 auto button_with_tooltip(
-    std::string_view   name,
-    std::string_view   tooltip_message,
-    ImVec2             size    = ImVec2{0.f, 0.f},
-    ImGuiGradientFlags options = ImGuiGradientFlags_None
+    std::string_view name,
+    std::string_view tooltip_message,
+    ImVec2           size                = ImVec2{0.f, 0.f},
+    bool             should_show_tooltip = true
 ) -> bool
 {
     const bool clicked = ImGui::Button(name.data(), size);
-    if (!(options & ImGuiGradientFlags_NoTooltip)) // TODO(ASG) Use just a bool should_show_tooltip
+    if (should_show_tooltip)
     {
         tooltip(tooltip_message.data());
     }
@@ -62,33 +62,33 @@ auto gradient_interpolation_mode(Interpolation& interpolation_mode) -> bool
     );
 }
 
-auto delete_button(const float size, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool
+auto delete_button(const float size, bool should_show_tooltip) -> bool
 {
     return button_with_tooltip(
         "-",
         "Select a mark to remove it\nor middle click on it\nor drag it down",
         ImVec2{size, size},
-        options
+        should_show_tooltip
     );
 }
 
-auto add_button(const float size, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool
+auto add_button(const float size, bool should_show_tooltip) -> bool
 {
     return button_with_tooltip(
         "+",
         "Add a mark here\nor click on the gradient to choose its position",
         ImVec2{size, size},
-        options
+        should_show_tooltip
     );
 }
 
-auto color_button(Mark* selected_mark, ImGuiGradientFlags options = ImGuiGradientFlags_None, ImGuiColorEditFlags flags = 0) -> bool
+auto color_button(Mark* selected_mark, bool should_show_tooltip, ImGuiColorEditFlags flags = 0) -> bool
 {
     return selected_mark &&
            ImGui::ColorEdit4(
                "##colorpicker1",
                reinterpret_cast<float*>(&selected_mark->color),
-               !(options & ImGuiGradientFlags_NoTooltip)
+               should_show_tooltip
                    ? ImGuiColorEditFlags_NoInputs | flags
                    : ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | flags
            );
@@ -107,17 +107,17 @@ auto precise_position(Mark& selected_mark, const float width) -> bool
     ));
 }
 
-auto random_mode_box(bool& random_mode, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool
+auto random_mode_box(bool& random_mode, bool should_show_tooltip) -> bool
 {
     const bool modified = ImGui::Checkbox("Random Mode", &random_mode);
-    if (!(options & ImGuiGradientFlags_NoTooltip))
+    if (should_show_tooltip)
     {
         tooltip("Add mark with random color");
     }
     return modified;
 }
 
-auto open_color_picker_popup(Mark& selected_mark, const float popup_size, ImGuiGradientFlags options = ImGuiGradientFlags_None, ImGuiColorEditFlags flags = 0) -> bool //
+auto open_color_picker_popup(Mark& selected_mark, const float popup_size, bool should_show_tooltip, ImGuiColorEditFlags flags = 0) -> bool //
 {
     if (ImGui::BeginPopup("SelectedMarkColorPicker"))
     {
@@ -125,7 +125,7 @@ auto open_color_picker_popup(Mark& selected_mark, const float popup_size, ImGuiG
         const bool modified = ImGui::ColorPicker4(
             "##colorpicker2",
             reinterpret_cast<float*>(&selected_mark.color),
-            !(options & ImGuiGradientFlags_NoTooltip)
+            !should_show_tooltip
                 ? flags
                 : ImGuiColorEditFlags_NoTooltip | flags
         );

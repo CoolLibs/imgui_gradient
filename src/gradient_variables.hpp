@@ -27,17 +27,22 @@ inline auto gradient_position(float offset) -> ImVec2
 
 inline auto color__border() -> ImU32
 {
-    return IM_COL32(100, 100, 100, 255); // TODO(ASG) Use ImGui's color from the theme (ImGui::GetStyleColorVec4(ImGuiCol_NavHighlight);) Don't use GetStyleColorVec4, use the one that returns a IM_COL32 directly
+    return ImGui::GetColorU32(ImGuiCol_Border);
 }
 
-inline auto color__inside_arrow_border() -> ImU32
+inline auto color__mark() -> ImU32
 {
-    return IM_COL32(0, 0, 0, 255);
+    return ImGui::GetColorU32(ImGuiCol_Button);
+}
+
+inline auto color__hovered_mark() -> ImU32
+{
+    return ImGui::GetColorU32(ImGuiCol_ButtonHovered);
 }
 
 inline auto color__selected_mark() -> ImU32
 {
-    return IM_COL32(0, 255, 0, 255);
+    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
 }
 
 } // namespace internal

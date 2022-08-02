@@ -52,7 +52,7 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
     }
 }
 
-static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor border_color, ImColor inside_border_color, const float arrow_border, const float offset)
+static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor arrow_mark, const float arrow_border, const float offset)
 {
     const float arrow_inside_border = arrow_border - offset;
 
@@ -64,9 +64,9 @@ static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColo
     const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
     const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
 
-    draw_list.AddTriangleFilled(pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, border_color);
-    utils::draw_uniform_square(draw_list, pos - arrow_border_x, pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y, border_color);
-    utils::draw_uniform_square(draw_list, pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, inside_border_color);
+    draw_list.AddTriangleFilled(pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, arrow_mark);
+    utils::draw_uniform_square(draw_list, pos - arrow_border_x, pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y, arrow_mark);
+    utils::draw_uniform_square(draw_list, pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, arrow_mark);
 }
 
 static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor selected_color, const float arrow_inside_border, const float arrow_selected, const float offset)
@@ -91,14 +91,14 @@ static bool mark_invisible_button(const ImVec2 vec, const float arrow_border)
     return ImGui::IsItemHovered();
 }
 
-static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, const float arrow_border, bool cond)
+static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor background_mark_color, ImColor mark_color, const float arrow_border, bool cond)
 {
     const float offset = 1.f;
 
     ImGuiGradient::draw_background_mark(
         draw_list,
         pos,
-        internal::color__border(), internal::color__inside_arrow_border(),
+        background_mark_color,
         arrow_border, offset
     );
     if (cond)
@@ -128,8 +128,15 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
 static void mark_invisble_hitbox(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, bool cond)
 {
     const float arrow_border = 6.f;
-    draw_mark(draw_list, pos, mark_color, arrow_border, cond);
-    mark_invisible_button(pos, arrow_border);
+    draw_mark(
+        draw_list,
+        pos,
+        mark_invisible_button(pos, arrow_border) ? internal::color__hovered_mark()
+                                                 : internal::color__mark(),
+        mark_color,
+        arrow_border,
+        cond
+    );
 }
 
 } // namespace ImGuiGradient

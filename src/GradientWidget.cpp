@@ -191,12 +191,12 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         modified |= true;
     }
     ImGui::EndGroup();
-
+    const bool no_tooltip           = !(options & ImGuiGradientFlags_NoTooltip);
     const bool remove_button_exists = !(options & ImGuiGradientFlags_NoRemoveButton);
     if (!gradient.is_empty())
     {
         if (((remove_button_exists &&
-              delete_button(internal::button_size(), options)) ||
+              delete_button(internal::button_size(), no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
@@ -212,7 +212,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         {
             ImGui::SameLine();
         }
-        if (add_button(internal::button_size(), options))
+        if (add_button(internal::button_size(), no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_to_add_next_mark(gradient), generator);
@@ -225,7 +225,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         {
             ImGui::SameLine();
         }
-        modified |= color_button(selected_mark, options, flags);
+        modified |= color_button(selected_mark, no_tooltip, flags);
     }
     if (!(options & ImGuiGradientFlags_NoPositionSlider))
     {
@@ -262,7 +262,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         {
             ImGui::SameLine();
         }
-        modified |= random_mode_box(random_mode, options);
+        modified |= random_mode_box(random_mode, no_tooltip);
     }
 
     if (!(options & ImGuiGradientFlags_NoResetButton))
@@ -277,7 +277,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
 
     if (selected_mark)
     {
-        modified |= open_color_picker_popup(*selected_mark, internal::button_size() * 12.f, options, flags);
+        modified |= open_color_picker_popup(*selected_mark, internal::button_size() * 12.f, no_tooltip, flags);
     }
 
     if (!(options & ImGuiGradientFlags_NoBorder))
