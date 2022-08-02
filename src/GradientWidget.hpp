@@ -43,10 +43,10 @@
 
 #pragma once
 
-#include "Gradient.h"
-#include "ImGuiGradientFlags.h"
-#include "Interpolation.h"
-#include "random.h"
+#include "Gradient.hpp"
+#include "ImGuiGradientFlags.hpp"
+#include "Interpolation.hpp"
+#include "random.hpp"
 
 namespace ImGuiGradient {
 

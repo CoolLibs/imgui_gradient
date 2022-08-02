@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Gradient.h"
-#include "Interpolation.h"
-#include "gradient_variables.h"
-#include "imgui_draw_utils.h"
+#include "Gradient.hpp"
+#include "Interpolation.hpp"
+#include "gradient_variables.hpp"
+#include "imgui_draw_utils.hpp"
 
 namespace ImGuiGradient {
 

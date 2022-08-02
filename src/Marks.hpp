@@ -13,7 +13,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "RelativePosition.h"
+#include "RelativePosition.hpp"
 
 namespace ImGuiGradient {
 

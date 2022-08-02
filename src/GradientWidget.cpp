@@ -1,8 +1,8 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
-#include "gradient_widgets.h"
-#include "imgui_draw.h"
-#include "random.h"
+#include "gradient_widgets.hpp"
+#include "imgui_draw.hpp"
+#include "random.hpp"
 
 namespace ImGuiGradient {
 

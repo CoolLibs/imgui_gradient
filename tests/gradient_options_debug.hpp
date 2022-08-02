@@ -1,7 +1,7 @@
 #pragma once
 
 #include <imgui/imgui.h>
-#include "../src/ImGuiGradientFlags.h"
+#include "../src/ImGuiGradientFlags.hpp"
 
 auto gradient_options_debug() -> ImGuiGradientFlags
 {

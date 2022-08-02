@@ -1,5 +1,5 @@
-#include "Gradient.h"
-#include "utils.h"
+#include "Gradient.hpp"
+#include "utils.hpp"
 
 namespace ImGuiGradient {
 

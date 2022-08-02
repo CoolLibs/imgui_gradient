@@ -3,11 +3,11 @@
 #include <imgui/imgui.h>
 #include <cassert>
 #include <string_view>
-#include "Gradient.h"
-#include "ImGuiGradientFlags.h"
-#include "Interpolation.h"
-#include "PositionMode.h"
-#include "gradient_variables.h"
+#include "Gradient.hpp"
+#include "ImGuiGradientFlags.hpp"
+#include "Interpolation.hpp"
+#include "PositionMode.hpp"
+#include "gradient_variables.hpp"
 
 namespace ImGuiGradient {
 
