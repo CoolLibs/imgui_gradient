@@ -69,16 +69,6 @@ static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*&
     return hitbox_is_hovered;
 }
 
-bool gradient_button(Gradient& gradient, const Interpolation& interpolation)
-{
-    const ImVec2 widget_pos = ImGui::GetCursorScreenPos();
-    const float  width      = ImMax(250.0f, ImGui::GetContentRegionAvail().x - 100.0f);
-    const bool   clicked    = ImGui::InvisibleButton("gradient_bar", ImVec2(widget_pos.x + width, internal::gradient_height));
-
-    draw_gradient_bar(gradient, interpolation, widget_pos, width, internal::gradient_height);
-
-    return clicked;
-}
 
 float position_where_add_mark(Gradient& gradient)
 {

@@ -90,6 +90,4 @@ private:
     bool          random_mode        = false;
 };
 
-bool gradient_button(Gradient* gradient, const Interpolation& interpolation);
-
 } // namespace ImGuiGradient
