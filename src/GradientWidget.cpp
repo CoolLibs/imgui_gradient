@@ -11,7 +11,7 @@ static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpola
     ImDrawList& draw_list  = *ImGui::GetWindowDrawList();
     const float bar_bottom = bar_pos.y + height;
 
-    draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), variables::border_color());
+    draw_bar_border(draw_list, bar_pos, ImVec2(bar_pos.x + width, bar_bottom), internal::color__border());
     if (!Gradient.is_empty())
     {
         draw_gradient(Gradient, draw_list, interpolation_mode, bar_pos, bar_bottom, width);
@@ -73,9 +73,9 @@ bool gradient_button(Gradient& gradient, const Interpolation& interpolation)
 {
     const ImVec2 widget_pos = ImGui::GetCursorScreenPos();
     const float  width      = ImMax(250.0f, ImGui::GetContentRegionAvail().x - 100.0f);
-    const bool   clicked    = ImGui::InvisibleButton("gradient_bar", ImVec2(widget_pos.x + width, variables::GRADIENT_BAR_WIDGET_HEIGHT));
+    const bool   clicked    = ImGui::InvisibleButton("gradient_bar", ImVec2(widget_pos.x + width, internal::gradient_height));
 
-    draw_gradient_bar(gradient, interpolation, widget_pos, width, variables::GRADIENT_BAR_WIDGET_HEIGHT);
+    draw_gradient_bar(gradient, interpolation, widget_pos, width, internal::gradient_height);
 
     return clicked;
 }
@@ -132,12 +132,12 @@ auto GradientWidget::mouse_dragging(const float bar_bottom, float width, float b
         if (!(options & GradientOptions_NoDragDowntoDelete))
         { // hide dragging mark when mouse under gradient bar
             float diffY = ImGui::GetIO().MousePos.y - bar_bottom;
-            if (diffY >= variables::GRADIENT_MARK_DELETE_DIFFY)
+            if (diffY >= internal::gradient_mak_delete_diffy)
             {
                 mark_to_hide = dragging_mark;
             }
             // do not hide it anymore when mouse on gradient bar
-            if (mark_to_hide && diffY <= variables::GRADIENT_MARK_DELETE_DIFFY)
+            if (mark_to_hide && diffY <= internal::gradient_mak_delete_diffy)
             {
                 dragging_mark = mark_to_hide;
                 mark_to_hide  = nullptr;
@@ -155,17 +155,17 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         ImGui::Dummy(ImVec2{0.f, 1.5f});
     }
 
-    const ImVec2 bar_pos    = variables::bar_position(horizontal_margin);
+    const ImVec2 bar_pos    = internal::gradient_position(horizontal_margin);
     const float  width      = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
-    const float  bar_bottom = bar_pos.y + variables::GRADIENT_BAR_EDITOR_HEIGHT;
+    const float  bar_bottom = bar_pos.y + internal::gradient_editor_height;
 
     ImGui::BeginGroup();
-    ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, variables::GRADIENT_BAR_EDITOR_HEIGHT));
-    draw_gradient_bar(gradient, interpolation_mode, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+    ImGui::InvisibleButton("gradient_editor_bar", ImVec2(width, internal::gradient_editor_height));
+    draw_gradient_bar(gradient, interpolation_mode, bar_pos, width, internal::gradient_editor_height);
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, variables::GRADIENT_BAR_EDITOR_HEIGHT);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, bar_pos, width, internal::gradient_editor_height);
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)
@@ -204,7 +204,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
     if (!gradient.is_empty())
     {
         if (((remove_button_exists &&
-              delete_button(variables::button_size(), options)) ||
+              delete_button(internal::button_size(), options)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             selected_mark)
         {
@@ -220,7 +220,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             ImGui::SameLine();
         }
-        if (add_button(variables::button_size(), options))
+        if (add_button(internal::button_size(), options))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_add_mark(gradient), generator);
@@ -278,7 +278,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         }
     }
 
-    modified |= popup(selected_mark, variables::button_size(), options, flags);
+    modified |= popup(selected_mark, internal::button_size(), options, flags);
 
     if (!(options & GradientOptions_NoBorder))
     {
@@ -300,11 +300,11 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
         {
             number_of_line_under_bar += 1.f;
         }
-        const float y_space_under_bar = bar_bottom + variables::button_size() * number_of_line_under_bar;
+        const float y_space_under_bar = bar_bottom + internal::button_size() * number_of_line_under_bar;
         draw_border_widget(
             bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
             ImVec2(bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar * 1.25f),
-            variables::border_color()
+            internal::color__border()
         );
     }
 

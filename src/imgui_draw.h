@@ -85,8 +85,8 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
 
 static bool mark_button(const ImVec2 vec, const float arrow_border)
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, variables::GRADIENT_BAR_EDITOR_HEIGHT});
-    const ImVec2 button_size = {arrow_border * 3.f, variables::GRADIENT_BAR_EDITOR_HEIGHT + arrow_border * 2.f};
+    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, internal::gradient_editor_height});
+    const ImVec2 button_size = {arrow_border * 3.f, internal::gradient_editor_height + arrow_border * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
@@ -98,7 +98,7 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
     ImGuiGradient::draw_background_mark(
         draw_list,
         pos,
-        variables::border_color(), variables::inside_arrow_border_color(),
+        internal::color__border(), internal::color__inside_arrow_border(),
         arrow_border, offset
     );
     if (cond)
@@ -109,7 +109,7 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
         ImGuiGradient::arrow_selected(
             draw_list,
             pos,
-            variables::selected_mark_color(),
+            internal::color__selected_mark(),
             arrow_inside_border, arrow_selected, offset
         );
     }
