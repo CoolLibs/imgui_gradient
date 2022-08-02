@@ -32,10 +32,10 @@ auto gradient_options_debug() -> GradientOptions
         options |= GradientOptions_NoLabel;
     }
     static bool no_random_mode = false;
-    ImGui::Checkbox("GradientOptions_NoRandomMode", &no_random_mode);
+    ImGui::Checkbox("GradientOptions_NoRandomModeChange", &no_random_mode);
     if (no_random_mode)
     {
-        options |= GradientOptions_NoRandomMode;
+        options |= GradientOptions_NoRandomModeChange;
     }
     static bool no_add_button = false;
     ImGui::Checkbox("GradientOptions_NoAddButton", &no_add_button);
@@ -50,10 +50,10 @@ auto gradient_options_debug() -> GradientOptions
         options |= GradientOptions_NoRemoveButton;
     }
     static bool no_drag_slider = false;
-    ImGui::Checkbox("GradientOptions_NoDragSlider", &no_drag_slider);
+    ImGui::Checkbox("GradientOptions_NoPositionSlider", &no_drag_slider);
     if (no_drag_slider)
     {
-        options |= GradientOptions_NoDragSlider;
+        options |= GradientOptions_NoPositionSlider;
     }
     static bool no_color_edit = false;
     ImGui::Checkbox("GradientOptions_NoColorEdit", &no_color_edit);

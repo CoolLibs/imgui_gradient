@@ -227,7 +227,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         }
         modified |= color_button(selected_mark, options, flags);
     }
-    if (!(options & GradientOptions_NoDragSlider))
+    if (!(options & GradientOptions_NoPositionSlider))
     {
         if ((remove_button_exists || add_button_exists || color_edit_exists) && selected_mark)
         {
@@ -256,7 +256,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         modified |= position_mode_combo(position_mode);
     }
 
-    if (!(options & GradientOptions_NoRandomMode))
+    if (!(options & GradientOptions_NoRandomModeChange))
     {
         if (position_mode_combo_exists || interpolation_combo_exists)
         {
