@@ -1,7 +1,7 @@
 #pragma once
 
 #include <imgui/imgui.h>
-#include "GradientOptions.h"
+#include "../src/GradientOptions.h"
 
 auto gradient_options_debug() -> GradientOptions
 {
