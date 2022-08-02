@@ -31,87 +31,28 @@ auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size
     return clicked;
 }
 
-bool position_mode_combo(PositionMode& position_mode)
+auto position_mode_combo(PositionMode& position_mode) -> bool
 {
     // Take the greater word to choose combo size
-    ImGui::PushItemWidth(ImGui::CalcTextSize("Mirror Repeat").x * 1.5f);
-    int current_combo_item = [&]() {
-        switch (position_mode)
-        {
-        case PositionMode::clamp:
-            return 0;
-        case PositionMode::repeat:
-            return 1;
-        case PositionMode::mirror_clamp:
-            return 2;
-        case PositionMode::mirror_repeat:
-            return 3;
-        default:
-            assert(false && "[ImGuiGradient::position_mode_combo] Invalid enum value");
-            return -1;
-        }
-    }();
-    const char* position_mode_items = " Clamp\0 Repeat\0 Mirror Clamp\0 Mirror Repeat\0\0";
-    if (ImGui::Combo("Position Mode", &current_combo_item, position_mode_items))
-    {
-        switch (current_combo_item)
-        {
-        case 0:
-            position_mode = PositionMode::clamp;
-            break;
-        case 1:
-            position_mode = PositionMode::repeat;
-            break;
-        case 2:
-            position_mode = PositionMode::mirror_clamp;
-            break;
-        case 3:
-            position_mode = PositionMode::mirror_repeat;
-            break;
-        }
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f;
+    ImGui::SetNextItemWidth(size);
+    return ImGui::Combo(
+        "Position Mode",
+        reinterpret_cast<int*>(&position_mode),
+        " Clamp\0 Repeat\0 Mirror Clamp\0 Mirror Repeat\0\0"
+    );
 }
 
-bool gradient_interpolation_mode(Interpolation& interpolation_mode)
+auto gradient_interpolation_mode(Interpolation& interpolation_mode) -> bool
 {
     // Take the greater word to choose combo size
-    ImGui::PushItemWidth(ImGui::CalcTextSize("Constant").x * 2.f);
-    int current_combo_item = [&]() {
-        switch (interpolation_mode)
-        {
-        case Interpolation::linear:
-            return 0;
-        case Interpolation::constant:
-            return 1;
-        default:
-            assert(false && "[ImGuiGradient::gradient_interpolation_mode] Invalid enum value");
-            return 0;
-        }
-    }();
-    const char* interpolation_mode_items = " Linear\0 Constant\0\0";
-    if (ImGui::Combo("Interpolation Mode", &current_combo_item, interpolation_mode_items))
-    {
-        switch (current_combo_item)
-        {
-        case 0:
-            interpolation_mode = Interpolation::linear;
-            break;
-        case 1:
-            interpolation_mode = Interpolation::constant;
-            break;
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    const float size = ImGui::CalcTextSize("Constant").x + 50.f;
+    ImGui::SetNextItemWidth(size);
+    return ImGui::Combo(
+        "Interpolation Mode",
+        reinterpret_cast<int*>(&interpolation_mode),
+        " Linear\0 Constant\0\0"
+    );
 }
 
 auto delete_button(const float size, GradientOptions options = GradientOptions_None) -> bool
