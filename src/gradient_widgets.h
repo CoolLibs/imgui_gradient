@@ -21,7 +21,7 @@ void tooltip(const char* text)
     }
 }
 
-auto button(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}, GradientOptions options = GradientOptions_None) -> bool
+auto button_with_tooltip(std::string_view name, std::string_view tooltip_message, ImVec2 size = ImVec2{0.f, 0.f}, GradientOptions options = GradientOptions_None) -> bool
 {
     const bool clicked = ImGui::Button(name.data(), size);
     if (!(options & GradientOptions_NoTooltip))
@@ -57,7 +57,7 @@ auto gradient_interpolation_mode(Interpolation& interpolation_mode) -> bool
 
 auto delete_button(const float size, GradientOptions options = GradientOptions_None) -> bool
 {
-    return button(
+    return button_with_tooltip(
         "-",
         "Select a mark to remove it\nor middle click on it\nor drag it down",
         ImVec2{size, size},
@@ -67,7 +67,7 @@ auto delete_button(const float size, GradientOptions options = GradientOptions_N
 
 auto add_button(const float size, GradientOptions options = GradientOptions_None) -> bool
 {
-    return button(
+    return button_with_tooltip(
         "+",
         "Add a mark here\nor click on the gradient to choose its position",
         ImVec2{size, size},
