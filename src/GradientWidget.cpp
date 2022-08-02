@@ -28,7 +28,7 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
     {
-        ImGui::OpenPopup("SelectedMarkColorPicker"); // TODO(ASG) Rename as SelectedMarkColorPicker
+        ImGui::OpenPopup("SelectedMarkColorPicker");
         selected_mark = &hovered_mark;
     }
     if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
