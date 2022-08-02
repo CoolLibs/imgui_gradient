@@ -80,24 +80,17 @@ auto color_button(Mark* selected_mark, GradientOptions options = GradientOptions
     return (selected_mark && ImGui::ColorEdit4("##picker1", reinterpret_cast<float*>(&selected_mark->color), !(options & GradientOptions_NoTooltip) ? ImGuiColorEditFlags_NoInputs | flags : ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | flags));
 }
 
-auto precise_position(Gradient gradient, Mark* selected_mark, const float width, GradientOptions options = GradientOptions_None) -> bool
+auto precise_position(Mark& selected_mark, const float width) -> bool
 {
-    bool modified = false;
-    ImGui::PushItemWidth(width * .25f);
-    if (selected_mark)
-    {
-        const float speed = 1.f / width;
-        if (ImGui::DragFloat("##3", &selected_mark->get_position(), speed, 0.f, 1.f, "%.3f", ImGuiSliderFlags_AlwaysClamp))
-        {
-            gradient.get_marks().sort();
-            modified = true;
-        }
-        if (!gradient.is_empty() && !(options & GradientOptions_NoTooltip))
-        {
-            tooltip("Choose a precise position");
-        }
-    }
-    return modified;
+    ImGui::SetNextItemWidth(width);
+    const float speed{1.f / width};
+    return (ImGui::DragFloat(
+        "##3",
+        &selected_mark.get_position(),
+        speed, 0.f, 1.f,
+        "%.3f",
+        ImGuiSliderFlags_AlwaysClamp
+    ));
 }
 
 auto random_mode_box(bool& random_mode, GradientOptions options = GradientOptions_None) -> bool

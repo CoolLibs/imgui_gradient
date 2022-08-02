@@ -242,7 +242,10 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
             ImGui::SameLine();
         }
 
-        modified |= precise_position(gradient, selected_mark, width, options);
+        if (selected_mark && precise_position(*selected_mark, width * .25f))
+        {
+            modified = true;
+        }
     }
 
     const bool interpolation_combo_exists = !(options & GradientOptions_NoInterpolationCombo);
