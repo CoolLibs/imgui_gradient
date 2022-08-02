@@ -19,12 +19,12 @@ static void draw_gradient_border(ImDrawList& draw_list, const ImVec2 vec1, const
     utils::draw_border(draw_list, vec1 - margin, vec2 + margin, color);
 }
 
-static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_list, const Interpolation& interpolation_mode, const ImVec2& bar_pos, const float bar_bottom, float width)
+static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Interpolation& interpolation_mode, const ImVec2& bar_pos, const float bar_bottom, float width)
 {
     float current_starting_x = bar_pos.x;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
-        ImGuiGradient::Mark& mark = *markIt;
+        const Mark& mark = *markIt;
 
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(mark.color);
         ImU32 colorAU32 = (markIt != gradient.get_list().begin()) ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color) : colorBU32;
