@@ -86,7 +86,7 @@ auto color_button(Mark* selected_mark, GradientOptions options = GradientOptions
 {
     return selected_mark &&
            ImGui::ColorEdit4(
-               "##picker1",
+               "##colorpicker1",
                reinterpret_cast<float*>(&selected_mark->color),
                !(options & GradientOptions_NoTooltip)
                    ? ImGuiColorEditFlags_NoInputs | flags
@@ -117,16 +117,14 @@ auto random_mode_box(bool& random_mode, GradientOptions options = GradientOption
     return modified;
 }
 
-
-auto popup(Mark* selected_mark, const float item_size, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool
+auto open_color_picker_popup(Mark& selected_mark, const float popup_size, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool //
 {
-    const float popup_size = item_size * 12.f;
-    if (ImGui::BeginPopup("picker") && selected_mark)
+    if (ImGui::BeginPopup("SelectedMarkColorPicker"))
     {
         ImGui::SetNextItemWidth(popup_size);
         const bool modified = ImGui::ColorPicker4(
-            "##picker2",
-            reinterpret_cast<float*>(&selected_mark->color),
+            "##colorpicker2",
+            reinterpret_cast<float*>(&selected_mark.color),
             !(options & GradientOptions_NoTooltip)
                 ? flags
                 : ImGuiColorEditFlags_NoTooltip | flags

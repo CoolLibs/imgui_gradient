@@ -29,7 +29,7 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
     {
-        ImGui::OpenPopup("picker"); // TODO(ASG) Rename as SelectedMarkColorPicker
+        ImGui::OpenPopup("SelectedMarkColorPicker"); // TODO(ASG) Rename as SelectedMarkColorPicker
         selected_mark = &hovered_mark;
     }
     if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
@@ -163,7 +163,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
     if (add_mark_possible && !mark_hitbox_is_hovered)
     {
         modified = add_mark((ImGui::GetIO().MousePos.x - bar_pos.x) / width, generator);
-        ImGui::OpenPopup("picker");
+        ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
     modified |= mouse_dragging(bar_bottom, width, bar_pos.x, options);
@@ -275,7 +275,10 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         }
     }
 
-    modified |= popup(selected_mark, internal::button_size(), options, flags);
+    if (selected_mark)
+    {
+        modified |= open_color_picker_popup(*selected_mark, internal::button_size() * 12.f, options, flags);
+    }
 
     if (!(options & GradientOptions_NoBorder))
     {
