@@ -35,7 +35,7 @@ static void draw_gradient(ImGuiGradient::Gradient& gradient, ImDrawList& draw_li
         {
             if (interpolation_mode == Interpolation::linear)
             {
-                utils::draw_gradient_partial(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
+                utils::draw_gradient_between_two_colors(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
             }
             else
             {
@@ -64,7 +64,7 @@ static void draw_background_mark(ImDrawList& draw_list, const ImVec2 pos, ImColo
     const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
     const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
 
-    utils::draw_triangle(draw_list, pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, border_color);
+    draw_list.AddTriangleFilled(pos - arrow_border_y, pos - arrow_border_x, pos + arrow_border_x, border_color);
     utils::draw_uniform_square(draw_list, pos - arrow_border_x, pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y, border_color);
     utils::draw_uniform_square(draw_list, pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, inside_border_color);
 }
@@ -79,7 +79,7 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
     const auto arrow_selected_x = ImVec2{arrow_selected, 0.f};
     const auto arrow_selected_y = ImVec2{0.f, arrow_selected};
 
-    utils::draw_triangle(draw_list, pos - arrow_selected_y - offset_y, pos + offset_y - arrow_selected_x, pos + arrow_selected_x + offset_y, selected_color);
+    draw_list.AddTriangleFilled(pos - arrow_selected_y - offset_y, pos + offset_y - arrow_selected_x, pos + arrow_selected_x + offset_y, selected_color);
     draw_list.AddRect(pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed);
 }
 

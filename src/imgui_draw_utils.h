@@ -4,26 +4,22 @@
 
 namespace utils {
 
-static void draw_border(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
+inline void draw_border(ImDrawList& draw_list, const ImVec2 top_left_corner, const ImVec2 bottom_rigth_corner, ImColor color)
 {
-    const float rounding  = 1.f;
-    const float thickness = 2.f;
-    draw_list.AddRect(vec1, vec2, color, rounding, ImDrawFlags_None, thickness);
+    static constexpr float rounding  = 1.f;
+    static constexpr float thickness = 2.f;
+    draw_list.AddRect(top_left_corner, bottom_rigth_corner, color, rounding, ImDrawFlags_None, thickness);
 }
 
-static void draw_uniform_square(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor color)
+inline void draw_uniform_square(ImDrawList& draw_list, const ImVec2 top_left_corner, const ImVec2 bottom_rigth_corner, ImColor color)
 {
-    draw_list.AddRectFilled(vec1, vec2, color, 1.0f, ImDrawFlags_Closed);
+    static constexpr float rounding = 1.f;
+    draw_list.AddRectFilled(top_left_corner, bottom_rigth_corner, color, rounding, ImDrawFlags_Closed);
 }
 
-static void draw_gradient_partial(ImDrawList& draw_list, const ImVec2 vec1, const ImVec2 vec2, ImColor colorA, ImColor colorB)
+inline void draw_gradient_between_two_colors(ImDrawList& draw_list, const ImVec2 top_left_corner, const ImVec2 bottom_rigth_corner, ImColor colorA, ImColor colorB)
 {
-    draw_list.AddRectFilledMultiColor(vec1, vec2, colorA, colorB, colorB, colorA);
-}
-
-static void draw_triangle(ImDrawList& draw_list, const ImVec2 vec_triangle_up, const ImVec2 vec_triangle_down_left, const ImVec2 vec_triangle_down_right, ImColor color)
-{
-    draw_list.AddTriangleFilled(vec_triangle_up, vec_triangle_down_left, vec_triangle_down_right, color);
+    draw_list.AddRectFilledMultiColor(top_left_corner, bottom_rigth_corner, colorA, colorB, colorB, colorA);
 }
 
 } // namespace utils
