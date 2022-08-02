@@ -244,6 +244,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
         if (selected_mark && precise_position(*selected_mark, width * .25f))
         {
+            gradient.get_marks().sort();
             modified = true;
         }
     }
