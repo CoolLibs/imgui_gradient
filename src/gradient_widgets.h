@@ -110,10 +110,6 @@ auto random_mode_box(bool& random_mode, GradientOptions options = GradientOption
     return activate;
 }
 
-auto reset_button(GradientOptions options = GradientOptions_None) -> bool
-{
-    return button("Reset", "Reset gradient to the default value", ImVec2{0.f, 0.f}, options);
-}
 
 auto popup(Mark* selected_mark, const float item_size, GradientOptions options = GradientOptions_None, ImGuiColorEditFlags flags = 0) -> bool
 {

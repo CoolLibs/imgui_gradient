@@ -271,7 +271,7 @@ bool GradientWidget::gradient_editor(std::string_view name, std::default_random_
 
     if (!(options & GradientOptions_NoResetButton))
     {
-        if (reset_button(options))
+        if (ImGui::Button("Reset"))
         {
             reset_widget();
             modified |= true;
