@@ -19,9 +19,9 @@ static void draw_gradient_border(ImDrawList& draw_list, const ImVec2 vec1, const
     utils::draw_border(draw_list, vec1 - margin, vec2 + margin, color);
 }
 
-static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Interpolation& interpolation_mode, const ImVec2& bar_pos, const float bar_bottom, float width)
+static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Interpolation& interpolation_mode, const ImVec2& gradient_bar_pos, const float gradient_bar_bottom, float width)
 {
-    float current_starting_x = bar_pos.x;
+    float current_starting_x = gradient_bar_pos.x;
     for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
     {
         const Mark& mark = *markIt;
@@ -30,16 +30,16 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
         ImU32 colorAU32 = (markIt != gradient.get_list().begin()) ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color) : colorBU32;
 
         const float from = current_starting_x;
-        const float to   = bar_pos.x + mark.position.get() * (width);
+        const float to   = gradient_bar_pos.x + mark.position.get() * (width);
         if (mark.position != 0.f)
         {
             if (interpolation_mode == Interpolation::Linear)
             {
-                utils::draw_gradient_between_two_colors(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorAU32, colorBU32);
+                utils::draw_gradient_between_two_colors(draw_list, ImVec2(from, gradient_bar_pos.y), ImVec2(to, gradient_bar_bottom), colorAU32, colorBU32);
             }
             else
             {
-                utils::draw_uniform_square(draw_list, ImVec2(from, bar_pos.y), ImVec2(to, bar_bottom), colorBU32);
+                utils::draw_uniform_square(draw_list, ImVec2(from, gradient_bar_pos.y), ImVec2(to, gradient_bar_bottom), colorBU32);
             }
         }
         current_starting_x = to;
@@ -48,7 +48,7 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
     if (gradient.get_list().back().position != 1.f)
     {
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_list().back().color);
-        utils::draw_uniform_square(draw_list, ImVec2(current_starting_x, bar_pos.y), ImVec2(bar_pos.x + width, bar_bottom), colorBU32);
+        utils::draw_uniform_square(draw_list, ImVec2(current_starting_x, gradient_bar_pos.y), ImVec2(gradient_bar_pos.x + width, gradient_bar_bottom), colorBU32);
     }
 }
 

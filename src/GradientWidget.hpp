@@ -77,7 +77,7 @@ public:
         interpolation_mode = Interpolation::Linear;
         random_mode        = false;
     }
-    auto mouse_dragging(const float bar_bottom, float width, float bar_pos_x, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool;
+    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool;
     bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiGradientFlags options = ImGuiGradientFlags_None, ImGuiColorEditFlags flags = 0);
 
 private:
