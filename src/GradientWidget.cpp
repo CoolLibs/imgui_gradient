@@ -20,50 +20,45 @@ static void draw_gradient_bar(Gradient& Gradient, const Interpolation& interpola
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 10.0f));
 }
 
-static bool mark_hovered(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& mark)
+static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& hovered_mark)
 {
-    bool is_hovered = ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
-    if (is_hovered)
+    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
-        {
-            dragging_mark = &mark;
-        }
-        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) ||
-            ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
-        {
-            selected_mark = &mark;
-        }
-        if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
-        {
-            ImGui::OpenPopup("picker");
-        }
-        if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
-        {
-            // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
-            mark_to_delete = &mark;
-        }
+        dragging_mark = &hovered_mark;
+        selected_mark = &hovered_mark;
     }
-    return is_hovered;
+    if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
+    {
+        ImGui::OpenPopup("picker"); // TODO(ASG) Rename as SelectedMarkColorPicker
+        selected_mark = &hovered_mark;
+    }
+    if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
+    {
+        // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
+        mark_to_delete = &hovered_mark;
+    }
 }
 
 static bool draw_gradient_marks(Gradient& gradient, Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark*& mark_to_hide, const ImVec2& bar_pos, float width, float height)
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (auto markIt = gradient.get_list().begin(); markIt != gradient.get_list().end(); ++markIt)
+    for (Mark& mark_hovered : gradient.get_list()) // TODO(ASG) const Mark?
     {
-        Mark& mark = *markIt;
-        if (!(mark_to_hide && *mark_to_hide == mark))
+        if (mark_to_hide != &mark_hovered)
         {
-            mark_button(
+            mark_invisble_hitbox(
                 draw_list,
-                bar_pos + ImVec2(mark.get_position() * width, height),
-                ImGui::ColorConvertFloat4ToU32(mark.color),
-                selected_mark == &mark
+                bar_pos + ImVec2(mark_hovered.get_position() * width, height),
+                ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
+                selected_mark == &mark_hovered
             );
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
+            {
+                hitbox_is_hovered = true;
+                handle_interactions_with_hovered_mark(dragging_mark, selected_mark, mark_to_delete, mark_hovered);
+            }
         }
-        hitbox_is_hovered |= mark_hovered(dragging_mark, selected_mark, mark_to_delete, mark);
     }
     ImGui::SetCursorScreenPos(ImVec2(bar_pos.x, bar_pos.y + height + 20.0f));
     return hitbox_is_hovered;

@@ -83,7 +83,7 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
     draw_list.AddRect(pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed);
 }
 
-static bool mark_button(const ImVec2 vec, const float arrow_border)
+static bool mark_invisible_button(const ImVec2 vec, const float arrow_border)
 {
     ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, internal::gradient_editor_height});
     const ImVec2 button_size = {arrow_border * 3.f, internal::gradient_editor_height + arrow_border * 2.f};
@@ -125,11 +125,11 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_colo
     );
 }
 
-static void mark_button(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, bool cond)
+static void mark_invisble_hitbox(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, bool cond)
 {
     const float arrow_border = 6.f;
     draw_mark(draw_list, pos, mark_color, arrow_border, cond);
-    mark_button(pos, arrow_border);
+    mark_invisible_button(pos, arrow_border);
 }
 
 } // namespace ImGuiGradient
