@@ -5,15 +5,13 @@
 
 namespace ImGuiGradient {
 
+using RGBAColor = ImVec4;
+
 class Gradient {
 public:
-    auto compute_color_at(float position, WrapMode mode) const -> ImVec4;
-    auto compute_color_at(RelativePosition position) const -> ImVec4;
+    auto compute_color_at(float position, WrapMode mode) const -> RGBAColor;
+    auto compute_color_at(RelativePosition position) const -> RGBAColor;
 
-    void sort_marks()
-    {
-        _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
-    }
     auto add_mark(const Mark& mark) -> Mark&
     {
         _marks.push_back(mark);
@@ -26,6 +24,16 @@ public:
         _marks.remove(mark);
         sort_marks();
     };
+    void set_mark_position(Mark& mark, const RelativePosition position)
+    {
+        mark.position.set(position.get());
+        sort_marks();
+    };
+    void set_mark_color(Mark& mark, const RGBAColor color)
+    {
+        mark.color = color;
+    };
+
     auto is_empty() -> bool
     {
         return _marks.empty();
@@ -35,6 +43,12 @@ public:
     auto get_marks() const -> const std::list<Mark>& { return _marks; }
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
+
+private:
+    void sort_marks()
+    {
+        _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
+    }
 
 private:
     // Use std::list instead of vector because it is easier to remove a mark when we do not know the index

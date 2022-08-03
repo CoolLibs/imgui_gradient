@@ -240,7 +240,7 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
         if (state.dragging_mark->position.get() != map)
         {
             state.dragging_mark->position.set(map);
-            state.gradient.sort_marks();
+            state.gradient.set_mark_position(*state.dragging_mark, state.dragging_mark->position);
             dragging = true;
         }
         if (!(settings.flags & ImGuiGradientFlags_NoDragDowntoDelete))
@@ -376,7 +376,7 @@ auto GradientWidget::gradient_editor(
 
         if (state.selected_mark && precise_position(*state.selected_mark, width * .25f))
         {
-            state.gradient.sort_marks();
+            state.gradient.set_mark_position(*state.selected_mark, state.selected_mark->position);
             modified = true;
         }
     }
