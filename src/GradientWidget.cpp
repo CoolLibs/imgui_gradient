@@ -121,12 +121,12 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
         if (!(options & ImGuiGradientFlags_NoDragDowntoDelete))
         { // hide dragging mark when mouse under gradient bar
             float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
-            if (diffY >= internal::gradient_mak_delete_diffy)
+            if (diffY >= settings.gradient_mak_delete_diffy)
             {
                 state.mark_to_hide = state.dragging_mark;
             }
             // do not hide it anymore when mouse on gradient bar
-            if (state.mark_to_hide && diffY <= internal::gradient_mak_delete_diffy)
+            if (state.mark_to_hide && diffY <= settings.gradient_mak_delete_diffy)
             {
                 state.dragging_mark = state.mark_to_hide;
                 state.mark_to_hide  = nullptr;
@@ -146,15 +146,15 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
 
     const ImVec2 gradient_bar_pos    = internal::gradient_position(horizontal_margin);
     const float  width               = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
-    const float  gradient_bar_bottom = gradient_bar_pos.y + internal::gradient_editor_height;
+    const float  gradient_bar_bottom = gradient_bar_pos.y + settings.gradient_editor_height;
 
     ImGui::BeginGroup();
-    ImGui::InvisibleButton("gradient_editor", ImVec2(width, internal::gradient_editor_height));
-    draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_pos, width, internal::gradient_editor_height);
+    ImGui::InvisibleButton("gradient_editor", ImVec2(width, settings.gradient_editor_height));
+    draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_pos, width, settings.gradient_editor_height);
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(state, mark_to_delete, gradient_bar_pos, width, internal::gradient_editor_height);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(state, mark_to_delete, gradient_bar_pos, width, settings.gradient_editor_height);
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)

@@ -85,8 +85,8 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
 
 static bool mark_invisible_button(const ImVec2 vec, const float arrow_border)
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, internal::gradient_editor_height});
-    const ImVec2 button_size = {arrow_border * 3.f, internal::gradient_editor_height + arrow_border * 2.f};
+    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, settings.gradient_editor_height});
+    const ImVec2 button_size = {arrow_border * 3.f, settings.gradient_editor_height + arrow_border * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }

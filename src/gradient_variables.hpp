@@ -2,18 +2,15 @@
 
 namespace ImGuiGradient {
 
-// struct Settings {
-//  float gradient_height           = 25.f;
-//  float gradient_editor_height    = 40.f;
-//  float gradient_mak_delete_diffy = 40.f;
-//     GradientOptions flags;
-// };
+struct GradientSettings {
+    float gradient_height           = 25.f;
+    float gradient_editor_height    = 40.f;
+    float gradient_mak_delete_diffy = 40.f;
+};
+
+static constexpr GradientSettings settings{};
 
 namespace internal {
-
-static constexpr float gradient_height           = 25.f;
-static constexpr float gradient_editor_height    = 40.f;
-static constexpr float gradient_mak_delete_diffy = 40.f;
 
 inline auto button_size() -> float
 {
