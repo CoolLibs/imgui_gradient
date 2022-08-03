@@ -7,7 +7,7 @@
 #include "ImGuiGradientFlags.hpp"
 #include "Interpolation.hpp"
 #include "PositionMode.hpp"
-#include "gradient_variables.hpp"
+#include "gradient_settings.hpp"
 
 namespace ImGuiGradient {
 
