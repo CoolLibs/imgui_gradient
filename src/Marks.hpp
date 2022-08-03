@@ -45,12 +45,12 @@ struct Marks {
     {
         m_list.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
     }
-    Mark* add_mark(Mark mark)
+    Mark& add_mark(const Mark& mark)
     {
         m_list.push_back(mark);
         Mark* ptr = &m_list.back();
         sort();
-        return ptr;
+        return *ptr;
     }
     void remove_mark(const Mark& mark)
     {

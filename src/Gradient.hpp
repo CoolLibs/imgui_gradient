@@ -10,7 +10,7 @@ public:
     ImVec4 compute_color_at(float position, PositionMode mode) const;
     ImVec4 compute_color_at(RelativePosition position) const;
 
-    Mark* add_mark(const Mark& mark) // TODO(ASG) return type must be a reference
+    Mark& add_mark(const Mark& mark)
     {
         return m_marks.add_mark(mark);
     };
