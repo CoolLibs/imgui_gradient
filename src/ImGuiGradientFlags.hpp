@@ -1,7 +1,6 @@
 #pragma once
 
 typedef int ImGuiGradientFlags;
-// TODO(ASG) Make the flags part of the options ?
 
 enum ImGuiGradientFlags_ {
     ImGuiGradientFlags_None                 = 0,

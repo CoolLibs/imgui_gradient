@@ -83,10 +83,10 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
     draw_list.AddRect(pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed);
 }
 
-static bool mark_invisible_button(const ImVec2 vec, const float arrow_border)
+static bool mark_invisible_button(const ImVec2 vec, const float arrow_border, const float gradient_editor_height)
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, settings.gradient_editor_height});
-    const ImVec2 button_size = {arrow_border * 3.f, settings.gradient_editor_height + arrow_border * 2.f};
+    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, gradient_editor_height});
+    const ImVec2 button_size = {arrow_border * 3.f, gradient_editor_height + arrow_border * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
@@ -125,14 +125,14 @@ static void draw_mark(ImDrawList& draw_list, const ImVec2 pos, ImColor backgroun
     );
 }
 
-static void mark_invisble_hitbox(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, bool cond)
+static void mark_invisble_hitbox(ImDrawList& draw_list, const ImVec2 pos, ImColor mark_color, const float gradient_editor_height, bool cond)
 {
     const float arrow_border = 6.f;
     draw_mark(
         draw_list,
         pos,
-        mark_invisible_button(pos, arrow_border) ? internal::color__hovered_mark()
-                                                 : internal::color__mark(),
+        mark_invisible_button(pos, arrow_border, gradient_editor_height) ? internal::color__hovered_mark()
+                                                                         : internal::color__mark(),
         mark_color,
         arrow_border,
         cond

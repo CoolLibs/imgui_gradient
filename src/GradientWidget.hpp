@@ -46,7 +46,9 @@
 #include "Gradient.hpp"
 #include "ImGuiGradientFlags.hpp"
 #include "Interpolation.hpp"
+#include "gradient_settings.hpp"
 #include "random.hpp"
+
 
 namespace ImGuiGradient {
 struct GradientState {
@@ -73,14 +75,18 @@ public:
         const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(pos, position_mode);
         return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
     }
-    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool;
-    bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiGradientFlags options = ImGuiGradientFlags_None, ImGuiColorEditFlags flags = 0);
+    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x) -> bool;
+    bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
+
+    auto get_settings() const -> GradientSettings { return settings; };
+    void set_flags(ImGuiGradientFlags flags) { settings.flags = flags; }
 
 private:
-    GradientState state{};
-    PositionMode  position_mode      = PositionMode::Clamp;
-    Interpolation interpolation_mode = Interpolation::Linear;
-    bool          random_mode        = false;
+    GradientSettings settings{};
+    GradientState    state{};
+    PositionMode     position_mode      = PositionMode::Clamp;
+    Interpolation    interpolation_mode = Interpolation::Linear;
+    bool             random_mode        = false;
 };
 
 } // namespace ImGuiGradient

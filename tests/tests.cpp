@@ -2,6 +2,7 @@
 #include <doctest/doctest.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 #include "../src/ImGuiGradientFlags.hpp"
+#include "../src/gradient_settings.hpp"
 #include "../src/utils.hpp"
 #include "gradient_options_debug.hpp"
 
@@ -182,12 +183,12 @@ int main()
         static ImGuiGradientFlags            options;
         static std::default_random_engine    generator{std::random_device{}()};
         static ImGuiGradient::GradientWidget gradient;
+        gradient.set_flags(options);
         ImGui::Begin("Gradient Editor");
         gradient.gradient_editor(
             "Gradient",
             generator,
             10.f,
-            options,
             ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR
         );
         ImGui::End();

@@ -1,14 +1,15 @@
 #pragma once
 
+#include "ImGuiGradientFlags.hpp"
+
 namespace ImGuiGradient {
 
 struct GradientSettings {
-    float gradient_height           = 25.f;
-    float gradient_editor_height    = 40.f;
-    float gradient_mak_delete_diffy = 40.f;
+    float              gradient_height            = 25.f;
+    float              gradient_editor_height     = 40.f;
+    float              gradient_mark_delete_diffy = 40.f;
+    ImGuiGradientFlags flags                      = ImGuiGradientFlags_None;
 };
-
-static constexpr GradientSettings settings{};
 
 namespace internal {
 
