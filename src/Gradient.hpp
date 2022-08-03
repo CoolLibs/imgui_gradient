@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Marks.hpp"
+#include "Mark.hpp"
 #include "PositionMode.hpp"
 
 namespace ImGuiGradient {
