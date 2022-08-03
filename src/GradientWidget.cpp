@@ -50,7 +50,7 @@ static bool draw_gradient_marks(
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (Mark& mark_hovered : gradient.get_list()) // TODO(ASG) const Mark?
+    for (Mark& mark_hovered : gradient.get_marks())
     {
         if (mark_to_hide != &mark_hovered)
         {
@@ -78,15 +78,15 @@ float position_where_to_add_next_mark(Gradient& gradient)
     {
         return 0.f;
     }
-    else if (gradient.get_list().size() == 1)
+    else if (gradient.get_marks().size() == 1)
     {
-        return (gradient.get_list().begin()->get_position() > 1.f - gradient.get_list().begin()->get_position()) ? 0.f : 1.f;
+        return (gradient.get_marks().begin()->get_position() > 1.f - gradient.get_marks().begin()->get_position()) ? 0.f : 1.f;
     }
     else
     {
         float max_value_mark_position     = 0;
-        float max_value_between_two_marks = gradient.get_list().begin()->get_position();
-        for (auto markIt = gradient.get_list().begin(); markIt != std::prev(gradient.get_list().end()); ++markIt)
+        float max_value_between_two_marks = gradient.get_marks().begin()->get_position();
+        for (auto markIt = gradient.get_marks().begin(); markIt != std::prev(gradient.get_marks().end()); ++markIt)
         {
             Mark& mark = *markIt;
             if (max_value_between_two_marks < abs(std::next(markIt)->get_position() - mark.get_position()))
@@ -95,9 +95,9 @@ float position_where_to_add_next_mark(Gradient& gradient)
                 max_value_between_two_marks = abs(std::next(markIt)->get_position() - max_value_mark_position);
             }
         }
-        if (max_value_between_two_marks < abs(1.f - std::prev(gradient.get_list().end())->get_position()))
+        if (max_value_between_two_marks < abs(1.f - std::prev(gradient.get_marks().end())->get_position()))
         {
-            max_value_mark_position     = std::prev(gradient.get_list().end())->get_position();
+            max_value_mark_position     = std::prev(gradient.get_marks().end())->get_position();
             max_value_between_two_marks = abs(1.f - max_value_mark_position);
         }
         return max_value_mark_position + max_value_between_two_marks / 2.f;
@@ -118,7 +118,7 @@ auto GradientWidget::mouse_dragging(const float gradient_botto_barm, float width
         if (dragging_mark->get_position() != map)
         {
             dragging_mark->position.set(map);
-            gradient.get_marks().sort();
+            gradient.sort_marks();
             dragging = true;
         }
         if (!(options & ImGuiGradientFlags_NoDragDowntoDelete))
@@ -236,7 +236,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
 
         if (selected_mark && precise_position(*selected_mark, width * .25f))
         {
-            gradient.get_marks().sort();
+            gradient.sort_marks();
             modified = true;
         }
     }

@@ -37,7 +37,7 @@ auto Gradient::compute_color_at(RelativePosition position) const -> ImVec4
 {
     const Mark* lower = nullptr;
     const Mark* upper = nullptr;
-    for (const Mark& mark : m_marks.m_list)
+    for (const Mark& mark : _marks)
     {
         if (mark.position > position &&
             (!upper || mark.position < upper->position))

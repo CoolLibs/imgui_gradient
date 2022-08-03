@@ -37,31 +37,4 @@ struct Mark {
     };
 };
 
-struct Marks {
-    // Use std::list instead of vector because it is easier to remove a mark when we do not know the index
-    std::list<Mark> m_list{Mark{0.f, ImVec4{0.f, 0.f, 0.f, 1.f}}, Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}}};
-
-    void sort()
-    {
-        m_list.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
-    }
-    Mark& add_mark(const Mark& mark)
-    {
-        m_list.push_back(mark);
-        Mark* ptr = &m_list.back();
-        sort();
-        return *ptr;
-    }
-    void remove_mark(const Mark& mark)
-    {
-        m_list.remove(mark);
-        sort();
-    };
-    void clear()
-    {
-        m_list.clear();
-    }
-    friend auto operator==(const Marks& a, const Marks& b) -> bool { return a.m_list == b.m_list; }
-};
-
 } // namespace ImGuiGradient
