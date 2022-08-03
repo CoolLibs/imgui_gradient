@@ -39,31 +39,28 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
 }
 
 static bool draw_gradient_marks(
-    Gradient&     gradient, // TODO(ASG) Use State&
-    Mark*&        dragging_mark,
-    Mark*&        selected_mark,
-    Mark*&        mark_to_delete,
-    Mark*&        mark_to_hide,
-    const ImVec2& gradient_bar_pos,
+    GradientState& state,
+    Mark*&         mark_to_delete,
+    const ImVec2&  gradient_bar_pos,
     float width, float height
 )
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (Mark& mark_hovered : gradient.get_marks())
+    for (Mark& mark_hovered : state.gradient.get_marks())
     {
-        if (mark_to_hide != &mark_hovered)
+        if (state.mark_to_hide != &mark_hovered)
         {
             mark_invisble_hitbox(
                 draw_list,
                 gradient_bar_pos + ImVec2(mark_hovered.get_position() * width, height),
                 ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
-                selected_mark == &mark_hovered
+                state.selected_mark == &mark_hovered
             );
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
                 hitbox_is_hovered = true;
-                handle_interactions_with_hovered_mark(dragging_mark, selected_mark, mark_to_delete, mark_hovered);
+                handle_interactions_with_hovered_mark(state.dragging_mark, state.selected_mark, mark_to_delete, mark_hovered);
             }
         }
     }
@@ -88,7 +85,7 @@ float position_where_to_add_next_mark(Gradient& gradient)
         float max_value_between_two_marks = gradient.get_marks().begin()->get_position();
         for (auto markIt = gradient.get_marks().begin(); markIt != std::prev(gradient.get_marks().end()); ++markIt)
         {
-            Mark& mark = *markIt;
+            const Mark& mark = *markIt;
             if (max_value_between_two_marks < abs(std::next(markIt)->get_position() - mark.get_position()))
             {
                 max_value_mark_position     = mark.get_position();
@@ -104,35 +101,35 @@ float position_where_to_add_next_mark(Gradient& gradient)
     }
 }
 
-auto GradientWidget::mouse_dragging(const float gradient_botto_barm, float width, float gradient_bar_pos_x, ImGuiGradientFlags options) -> bool
+auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, ImGuiGradientFlags options) -> bool
 {
     bool dragging = false;
-    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && dragging_mark)
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && state.dragging_mark)
     {
-        dragging_mark = nullptr;
+        state.dragging_mark = nullptr;
     }
 
-    if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && dragging_mark)
+    if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && state.dragging_mark)
     {
         const float map = ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_pos_x) / width, 0.f, 1.f);
-        if (dragging_mark->get_position() != map)
+        if (state.dragging_mark->get_position() != map)
         {
-            dragging_mark->position.set(map);
-            gradient.sort_marks();
+            state.dragging_mark->position.set(map);
+            state.gradient.sort_marks();
             dragging = true;
         }
         if (!(options & ImGuiGradientFlags_NoDragDowntoDelete))
         { // hide dragging mark when mouse under gradient bar
-            float diffY = ImGui::GetIO().MousePos.y - gradient_botto_barm;
+            float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
             if (diffY >= internal::gradient_mak_delete_diffy)
             {
-                mark_to_hide = dragging_mark;
+                state.mark_to_hide = state.dragging_mark;
             }
             // do not hide it anymore when mouse on gradient bar
-            if (mark_to_hide && diffY <= internal::gradient_mak_delete_diffy)
+            if (state.mark_to_hide && diffY <= internal::gradient_mak_delete_diffy)
             {
-                dragging_mark = mark_to_hide;
-                mark_to_hide  = nullptr;
+                state.dragging_mark = state.mark_to_hide;
+                state.mark_to_hide  = nullptr;
             }
         }
     }
@@ -153,11 +150,11 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", ImVec2(width, internal::gradient_editor_height));
-    draw_gradient_bar(gradient, interpolation_mode, gradient_bar_pos, width, internal::gradient_editor_height);
+    draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_pos, width, internal::gradient_editor_height);
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(gradient, dragging_mark, selected_mark, mark_to_delete, mark_to_hide, gradient_bar_pos, width, internal::gradient_editor_height);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(state, mark_to_delete, gradient_bar_pos, width, internal::gradient_editor_height);
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)
@@ -169,74 +166,74 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
     modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_pos.x, options);
     if (!(options & ImGuiGradientFlags_NoDragDowntoDelete))
     { // If mouse released and there is still a mark hidden, then it become a mark to delete
-        if (mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
+        if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
-            if (dragging_mark && *dragging_mark == *mark_to_hide)
+            if (state.dragging_mark && *state.dragging_mark == *state.mark_to_hide)
             {
-                dragging_mark = nullptr;
+                state.dragging_mark = nullptr;
             }
-            mark_to_delete = mark_to_hide;
-            mark_to_hide   = nullptr;
+            mark_to_delete     = state.mark_to_hide;
+            state.mark_to_hide = nullptr;
             modified |= true;
         }
     }
     // Remove mark_to_delete if it exists
     if (mark_to_delete)
     {
-        if (selected_mark && *selected_mark == *mark_to_delete)
+        if (state.selected_mark && *state.selected_mark == *mark_to_delete)
         {
-            selected_mark = nullptr;
+            state.selected_mark = nullptr;
         }
-        gradient.remove_mark(*mark_to_delete);
+        state.gradient.remove_mark(*mark_to_delete);
         modified |= true;
     }
     ImGui::EndGroup();
     const bool no_tooltip           = !(options & ImGuiGradientFlags_NoTooltip);
     const bool remove_button_exists = !(options & ImGuiGradientFlags_NoRemoveButton);
-    if (!gradient.is_empty())
+    if (!state.gradient.is_empty())
     {
         if (((remove_button_exists &&
               delete_button(internal::button_size(), no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
-            selected_mark)
+            state.selected_mark)
         {
-            gradient.remove_mark(*selected_mark);
-            selected_mark = nullptr;
+            state.gradient.remove_mark(*state.selected_mark);
+            state.selected_mark = nullptr;
             modified |= true;
         }
     }
     const bool add_button_exists = !(options & ImGuiGradientFlags_NoAddButton);
     if (add_button_exists)
     {
-        if (remove_button_exists && !gradient.is_empty())
+        if (remove_button_exists && !state.gradient.is_empty())
         {
             ImGui::SameLine();
         }
         if (add_button(internal::button_size(), no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
-            modified = add_mark(position_where_to_add_next_mark(gradient), generator);
+            modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
         }
     }
     const bool color_edit_exists = !(options & ImGuiGradientFlags_NoColorEdit);
     if (color_edit_exists)
     {
-        if ((remove_button_exists || add_button_exists) && selected_mark)
+        if ((remove_button_exists || add_button_exists) && state.selected_mark)
         {
             ImGui::SameLine();
         }
-        modified |= color_button(selected_mark, no_tooltip, flags);
+        modified |= color_button(state.selected_mark, no_tooltip, flags);
     }
     if (!(options & ImGuiGradientFlags_NoPositionSlider))
     {
-        if ((remove_button_exists || add_button_exists || color_edit_exists) && selected_mark)
+        if ((remove_button_exists || add_button_exists || color_edit_exists) && state.selected_mark)
         {
             ImGui::SameLine();
         }
 
-        if (selected_mark && precise_position(*selected_mark, width * .25f))
+        if (state.selected_mark && precise_position(*state.selected_mark, width * .25f))
         {
-            gradient.sort_marks();
+            state.gradient.sort_marks();
             modified = true;
         }
     }
@@ -269,15 +266,14 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
     {
         if (ImGui::Button("Reset"))
         {
-            // state = GradientState{};
-            reset_widget();
+            state = GradientState{};
             modified |= true;
         }
     }
 
-    if (selected_mark)
+    if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*selected_mark, internal::button_size() * 12.f, no_tooltip, flags);
+        modified |= open_color_picker_popup(*state.selected_mark, internal::button_size() * 12.f, no_tooltip, flags);
     }
 
     if (!(options & ImGuiGradientFlags_NoBorder))

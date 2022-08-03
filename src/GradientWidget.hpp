@@ -49,6 +49,12 @@
 #include "random.hpp"
 
 namespace ImGuiGradient {
+struct GradientState {
+    Gradient gradient{};
+    Mark*    dragging_mark{};
+    Mark*    selected_mark{};
+    Mark*    mark_to_hide{};
+};
 
 static auto random_color(std::default_random_engine& generator) -> ImVec4
 {
@@ -59,32 +65,19 @@ static auto random_color(std::default_random_engine& generator) -> ImVec4
 class GradientWidget {
 public:
     GradientWidget() = default;
-    const Gradient& get_gradient() const { return gradient; }
-    Gradient&       get_gradient() { return gradient; }
+    const Gradient& get_gradient() const { return state.gradient; }
+    Gradient&       get_gradient() { return state.gradient; }
     bool            add_mark(const float position, std::default_random_engine& generator)
     {
         const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : gradient.compute_color_at(pos, position_mode);
-        return (selected_mark = &gradient.add_mark(Mark{pos, new_mark_col}));
-    }
-    void reset_widget()
-    {
-        gradient           = Gradient{};
-        dragging_mark      = nullptr;
-        selected_mark      = nullptr;
-        mark_to_hide       = nullptr;
-        position_mode      = PositionMode::Clamp;
-        interpolation_mode = Interpolation::Linear;
-        random_mode        = false;
+        const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(pos, position_mode);
+        return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
     }
     auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, ImGuiGradientFlags options = ImGuiGradientFlags_None) -> bool;
     bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiGradientFlags options = ImGuiGradientFlags_None, ImGuiColorEditFlags flags = 0);
 
 private:
-    Gradient      gradient{};
-    Mark*         dragging_mark{};
-    Mark*         selected_mark{};
-    Mark*         mark_to_hide{};
+    GradientState state{};
     PositionMode  position_mode      = PositionMode::Clamp;
     Interpolation interpolation_mode = Interpolation::Linear;
     bool          random_mode        = false;
