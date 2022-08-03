@@ -49,7 +49,6 @@
 #include "gradient_settings.hpp"
 #include "random.hpp"
 
-
 namespace ImGuiGradient {
 struct GradientState {
     Gradient gradient{};
@@ -76,7 +75,7 @@ public:
         return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
     }
     auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x) -> bool;
-    bool gradient_editor(std::string_view name, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
+    bool gradient_editor(const char* label, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
 
     auto get_settings() const -> GradientSettings { return settings; };
     void set_flags(ImGuiGradientFlags flags) { settings.flags = flags; }

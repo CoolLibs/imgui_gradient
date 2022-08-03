@@ -2,7 +2,6 @@
 
 #include <imgui/imgui.h>
 #include <cassert>
-#include <string_view>
 #include "Gradient.hpp"
 #include "ImGuiGradientFlags.hpp"
 #include "Interpolation.hpp"
@@ -24,16 +23,16 @@ static void tooltip(const char* text)
 }
 
 auto button_with_tooltip(
-    std::string_view name,
-    std::string_view tooltip_message,
-    ImVec2           size                = ImVec2{0.f, 0.f},
-    bool             should_show_tooltip = true
+    const char* label,
+    const char* tooltip_message,
+    ImVec2      size                = ImVec2{0.f, 0.f},
+    bool        should_show_tooltip = true
 ) -> bool
 {
-    const bool clicked = ImGui::Button(name.data(), size);
+    const bool clicked = ImGui::Button(label, size);
     if (should_show_tooltip)
     {
-        tooltip(tooltip_message.data());
+        tooltip(tooltip_message);
     }
     return clicked;
 }
