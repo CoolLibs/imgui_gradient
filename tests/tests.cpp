@@ -10,6 +10,31 @@
 
 #include <quick_imgui/quick_imgui.hpp>
 
+int main()
+{
+    doctest::Context context;
+    context.run();
+    quick_imgui::loop("Test Gradient Widget", []() {
+        static ImGuiGradientFlags            flags;
+        static std::default_random_engine    generator{std::random_device{}()};
+        static ImGuiGradient::GradientWidget gradient;
+        ImGui::Begin("Gradient Editor");
+        gradient.gradient_editor(
+            "Gradient",
+            generator,
+            ImGuiGradient::Settings{
+                .horizontal_margin = 10.f,
+                .flags             = flags,
+                .color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR,
+            }
+        );
+        ImGui::End();
+        ImGui::Begin("Tests");
+        flags = gradient_options_debug();
+        ImGui::End();
+    });
+}
+
 TEST_CASE(
     "Position Mode functions tests"
 )
@@ -173,27 +198,4 @@ TEST_CASE(
 
         CHECK(doctest::Approx(modulo_res) == 1.f);
     }
-}
-
-int main()
-{
-    doctest::Context context;
-    context.run();
-    quick_imgui::loop("Test Gradient Widget", []() {
-        static ImGuiGradientFlags            options;
-        static std::default_random_engine    generator{std::random_device{}()};
-        static ImGuiGradient::GradientWidget gradient;
-        gradient.set_flags(options);
-        ImGui::Begin("Gradient Editor");
-        gradient.gradient_editor(
-            "Gradient",
-            generator,
-            10.f,
-            ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR
-        );
-        ImGui::End();
-        ImGui::Begin("Tests");
-        options = gradient_options_debug();
-        ImGui::End();
-    });
 }

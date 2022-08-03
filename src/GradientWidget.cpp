@@ -235,7 +235,7 @@ auto position_where_to_add_next_mark(Gradient& gradient) -> float
     }
 }
 
-auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x) -> bool
+auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, const Settings& settings) -> bool
 {
     bool dragging = false;
     if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && state.dragging_mark)
@@ -286,8 +286,7 @@ auto GradientWidget::add_mark(const float position, std::default_random_engine& 
 auto GradientWidget::gradient_editor(
     const char*                 label,
     std::default_random_engine& generator,
-    float                       horizontal_margin,
-    ImGuiColorEditFlags         flags
+    const Settings&             settings
 ) -> bool
 {
     if (!(settings.flags & ImGuiGradientFlags_NoLabel))
@@ -296,8 +295,8 @@ auto GradientWidget::gradient_editor(
         ImGui::Dummy(ImVec2{0.f, 1.5f});
     }
 
-    const ImVec2 gradient_bar_pos    = internal::gradient_position(horizontal_margin);
-    const float  width               = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * horizontal_margin);
+    const ImVec2 gradient_bar_pos    = internal::gradient_position(settings.horizontal_margin);
+    const float  width               = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin);
     const float  gradient_bar_bottom = gradient_bar_pos.y + settings.gradient_editor_height;
 
     ImGui::BeginGroup();
@@ -315,7 +314,7 @@ auto GradientWidget::gradient_editor(
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
-    modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_pos.x);
+    modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_pos.x, settings);
     if (!(settings.flags & ImGuiGradientFlags_NoDragDowntoDelete))
     { // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
@@ -374,7 +373,7 @@ auto GradientWidget::gradient_editor(
         {
             ImGui::SameLine();
         }
-        modified |= color_button(state.selected_mark, no_tooltip, flags);
+        modified |= color_button(state.selected_mark, no_tooltip, settings.color_flags);
     }
     if (!(settings.flags & ImGuiGradientFlags_NoPositionSlider))
     {
@@ -418,14 +417,14 @@ auto GradientWidget::gradient_editor(
     {
         if (ImGui::Button("Reset"))
         {
-            state = GradientState{};
+            state = State{};
             modified |= true;
         }
     }
 
     if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*state.selected_mark, internal::button_size() * 12.f, no_tooltip, flags);
+        modified |= open_color_picker_popup(*state.selected_mark, internal::button_size() * 12.f, no_tooltip, settings.flags);
     }
 
     if (!(settings.flags & ImGuiGradientFlags_NoBorder))
@@ -454,8 +453,8 @@ auto GradientWidget::gradient_editor(
         }
         const float y_space_under_bar = gradient_bar_bottom + internal::button_size() * number_of_line_under_bar;
         draw_border_widget(
-            gradient_bar_pos - ImVec2(horizontal_margin + 4.f, y_space_over_bar),
-            ImVec2(gradient_bar_pos.x + width + horizontal_margin + 4.f, y_space_under_bar * 1.25f),
+            gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
+            ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f),
             internal::color__border()
         );
     }

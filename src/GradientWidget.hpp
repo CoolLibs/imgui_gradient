@@ -50,7 +50,7 @@
 #include "gradient_settings.hpp"
 
 namespace ImGuiGradient {
-struct GradientState {
+struct State {
     Gradient gradient{};
     Mark*    dragging_mark{};
     Mark*    selected_mark{};
@@ -64,21 +64,17 @@ public:
     auto get_gradient() -> Gradient& { return state.gradient; }
     auto add_mark(const float position, std::default_random_engine& generator) -> bool;
 
-    auto gradient_editor(const char* label, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0) -> bool;
-
-    auto get_settings() const -> GradientSettings { return settings; };
-    void set_flags(ImGuiGradientFlags flags) { settings.flags = flags; }
+    auto gradient_editor(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
 
 private:
     auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, float width, float height) -> bool;
-    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x) -> bool;
+    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, const Settings& settings) -> bool;
 
 private:
-    GradientSettings settings{};
-    GradientState    state{};
-    WrapMode         position_mode      = WrapMode::Clamp;
-    Interpolation    interpolation_mode = Interpolation::Linear;
-    bool             random_mode        = false;
+    State         state{};
+    WrapMode      position_mode      = WrapMode::Clamp;
+    Interpolation interpolation_mode = Interpolation::Linear;
+    bool          random_mode        = false;
 };
 
 } // namespace ImGuiGradient
