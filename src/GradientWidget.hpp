@@ -43,11 +43,11 @@
 
 #pragma once
 
+#include <random>
 #include "Gradient.hpp"
 #include "ImGuiGradientFlags.hpp"
 #include "Interpolation.hpp"
 #include "gradient_settings.hpp"
-#include "random.hpp"
 
 namespace ImGuiGradient {
 struct GradientState {
@@ -57,25 +57,14 @@ struct GradientState {
     Mark*    mark_to_hide{};
 };
 
-static auto random_color(std::default_random_engine& generator) -> ImVec4
-{
-    const auto color = ImVec4{utils::rand(generator), utils::rand(generator), utils::rand(generator), 1.f};
-    return color;
-}
-
 class GradientWidget {
 public:
     GradientWidget() = default;
-    const Gradient& get_gradient() const { return state.gradient; }
-    Gradient&       get_gradient() { return state.gradient; }
-    bool            add_mark(const float position, std::default_random_engine& generator)
-    {
-        const float  pos          = ImClamp(position, 0.f, 1.f);
-        const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(pos, position_mode);
-        return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
-    }
+    auto get_gradient() const -> const Gradient& { return state.gradient; }
+    auto get_gradient() -> Gradient& { return state.gradient; }
+    auto add_mark(const float position, std::default_random_engine& generator) -> bool;
     auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x) -> bool;
-    bool gradient_editor(const char* label, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0);
+    auto gradient_editor(const char* label, std::default_random_engine& generator, float horizontal_margin = 10.f, ImGuiColorEditFlags flags = 0) -> bool;
 
     auto get_settings() const -> GradientSettings { return settings; };
     void set_flags(ImGuiGradientFlags flags) { settings.flags = flags; }

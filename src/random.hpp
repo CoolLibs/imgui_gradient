@@ -4,7 +4,7 @@
 
 namespace utils {
 
-static float rand(std::default_random_engine& generator)
+static auto rand(std::default_random_engine& generator) -> float
 {
     std::uniform_real_distribution<float> distribution{0.f, 1.f};
     return distribution(generator);

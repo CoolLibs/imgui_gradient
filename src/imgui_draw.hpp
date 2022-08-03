@@ -83,7 +83,7 @@ static void arrow_selected(ImDrawList& draw_list, const ImVec2 pos, ImColor sele
     draw_list.AddRect(pos - arrow_inside_border_x + offset_y, pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed);
 }
 
-static bool mark_invisible_button(const ImVec2 vec, const float arrow_border, const float gradient_editor_height)
+static auto mark_invisible_button(const ImVec2 vec, const float arrow_border, const float gradient_editor_height) -> bool
 {
     ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, gradient_editor_height});
     const ImVec2 button_size = {arrow_border * 3.f, gradient_editor_height + arrow_border * 2.f};

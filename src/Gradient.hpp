@@ -7,14 +7,14 @@ namespace ImGuiGradient {
 
 class Gradient {
 public:
-    ImVec4 compute_color_at(float position, PositionMode mode) const;
-    ImVec4 compute_color_at(RelativePosition position) const;
+    auto compute_color_at(float position, PositionMode mode) const -> ImVec4;
+    auto compute_color_at(RelativePosition position) const -> ImVec4;
 
     void sort_marks()
     {
         _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
     }
-    Mark& add_mark(const Mark& mark)
+    auto add_mark(const Mark& mark) -> Mark&
     {
         _marks.push_back(mark);
         Mark* ptr = &_marks.back();
@@ -31,8 +31,8 @@ public:
         return _marks.empty();
     }
     // Need a mutable one because in some loops we use it to implement no-const variables
-    std::list<Mark>&       get_marks() { return _marks; }
-    const std::list<Mark>& get_marks() const { return _marks; }
+    auto get_marks() -> std::list<Mark>& { return _marks; }
+    auto get_marks() const -> const std::list<Mark>& { return _marks; }
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
 

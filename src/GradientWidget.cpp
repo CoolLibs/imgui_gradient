@@ -162,12 +162,12 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
     }
 }
 
-static bool draw_gradient_marks(
+static auto draw_gradient_marks(
     GradientState& state,
     Mark*&         mark_to_delete,
     const ImVec2&  gradient_bar_pos,
     float width, float height
-)
+) -> bool
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
@@ -194,7 +194,7 @@ static bool draw_gradient_marks(
     return hitbox_is_hovered;
 }
 
-float position_where_to_add_next_mark(Gradient& gradient)
+auto position_where_to_add_next_mark(Gradient& gradient) -> float
 {
     if (gradient.is_empty())
     {
@@ -261,7 +261,25 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
     return dragging;
 }
 
-bool GradientWidget::gradient_editor(const char* label, std::default_random_engine& generator, float horizontal_margin, ImGuiColorEditFlags flags)
+static auto random_color(std::default_random_engine& generator) -> ImVec4
+{
+    const auto color = ImVec4{utils::rand(generator), utils::rand(generator), utils::rand(generator), 1.f};
+    return color;
+}
+
+auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
+{
+    const float  pos          = ImClamp(position, 0.f, 1.f);
+    const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(pos, position_mode);
+    return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
+}
+
+auto GradientWidget::gradient_editor(
+    const char*                 label,
+    std::default_random_engine& generator,
+    float                       horizontal_margin,
+    ImGuiColorEditFlags         flags
+) -> bool
 {
     if (!(settings.flags & ImGuiGradientFlags_NoLabel))
     {

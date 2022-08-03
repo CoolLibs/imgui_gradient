@@ -24,8 +24,8 @@ struct Mark {
     Mark(RelativePosition position, ImVec4 color)
         : position{position}, color{color}
     {}
-    auto   get_position() const -> float { return position.get(); }
-    float& get_position() { return position.get(); }
+    auto get_position() const -> float { return position.get(); }
+    auto get_position() -> float& { return position.get(); }
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {
