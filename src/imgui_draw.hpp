@@ -31,7 +31,7 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
 
         const float from = current_starting_x;
         const float to   = gradient_bar_pos.x + mark.position.get() * (width);
-        if (mark.position != 0.f)
+        if (mark.position.get() != 0.f)
         {
             if (interpolation_mode == Interpolation::Linear)
             {
@@ -45,7 +45,7 @@ static void draw_gradient(Gradient& gradient, ImDrawList& draw_list, const Inter
         current_starting_x = to;
     }
     // If last element not at the end position extend its color to the end position
-    if (gradient.get_marks().back().position != 1.f)
+    if (gradient.get_marks().back().position.get() != 1.f)
     {
         ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color);
         utils::draw_uniform_square(draw_list, ImVec2(current_starting_x, gradient_bar_pos.y), ImVec2(gradient_bar_pos.x + width, gradient_bar_bottom), colorBU32);

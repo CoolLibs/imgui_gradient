@@ -4,7 +4,7 @@
 
 class RelativePosition {
 public:
-    RelativePosition(float position)
+    explicit RelativePosition(float position)
         : value(position)
     {
         IM_ASSERT(0.f <= position && position <= 1.f);

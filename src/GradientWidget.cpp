@@ -269,9 +269,9 @@ static auto random_color(std::default_random_engine& generator) -> ImVec4
 
 auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
 {
-    const float  pos          = ImClamp(position, 0.f, 1.f);
-    const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(pos, position_mode);
-    return (state.selected_mark = &state.gradient.add_mark(Mark{pos, new_mark_col}));
+    const float  pos          = ImClamp(position, 0.f, 1.f); // TODO(ASG) it is not here wa have to do that
+    const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(position, position_mode);
+    return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{pos}, new_mark_col}));
 }
 
 auto GradientWidget::gradient_editor(

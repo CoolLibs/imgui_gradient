@@ -38,7 +38,9 @@ public:
 
 private:
     // Use std::list instead of vector because it is easier to remove a mark when we do not know the index
-    std::list<Mark> _marks{Mark{0.f, ImVec4{0.f, 0.f, 0.f, 1.f}}, Mark{1.f, ImVec4{1.f, 1.f, 1.f, 1.f}}};
+    std::list<Mark> _marks{
+        Mark{RelativePosition{0.f}, ImVec4{0.f, 0.f, 0.f, 1.f}},
+        Mark{RelativePosition{1.f}, ImVec4{1.f, 1.f, 1.f, 1.f}}};
 };
 
 } // namespace ImGuiGradient
