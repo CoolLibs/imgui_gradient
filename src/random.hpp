@@ -2,12 +2,12 @@
 
 #include <random>
 
-namespace utils {
+namespace Utils {
 
-inline auto rand(std::default_random_engine& generator) -> float
+inline auto random(std::default_random_engine& generator) -> float
 {
-    std::uniform_real_distribution<float> distribution{0.f, 1.f};
+    const auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
     return distribution(generator);
 }
 
-} // namespace utils
+} // namespace Utils

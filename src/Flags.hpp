@@ -1,10 +1,12 @@
 #pragma once
 
-using ImGuiGradientFlags = int;
+namespace ImGuiGradient {
 
-namespace ImGuiGradient { namespace Flags {
+using Flags = int;
 
-enum ImGuiGradientFlags_ {
+namespace Flag {
+
+enum ImGuiGradientFlag {
     None                 = 0,
     NoTooltip            = 1 << 1,
     NoResetButton        = 1 << 2,
@@ -23,4 +25,5 @@ enum ImGuiGradientFlags_ {
     NoCombo              = NoInterpolationCombo | NoWrapModeCombo,
 };
 
-}} // namespace ImGuiGradient::Flags
+}
+} // namespace ImGuiGradient

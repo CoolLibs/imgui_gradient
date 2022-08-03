@@ -88,15 +88,7 @@ static auto color_button(Mark* selected_mark, bool should_show_tooltip, ImGuiCol
 
 static auto precise_position(Mark& selected_mark, const float width) -> bool
 {
-    ImGui::SetNextItemWidth(width);
-    const float speed{1.f / width};
-    return (ImGui::DragFloat(
-        "##3",
-        &selected_mark.position.get(),
-        speed, 0.f, 1.f,
-        "%.3f",
-        ImGuiSliderFlags_AlwaysClamp
-    ));
+    return selected_mark.position.widget(width);
 }
 
 static auto random_mode_box(bool& random_mode, bool should_show_tooltip) -> bool
@@ -135,7 +127,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     ImDrawList& draw_list           = *ImGui::GetWindowDrawList();
     const float gradient_botto_barm = gradient_bar_pos.y + height;
 
-    draw_gradient_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::color__border());
+    draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::color__border());
     if (!gradient.is_empty())
     {
         draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, gradient_botto_barm, width);
@@ -252,7 +244,7 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
             state.gradient.set_mark_position(*state.dragging_mark, state.dragging_mark->position);
             dragging = true;
         }
-        if (!(settings.flags & Flags::NoDragDowntoDelete))
+        if (!(settings.flags & Flag::NoDragDowntoDelete))
         { // hide dragging mark when mouse under gradient bar
             float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
             if (diffY >= settings.gradient_mark_delete_diffy)
@@ -272,7 +264,7 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
 
 static auto random_color(std::default_random_engine& generator) -> ImVec4
 {
-    const auto color = ImVec4{utils::rand(generator), utils::rand(generator), utils::rand(generator), 1.f};
+    const auto color = ImVec4{Utils::random(generator), Utils::random(generator), Utils::random(generator), 1.f};
     return color;
 }
 
@@ -289,7 +281,7 @@ auto GradientWidget::widget(
     const Settings&             settings
 ) -> bool
 {
-    if (!(settings.flags & Flags::NoLabel))
+    if (!(settings.flags & Flag::NoLabel))
     {
         ImGui::Text("%s", label);
         ImGui::Dummy(ImVec2{0.f, 1.5f});
@@ -315,7 +307,7 @@ auto GradientWidget::widget(
     }
 
     modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_pos.x, settings);
-    if (!(settings.flags & Flags::NoDragDowntoDelete))
+    if (!(settings.flags & Flag::NoDragDowntoDelete))
     { // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
@@ -339,8 +331,8 @@ auto GradientWidget::widget(
         modified |= true;
     }
     ImGui::EndGroup();
-    const bool no_tooltip           = !(settings.flags & Flags::NoTooltip);
-    const bool remove_button_exists = !(settings.flags & Flags::NoRemoveButton);
+    const bool no_tooltip           = !(settings.flags & Flag::NoTooltip);
+    const bool remove_button_exists = !(settings.flags & Flag::NoRemoveButton);
     if (!state.gradient.is_empty())
     {
         if (((remove_button_exists &&
@@ -353,7 +345,7 @@ auto GradientWidget::widget(
             modified |= true;
         }
     }
-    const bool add_button_exists = !(settings.flags & Flags::NoAddButton);
+    const bool add_button_exists = !(settings.flags & Flag::NoAddButton);
     if (add_button_exists)
     {
         if (remove_button_exists && !state.gradient.is_empty())
@@ -366,7 +358,7 @@ auto GradientWidget::widget(
             modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
         }
     }
-    const bool color_edit_exists = !(settings.flags & Flags::NoColorEdit);
+    const bool color_edit_exists = !(settings.flags & Flag::NoColorEdit);
     if (color_edit_exists)
     {
         if ((remove_button_exists || add_button_exists) && state.selected_mark)
@@ -375,7 +367,7 @@ auto GradientWidget::widget(
         }
         modified |= color_button(state.selected_mark, no_tooltip, settings.color_flags);
     }
-    if (!(settings.flags & Flags::NoPositionSlider))
+    if (!(settings.flags & Flag::NoPositionSlider))
     {
         if ((remove_button_exists || add_button_exists || color_edit_exists) && state.selected_mark)
         {
@@ -389,12 +381,12 @@ auto GradientWidget::widget(
         }
     }
 
-    const bool interpolation_combo_exists = !(settings.flags & Flags::NoInterpolationCombo);
+    const bool interpolation_combo_exists = !(settings.flags & Flag::NoInterpolationCombo);
     if (interpolation_combo_exists)
     {
         modified |= gradient_interpolation_mode(interpolation_mode);
     }
-    const bool position_mode_combo_exists = !(settings.flags & Flags::NoWrapModeCombo);
+    const bool position_mode_combo_exists = !(settings.flags & Flag::NoWrapModeCombo);
     if (position_mode_combo_exists)
     {
         if (interpolation_combo_exists)
@@ -404,7 +396,7 @@ auto GradientWidget::widget(
         modified |= position_mode_combo(position_mode);
     }
 
-    if (!(settings.flags & Flags::NoRandomModeChange))
+    if (!(settings.flags & Flag::NoRandomModeChange))
     {
         if (position_mode_combo_exists || interpolation_combo_exists)
         {
@@ -413,7 +405,7 @@ auto GradientWidget::widget(
         modified |= random_mode_box(random_mode, no_tooltip);
     }
 
-    if (!(settings.flags & Flags::NoResetButton))
+    if (!(settings.flags & Flag::NoResetButton))
     {
         if (ImGui::Button("Reset"))
         {
@@ -427,32 +419,32 @@ auto GradientWidget::widget(
         modified |= open_color_picker_popup(*state.selected_mark, internal::button_size() * 12.f, no_tooltip, settings.flags);
     }
 
-    if (!(settings.flags & Flags::NoBorder))
+    if (!(settings.flags & Flag::NoBorder))
     {
         float y_space_over_bar = 8.f;
-        if (!(settings.flags & Flags::NoLabel))
+        if (!(settings.flags & Flag::NoLabel))
         {
             y_space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
         }
         float number_of_line_under_bar = 0.f;
-        if (!(settings.flags & Flags::NoRandomModeChange) ||
-            !(settings.flags & Flags::NoCombo))
+        if (!(settings.flags & Flag::NoRandomModeChange) ||
+            !(settings.flags & Flag::NoCombo))
         {
             number_of_line_under_bar += 1.f;
         }
-        if (!(settings.flags & Flags::NoResetButton))
+        if (!(settings.flags & Flag::NoResetButton))
         {
             number_of_line_under_bar += 1.f;
         }
-        if (!(settings.flags & Flags::NoAddButton) ||
-            !(settings.flags & Flags::NoRemoveButton) ||
-            !(settings.flags & Flags::NoPositionSlider) ||
-            !(settings.flags & Flags::NoColorEdit))
+        if (!(settings.flags & Flag::NoAddButton) ||
+            !(settings.flags & Flag::NoRemoveButton) ||
+            !(settings.flags & Flag::NoPositionSlider) ||
+            !(settings.flags & Flag::NoColorEdit))
         {
             number_of_line_under_bar += 1.f;
         }
         const float y_space_under_bar = gradient_bar_bottom + internal::button_size() * number_of_line_under_bar;
-        draw_border_widget(
+        draw_border(
             gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
             ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f),
             internal::color__border()

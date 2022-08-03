@@ -13,7 +13,7 @@
 
 // https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf p260
 
-namespace utils {
+namespace Utils {
 
 /// Always returns a number between 0.f and 1.f, even if x is negative.
 static auto fract(float x) -> float
@@ -45,4 +45,4 @@ static auto mirror_repeat_position(float position) -> float
     return 1.f - (abs(modulo(position, 2.f) - 1.f));
 }
 
-} // namespace utils
+} // namespace Utils

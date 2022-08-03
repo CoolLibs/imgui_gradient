@@ -1,16 +1,16 @@
 #pragma once
 
-#include "ImGuiGradientFlags.hpp"
+#include "Flags.hpp"
 
 namespace ImGuiGradient {
 
 struct Settings {
-    float               gradient_height            = 25.f;
-    float               gradient_editor_height     = 40.f;
-    float               gradient_mark_delete_diffy = 40.f;
-    float               horizontal_margin          = 10.f;
-    ImGuiGradientFlags  flags                      = Flags::None;
-    ImGuiColorEditFlags color_flags                = ImGuiColorEditFlags_None;
+    float                gradient_height            = 25.f;
+    float                gradient_editor_height     = 40.f;
+    float                gradient_mark_delete_diffy = 40.f;
+    float                horizontal_margin          = 10.f;
+    ImGuiGradient::Flags flags                      = Flag::None;
+    ImGuiColorEditFlags  color_flags                = ImGuiColorEditFlags_None;
 };
 
 namespace internal {

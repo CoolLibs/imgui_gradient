@@ -1,7 +1,6 @@
 #pragma once
 
-#include <imgui/imgui.h>
-#include <list>
+#include <imgui/imgui.h> // Include ImVec4
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
@@ -17,16 +16,16 @@
 
 namespace ImGuiGradient {
 
-using RGBAColor = ImVec4;
+using ColorRGBA = ImVec4;
 
 struct Mark {
     RelativePosition position{0.f};
-    RGBAColor        color{0.f, 0.f, 0.f, 1.f};
+    ColorRGBA        color{0.f, 0.f, 0.f, 1.f};
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {
         return (a.position == b.position) &&
-               (a.color.x == b.color.x) &&
+               (a.color.x == b.color.x) && // TODO(ASG) define an operator == for ColorRGBA
                (a.color.y == b.color.y) &&
                (a.color.z == b.color.z) &&
                (a.color.w == b.color.w);

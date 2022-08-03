@@ -14,15 +14,15 @@ auto Gradient::compute_color_at(float position, WrapMode mode) const -> ImVec4
         }
         case WrapMode::Repeat:
         {
-            return utils::repeat_position(position);
+            return Utils::repeat_position(position);
         }
         case WrapMode::MirrorClamp:
         {
-            return utils::mirror_clamp_position(position);
+            return Utils::mirror_clamp_position(position);
         }
         case WrapMode::MirrorRepeat:
         {
-            return utils::mirror_repeat_position(position);
+            return Utils::mirror_repeat_position(position);
         }
         default:
             assert(false && "[Gradient::get_color_at] Invalid enum value");

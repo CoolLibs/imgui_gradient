@@ -44,10 +44,11 @@
 #pragma once
 
 #include <random>
+#include "Flags.hpp"
 #include "Gradient.hpp"
-#include "ImGuiGradientFlags.hpp"
 #include "Interpolation.hpp"
 #include "gradient_settings.hpp"
+
 
 namespace ImGuiGradient {
 struct State {

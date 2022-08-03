@@ -1,7 +1,9 @@
 #pragma once
 
+#include <list>
 #include "Mark.hpp"
 #include "WrapMode.hpp"
+
 
 namespace ImGuiGradient {
 
