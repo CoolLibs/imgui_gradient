@@ -3,24 +3,24 @@
 
 namespace ImGuiGradient {
 
-auto Gradient::compute_color_at(float position, PositionMode mode) const -> ImVec4
+auto Gradient::compute_color_at(float position, WrapMode mode) const -> ImVec4
 {
     const auto relative_pos = RelativePosition{[&] {
         switch (mode)
         {
-        case PositionMode::Clamp:
+        case WrapMode::Clamp:
         {
             return ImClamp(position, 0.f, 1.f);
         }
-        case PositionMode::Repeat:
+        case WrapMode::Repeat:
         {
             return utils::repeat_position(position);
         }
-        case PositionMode::MirrorClamp:
+        case WrapMode::MirrorClamp:
         {
             return utils::mirror_clamp_position(position);
         }
-        case PositionMode::MirrorRepeat:
+        case WrapMode::MirrorRepeat:
         {
             return utils::mirror_repeat_position(position);
         }

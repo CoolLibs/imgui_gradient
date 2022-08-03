@@ -21,7 +21,7 @@ using RGBAColor = ImVec4;
 
 struct Mark {
     RelativePosition position{0.f};
-    ImVec4           color{0.f, 0.f, 0.f, 1.f};
+    RGBAColor        color{0.f, 0.f, 0.f, 1.f};
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {

@@ -12,11 +12,11 @@ enum ImGuiGradientFlags_ {
     ImGuiGradientFlags_NoRemoveButton       = 1 << 6,
     ImGuiGradientFlags_NoPositionSlider     = 1 << 7,
     ImGuiGradientFlags_NoColorEdit          = 1 << 8,
-    ImGuiGradientFlags_NoPositionModeCombo  = 1 << 9,
+    ImGuiGradientFlags_NoWrapModeCombo      = 1 << 9,
     ImGuiGradientFlags_NoInterpolationCombo = 1 << 10,
     ImGuiGradientFlags_NoDragDowntoDelete   = 1 << 11,
     ImGuiGradientFlags_NoBorder             = 1 << 12,
     ImGuiGradientFlags_NoAddAndRemoveButton = ImGuiGradientFlags_NoAddButton | ImGuiGradientFlags_NoRemoveButton,
     ImGuiGradientFlags_NoMarkOptions        = ImGuiGradientFlags_NoColorEdit | ImGuiGradientFlags_NoPositionSlider,
-    ImGuiGradientFlags_NoCombo              = ImGuiGradientFlags_NoInterpolationCombo | ImGuiGradientFlags_NoPositionModeCombo,
+    ImGuiGradientFlags_NoCombo              = ImGuiGradientFlags_NoInterpolationCombo | ImGuiGradientFlags_NoWrapModeCombo,
 };

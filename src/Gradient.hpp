@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Mark.hpp"
-#include "PositionMode.hpp"
+#include "WrapMode.hpp"
 
 namespace ImGuiGradient {
 
 class Gradient {
 public:
-    auto compute_color_at(float position, PositionMode mode) const -> ImVec4;
+    auto compute_color_at(float position, WrapMode mode) const -> ImVec4;
     auto compute_color_at(RelativePosition position) const -> ImVec4;
 
     void sort_marks()

@@ -30,7 +30,7 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static auto position_mode_combo(PositionMode& position_mode) -> bool
+static auto position_mode_combo(WrapMode& position_mode) -> bool
 {
     // Take the greater word to choose combo size
     const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f;
@@ -386,7 +386,7 @@ auto GradientWidget::gradient_editor(
     {
         modified |= gradient_interpolation_mode(interpolation_mode);
     }
-    const bool position_mode_combo_exists = !(settings.flags & ImGuiGradientFlags_NoPositionModeCombo);
+    const bool position_mode_combo_exists = !(settings.flags & ImGuiGradientFlags_NoWrapModeCombo);
     if (position_mode_combo_exists)
     {
         if (interpolation_combo_exists)

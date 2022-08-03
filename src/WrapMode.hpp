@@ -2,7 +2,7 @@
 
 namespace ImGuiGradient {
 
-enum class PositionMode {
+enum class WrapMode {
     Clamp,
     Repeat,
     MirrorClamp,

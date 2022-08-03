@@ -72,7 +72,7 @@ public:
 private:
     GradientSettings settings{};
     GradientState    state{};
-    PositionMode     position_mode      = PositionMode::Clamp;
+    WrapMode         position_mode      = WrapMode::Clamp;
     Interpolation    interpolation_mode = Interpolation::Linear;
     bool             random_mode        = false;
 };

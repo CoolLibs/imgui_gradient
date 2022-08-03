@@ -62,10 +62,10 @@ auto gradient_options_debug() -> ImGuiGradientFlags
         options |= ImGuiGradientFlags_NoColorEdit;
     }
     static bool no_posittion_mode_combo = false;
-    ImGui::Checkbox("ImGuiGradientFlags_NoPositionModeCombo", &no_posittion_mode_combo);
+    ImGui::Checkbox("ImGuiGradientFlags_NoWrapModeCombo", &no_posittion_mode_combo);
     if (no_posittion_mode_combo)
     {
-        options |= ImGuiGradientFlags_NoPositionModeCombo;
+        options |= ImGuiGradientFlags_NoWrapModeCombo;
     }
     static bool no_interpolation_combo = false;
     ImGui::Checkbox("ImGuiGradientFlags_NoInterpolationCombo", &no_interpolation_combo);
