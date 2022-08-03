@@ -9,7 +9,7 @@ struct Settings {
     float               gradient_editor_height     = 40.f;
     float               gradient_mark_delete_diffy = 40.f;
     float               horizontal_margin          = 10.f;
-    ImGuiGradientFlags  flags                      = ImGuiGradientFlags_None;
+    ImGuiGradientFlags  flags                      = Flags::None;
     ImGuiColorEditFlags color_flags                = ImGuiColorEditFlags_None;
 };
 
