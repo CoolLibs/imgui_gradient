@@ -143,7 +143,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height));
 }
 
-static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& selected_mark, Mark*& mark_to_delete, Mark& hovered_mark)
+void handle_interactions_with_hovered_mark(const Mark*& dragging_mark, const Mark*& selected_mark, const Mark*& mark_to_delete, const Mark& hovered_mark)
 {
     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
@@ -162,16 +162,15 @@ static void handle_interactions_with_hovered_mark(Mark*& dragging_mark, Mark*& s
     }
 }
 
-static auto draw_gradient_marks(
-    GradientState& state,
-    Mark*&         mark_to_delete,
-    const ImVec2&  gradient_bar_pos,
+auto GradientWidget::draw_gradient_marks(
+    const Mark*   mark_to_delete,
+    const ImVec2& gradient_bar_pos,
     float width, float height
 ) -> bool
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (Mark& mark_hovered : state.gradient.get_marks())
+    for (const Mark& mark_hovered : state.gradient.get_marks())
     {
         if (state.mark_to_hide != &mark_hovered)
         {
@@ -185,7 +184,17 @@ static auto draw_gradient_marks(
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
                 hitbox_is_hovered = true;
-                handle_interactions_with_hovered_mark(state.dragging_mark, state.selected_mark, mark_to_delete, mark_hovered);
+                const Mark* const_dragging_mark{state.dragging_mark};
+                const Mark* const_selected_mark{state.selected_mark};
+                handle_interactions_with_hovered_mark(const_dragging_mark, const_selected_mark, mark_to_delete, mark_hovered);
+                if (const_selected_mark)
+                {
+                    state.selected_mark = const_cast<Mark*>(const_selected_mark);
+                }
+                if (const_dragging_mark)
+                {
+                    state.dragging_mark = const_cast<Mark*>(const_dragging_mark);
+                }
             }
         }
     }
@@ -297,7 +306,7 @@ auto GradientWidget::gradient_editor(
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(state, mark_to_delete, gradient_bar_pos, width, settings.gradient_editor_height);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(mark_to_delete, gradient_bar_pos, width, settings.gradient_editor_height);
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)

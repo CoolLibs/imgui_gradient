@@ -38,8 +38,6 @@ public:
     {
         return _marks.empty();
     }
-    // Need a mutable one because in some loops we use it to implement no-const variables
-    auto get_marks() -> std::list<Mark>& { return _marks; }
     auto get_marks() const -> const std::list<Mark>& { return _marks; }
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
