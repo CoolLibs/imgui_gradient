@@ -17,15 +17,11 @@
 
 namespace ImGuiGradient {
 
+using RGBAColor = ImVec4;
+
 struct Mark {
     RelativePosition position{0.f};
     ImVec4           color{0.f, 0.f, 0.f, 1.f};
-
-    Mark(RelativePosition position, ImVec4 color)
-        : position{position}, color{color}
-    {}
-    auto get_position() const -> float { return position.get(); }
-    auto get_position() -> float& { return position.get(); }
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {

@@ -69,8 +69,8 @@ auto Gradient::compute_color_at(RelativePosition position) const -> ImVec4
     }
     else
     {
-        float mix = (position.get() - lower->get_position()) /
-                    (upper->get_position() - lower->get_position());
+        float mix = (position.get() - lower->position.get()) /
+                    (upper->position.get() - lower->position.get());
         return ImLerp(lower->color, upper->color, mix);
     }
 };
