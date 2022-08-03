@@ -284,7 +284,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
             y_space_over_bar = ImGui::CalcTextSize(label.data()).y * 2.3f;
         }
         float number_of_line_under_bar = 0.f;
-        if (!(options & ImGuiGradientFlags_NoComboAndRandomMode))
+        if (!(options & (ImGuiGradientFlags_NoRandomModeChange | ImGuiGradientFlags_NoCombo)))
         {
             number_of_line_under_bar += 1.f;
         }
@@ -292,7 +292,7 @@ bool GradientWidget::gradient_editor(std::string_view label, std::default_random
         {
             number_of_line_under_bar += 1.f;
         }
-        if (!(options & ImGuiGradientFlags_NoButtonAndMarkOptions))
+        if (!(options & (ImGuiGradientFlags_NoAddAndRemoveButton | ImGuiGradientFlags_NoMarkOptions)))
         {
             number_of_line_under_bar += 1.f;
         }
