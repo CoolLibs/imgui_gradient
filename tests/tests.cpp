@@ -19,7 +19,7 @@ int main()
         static std::default_random_engine    generator{std::random_device{}()};
         static ImGuiGradient::GradientWidget gradient;
         ImGui::Begin("Gradient Editor");
-        gradient.gradient_editor(
+        gradient.widget(
             "Gradient",
             generator,
             ImGuiGradient::Settings{

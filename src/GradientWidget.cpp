@@ -283,7 +283,7 @@ auto GradientWidget::add_mark(const float position, std::default_random_engine& 
     return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{pos}, new_mark_col}));
 }
 
-auto GradientWidget::gradient_editor(
+auto GradientWidget::widget(
     const char*                 label,
     std::default_random_engine& generator,
     const Settings&             settings

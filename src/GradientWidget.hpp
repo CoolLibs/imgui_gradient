@@ -63,8 +63,8 @@ public:
     auto get_gradient() const -> const Gradient& { return state.gradient; }
     auto get_gradient() -> Gradient& { return state.gradient; }
     auto add_mark(const float position, std::default_random_engine& generator) -> bool;
-
-    auto gradient_editor(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
+    // TODO(ASG) add widget_with_chosen_rnd()
+    auto widget(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
 
 private:
     auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, float width, float height) -> bool;
