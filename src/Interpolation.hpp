@@ -1,8 +1,10 @@
 #pragma once
 
-// TODO(ASG) namespace
+namespace ImGuiGradient {
 
 enum class Interpolation {
     Linear,
     Constant,
 };
+
+}
