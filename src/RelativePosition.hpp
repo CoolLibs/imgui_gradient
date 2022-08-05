@@ -40,7 +40,7 @@ public:
 private:
     void assert_invariants() const
     {
-        assert(0.f <= value && value <= 1.f && "gdngl"); // TODO(ASG) Error message
+        assert(0.f <= value && value <= 1.f && "RelativePosition value should be between 0.f and 1.f");
     }
 
 private:
