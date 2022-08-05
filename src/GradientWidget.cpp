@@ -443,8 +443,11 @@ auto GradientWidget::widget(
         {
             number_of_line_under_bar += 1.f;
         }
+        ImDrawList& draw_list = *ImGui::GetWindowDrawList();
+
         const float y_space_under_bar = gradient_bar_bottom + internal::button_size() * number_of_line_under_bar;
         draw_border(
+            draw_list,
             gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
             ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f),
             internal::color__border()
