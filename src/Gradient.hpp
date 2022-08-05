@@ -2,8 +2,6 @@
 
 #include <list>
 #include "Mark.hpp"
-#include "WrapMode.hpp"
-
 
 namespace ImGuiGradient {
 
@@ -11,7 +9,6 @@ using RGBAColor = ImVec4;
 
 class Gradient {
 public:
-    auto compute_color_at(float position, WrapMode mode) const -> RGBAColor;
     auto compute_color_at(RelativePosition position) const -> RGBAColor;
 
     auto add_mark(const Mark& mark) -> Mark&

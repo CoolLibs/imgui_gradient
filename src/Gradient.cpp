@@ -1,37 +1,6 @@
 #include "Gradient.hpp"
-#include "utils.hpp"
 
 namespace ImGuiGradient {
-
-auto Gradient::compute_color_at(float position, WrapMode mode) const -> ImVec4
-{
-    const auto relative_pos = RelativePosition{[&] {
-        switch (mode)
-        {
-        case WrapMode::Clamp:
-        {
-            return ImClamp(position, 0.f, 1.f);
-        }
-        case WrapMode::Repeat:
-        {
-            return Utils::repeat_position(position);
-        }
-        case WrapMode::MirrorClamp:
-        {
-            return Utils::mirror_clamp_position(position);
-        }
-        case WrapMode::MirrorRepeat:
-        {
-            return Utils::mirror_repeat_position(position);
-        }
-        default:
-            assert(false && "[Gradient::get_color_at] Invalid enum value");
-            return 0.5f;
-        }
-    }()};
-
-    return compute_color_at(relative_pos);
-}
 
 auto Gradient::compute_color_at(RelativePosition position) const -> ImVec4
 {

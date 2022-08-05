@@ -2,6 +2,7 @@
 #include <iterator>
 #include "imgui_draw.hpp"
 #include "random.hpp"
+#include "utils.hpp"
 
 namespace ImGuiGradient {
 
@@ -270,9 +271,32 @@ static auto random_color(std::default_random_engine& generator) -> ImVec4
 
 auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
 {
-    const float  pos          = ImClamp(position, 0.f, 1.f); // TODO(ASG) it is not here wa have to do that
-    const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(position, position_mode);
-    return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{pos}, new_mark_col}));
+    const auto   relative_pos = RelativePosition{[&] {
+        switch (position_mode)
+        {
+        case WrapMode::Clamp:
+        {
+            return ImClamp(position, 0.f, 1.f);
+        }
+        case WrapMode::Repeat:
+        {
+            return Utils::repeat_position(position);
+        }
+        case WrapMode::MirrorClamp:
+        {
+            return Utils::mirror_clamp_position(position);
+        }
+        case WrapMode::MirrorRepeat:
+        {
+            return Utils::mirror_repeat_position(position);
+        }
+        default:
+            assert(false && "[Gradient::get_color_at] Invalid enum value");
+            return 0.5f;
+        }
+    }()};
+    const ImVec4 new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(relative_pos);
+    return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{relative_pos}, new_mark_col}));
 }
 
 auto GradientWidget::widget_with_chosen_rnd(
