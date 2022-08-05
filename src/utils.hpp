@@ -33,13 +33,13 @@ inline auto repeat_position(float position) -> float
 
 // TODO(ASG) Apply the actua wrap mode on textures and see what happens
 
-// TODO(ASG) explain what this does
+// Applies a mirror transform on position given around 0.f, then clamp it between 0.f and 1.f
 inline auto mirror_clamp_position(float position) -> float
 {
     return ImClamp(abs(position), 0.f, 1.f);
 }
 
-// TODO(ASG) explain what this does
+// Applies a mirror transform on position given around 0.f, then repeat it
 inline auto mirror_repeat_position(float position) -> float
 {
     return 1.f - (abs(modulo(position, 2.f) - 1.f));
