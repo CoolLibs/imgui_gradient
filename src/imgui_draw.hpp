@@ -3,7 +3,6 @@
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "gradient_settings.hpp"
-#include "imgui_draw_utils.hpp"
 
 namespace ImGuiGradient {
 
