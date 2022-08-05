@@ -18,6 +18,14 @@ namespace ImGuiGradient {
 
 using ColorRGBA = ImVec4;
 
+inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
+{
+    return (a.x == b.x) &&
+           (a.y == b.y) &&
+           (a.z == b.z) &&
+           (a.w == b.w);
+}
+
 struct Mark {
     RelativePosition position{0.f};
     ColorRGBA        color{0.f, 0.f, 0.f, 1.f};
@@ -25,10 +33,7 @@ struct Mark {
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {
         return (a.position == b.position) &&
-               (a.color.x == b.color.x) && // TODO(ASG) define an operator == for ColorRGBA
-               (a.color.y == b.color.y) &&
-               (a.color.z == b.color.z) &&
-               (a.color.w == b.color.w);
+               (a.color == b.color);
     };
 };
 
