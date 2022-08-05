@@ -21,7 +21,6 @@ int main()
         ImGui::Begin("Gradient Editor");
         gradient.widget(
             "Gradient",
-            generator,
             ImGuiGradient::Settings{
                 .horizontal_margin = 10.f,
                 .flags             = flags,

@@ -49,7 +49,6 @@
 #include "Interpolation.hpp"
 #include "gradient_settings.hpp"
 
-
 namespace ImGuiGradient {
 struct State {
     Gradient gradient{};
@@ -64,8 +63,9 @@ public:
     auto get_gradient() const -> const Gradient& { return state.gradient; }
     auto get_gradient() -> Gradient& { return state.gradient; }
     auto add_mark(const float position, std::default_random_engine& generator) -> bool;
-    // TODO(ASG) add widget_with_chosen_rnd()
-    auto widget(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
+
+    auto widget_with_chosen_rnd(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
+    auto widget(const char* label, const Settings& settings) -> bool;
 
 private:
     auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, float width, float height) -> bool;

@@ -275,7 +275,7 @@ auto GradientWidget::add_mark(const float position, std::default_random_engine& 
     return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{pos}, new_mark_col}));
 }
 
-auto GradientWidget::widget(
+auto GradientWidget::widget_with_chosen_rnd(
     const char*                 label,
     std::default_random_engine& generator,
     const Settings&             settings
@@ -455,6 +455,12 @@ auto GradientWidget::widget(
     }
 
     return modified;
+}
+
+auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
+{
+    static std::default_random_engine generator{std::random_device{}()};
+    return widget_with_chosen_rnd(label, generator, settings);
 }
 
 }; // namespace ImGuiGradient
