@@ -90,7 +90,7 @@ static auto color_button(Mark* selected_mark, bool should_show_tooltip, ImGuiCol
 
 static auto precise_position(Mark& selected_mark, const float width) -> bool
 {
-    return selected_mark.position.widget(width);
+    return selected_mark.position.imgui_widget(width);
 }
 
 static auto random_mode_box(bool& should_use_a_random_color_for_the_new_marks, bool should_show_tooltip) -> bool

@@ -29,7 +29,7 @@ public:
         assert_invariants();
     }
 
-    auto widget(float width) -> bool // TODO(ASG) rename as imgui_widget()
+    auto imgui_widget(float width) -> bool
     {
         ImGui::SetNextItemWidth(width);
         static constexpr auto speed{1.f}; // TODO(ASG) Find a nice value
