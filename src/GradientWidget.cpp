@@ -318,15 +318,15 @@ auto GradientWidget::widget(
 
     const ImVec2 gradient_bar_pos    = internal::gradient_position(settings.horizontal_margin);
     const float  width               = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin);
-    const float  gradient_bar_bottom = gradient_bar_pos.y + settings.gradient_editor_height;
+    const float  gradient_bar_bottom = gradient_bar_pos.y + settings.widget_height;
 
     ImGui::BeginGroup();
-    ImGui::InvisibleButton("gradient_editor", ImVec2(width, settings.gradient_editor_height));
-    draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_pos, width, settings.gradient_editor_height);
+    ImGui::InvisibleButton("gradient_editor", ImVec2(width, settings.widget_height));
+    draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_pos, width, settings.widget_height);
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(mark_to_delete, gradient_bar_pos, width, settings.gradient_editor_height);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(mark_to_delete, gradient_bar_pos, width, settings.widget_height);
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)
