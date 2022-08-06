@@ -1,6 +1,7 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
 #include "imgui_draw.hpp"
+#include "internal.hpp"
 #include "random.hpp"
 #include "utils.hpp"
 
@@ -128,7 +129,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     ImDrawList& draw_list           = *ImGui::GetWindowDrawList();
     const float gradient_botto_barm = gradient_bar_pos.y + height;
 
-    draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::color__border());
+    draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::border_color());
     if (!gradient.is_empty())
     {
         draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, gradient_botto_barm, width);
@@ -360,7 +361,7 @@ auto GradientWidget::widget_with_chosen_rnd(
     if (!state.gradient.is_empty())
     {
         if (((remove_button_exists &&
-              delete_button(internal::button_size(), no_tooltip)) ||
+              delete_button(internal::button_height(), no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
@@ -376,7 +377,7 @@ auto GradientWidget::widget_with_chosen_rnd(
         {
             ImGui::SameLine();
         }
-        if (add_button(internal::button_size(), no_tooltip))
+        if (add_button(internal::button_height(), no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
@@ -440,7 +441,7 @@ auto GradientWidget::widget_with_chosen_rnd(
 
     if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*state.selected_mark, internal::button_size() * 12.f, no_tooltip, settings.flags);
+        modified |= open_color_picker_popup(*state.selected_mark, internal::button_height() * 12.f, no_tooltip, settings.flags);
     }
 
     if (!(settings.flags & Flag::NoBorder))
@@ -469,12 +470,12 @@ auto GradientWidget::widget_with_chosen_rnd(
         }
         ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
-        const float y_space_under_bar = gradient_bar_bottom + internal::button_size() * number_of_line_under_bar;
+        const float y_space_under_bar = gradient_bar_bottom + internal::button_height() * number_of_line_under_bar;
         draw_border(
             draw_list,
             gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
             ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f),
-            internal::color__border()
+            internal::border_color()
         );
     }
 

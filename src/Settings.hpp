@@ -13,39 +13,4 @@ struct Settings {
     ImGuiColorEditFlags  color_flags                = ImGuiColorEditFlags_None;
 };
 
-// TODO(ASG) The things below don't belong to this File
-namespace internal {
-
-inline auto button_size() -> float // TODO(ASG) Should be named button_height
-{
-    return ImGui::GetFrameHeight();
-}
-
-inline auto gradient_position(float offset) -> ImVec2 // TODO(ASG) offset should be named x_offset
-{
-    return ImGui::GetCursorScreenPos() + ImVec2(offset, 0.f);
-}
-
-inline auto color__border() -> ImU32 // TODO(ASG) acutally I don't like this name, border_color is better
-{
-    return ImGui::GetColorU32(ImGuiCol_Border);
-}
-
-inline auto color__mark() -> ImU32 // TODO(ASG)same
-{
-    return ImGui::GetColorU32(ImGuiCol_Button);
-}
-
-inline auto color__hovered_mark() -> ImU32 // TODO(ASG) same
-{
-    return ImGui::GetColorU32(ImGuiCol_ButtonHovered);
-}
-
-inline auto color__selected_mark() -> ImU32 // TODO(ASG) same
-{
-    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
-}
-
-} // namespace internal
-
 } // namespace ImGuiGradient

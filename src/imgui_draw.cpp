@@ -3,6 +3,7 @@
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "Settings.hpp"
+#include "internal.hpp"
 
 namespace ImGuiGradient {
 
@@ -178,7 +179,7 @@ static void draw_mark(
         draw_arrow_selected(
             draw_list,
             pos,
-            internal::color__selected_mark(),
+            internal::selected_mark_color(),
             arrow_inside_border, arrow_selected, offset
         );
     }
@@ -219,8 +220,8 @@ void mark_invisble_hitbox(
         draw_list,
         pos,
         mark_invisible_button(pos, arrow_border, gradient_editor_height)
-            ? internal::color__hovered_mark()
-            : internal::color__mark(),
+            ? internal::hovered_mark_color()
+            : internal::mark_color(),
         mark_color,
         arrow_border,
         mark_is_selected
