@@ -5,7 +5,6 @@
 #include "internal.hpp"
 #include "random.hpp"
 
-
 namespace ImGuiGradient {
 
 static void tooltip(const char* text)
@@ -273,7 +272,6 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
 
 auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
 {
-    // TODO(ASG) move the switch to a make_relative_position function
     const auto      relative_pos = make_relative_position(position, wrap_mode);
     const ColorRGBA new_mark_col = should_use_a_random_color_for_the_new_marks
                                        ? random_color(generator)
