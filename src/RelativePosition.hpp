@@ -4,7 +4,7 @@
 
 namespace ImGuiGradient {
 
-// TODO(ASG) Documentation
+// RelativePosition is a number between 0 and 1 that represents a 1D position
 class RelativePosition {
 public:
     explicit RelativePosition(float position)
