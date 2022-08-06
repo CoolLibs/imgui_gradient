@@ -1,45 +1,6 @@
-// https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112
+// Inspired by https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112
 
-/* TODO(ASG) Replace this with our own documentation
-
- Usage:
-
- ::GRADIENT DATA::
- ImGradient gradient;
-
- ::BUTTON::
- if(ImGui::GradientButton(&gradient))
- {
-    //set show editor flag to true/false
- }
-
- ::EDITOR::
- static ImGradientMark* draggingMark = nullptr;
- static ImGradientMark* selectedMark = nullptr;
-
- bool updated = ImGui::GradientEditor(&gradient, draggingMark, selectedMark);
-
- ::GET A COLOR::
- float color[3];
- gradient.getColorAt(0.3f, color); //position from 0 to 1
-
- ::MODIFY GRADIENT WITH CODE::
- gradient.get().clear();
- gradient.add_mark(0.0f, ImColor(0.2f, 0.1f, 0.0f));
- gradient.add_mark(0.7f, ImColor(120, 200, 255));
-
- ::WOOD BROWNS PRESET::
- gradient.get().clear();
- gradient.add_mark(0.0f, ImColor(0xA0, 0x79, 0x3D));
- gradient.add_mark(0.2f, ImColor(0xAA, 0x83, 0x47));
- gradient.add_mark(0.3f, ImColor(0xB4, 0x8D, 0x51));
- gradient.add_mark(0.4f, ImColor(0xBE, 0x97, 0x5B));
- gradient.add_mark(0.6f, ImColor(0xC8, 0xA1, 0x65));
- gradient.add_mark(0.7f, ImColor(0xD2, 0xAB, 0x6F));
- gradient.add_mark(0.8f, ImColor(0xDC, 0xB5, 0x79));
- gradient.add_mark(1.0f, ImColor(0xE6, 0xBF, 0x83));
-
- */
+// TODO(ASG) Documentation
 
 #pragma once
 
@@ -52,33 +13,36 @@
 
 namespace ImGuiGradient {
 
-using RGBAColor = ImVec4;
+using RGBAColor = ImVec4; // TODO(ASG) REMOVE
 
+namespace internal { // TODO(ASG) move to a separate file
 struct State {
     Gradient gradient{};
     Mark*    dragging_mark{};
     Mark*    selected_mark{};
     Mark*    mark_to_hide{};
 };
+} // namespace internal
 
 class GradientWidget {
 public:
     GradientWidget() = default;
     auto get_gradient() const -> const Gradient& { return state.gradient; }
-    auto add_mark(const float position, std::default_random_engine& generator) -> bool;
+    auto add_mark(float position) -> bool;
+    auto add_mark(float position, std::default_random_engine& generator) -> bool;
 
-    auto widget_with_chosen_rnd(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
+    auto widget(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
     auto widget(const char* label, const Settings& settings) -> bool;
 
 private:
     auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, float width, float height) -> bool;
-    auto mouse_dragging(const float gradient_bar_bottom, float width, float gradient_bar_pos_x, const Settings& settings) -> bool;
+    auto mouse_dragging(float gradient_bar_bottom, float width, float gradient_bar_pos_x, const Settings& settings) -> bool;
 
 private:
-    State         state{};
-    WrapMode      position_mode      = WrapMode::Clamp;
-    Interpolation interpolation_mode = Interpolation::Linear;
-    bool          random_mode        = false;
+    internal::State state{};
+    WrapMode        wrap_mode{WrapMode::Clamp};
+    Interpolation   interpolation_mode{Interpolation::Linear};
+    bool            should_use_a_random_color_for_the_new_marks{false};
 };
 
 } // namespace ImGuiGradient

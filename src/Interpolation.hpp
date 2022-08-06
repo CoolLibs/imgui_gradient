@@ -2,9 +2,10 @@
 
 namespace ImGuiGradient {
 
+// TODO(ASG) Documentation
 enum class Interpolation {
-    Linear,
-    Constant,
+    Linear,   // TODO(ASG) Documentation
+    Constant, // TODO(ASG) Documentation
 };
 
-}
+} // namespace ImGuiGradient

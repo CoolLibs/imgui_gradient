@@ -5,11 +5,11 @@
 
 namespace ImGuiGradient {
 
-using RGBAColor = ImVec4;
+using RGBAColor = ImVec4; // TODO(ASG) Remove this one
 
 class Gradient {
 public:
-    auto compute_color_at(RelativePosition position) const -> RGBAColor;
+    auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
     auto add_mark(const Mark& mark) -> Mark&
     {

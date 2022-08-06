@@ -36,8 +36,8 @@ void draw_gradient(
     ImDrawList&          draw_list,
     const Interpolation& interpolation_mode,
     const ImVec2         gradient_bar_pos,
-    float                gradient_bar_bottom,
-    float                width
+    const float          gradient_bar_bottom,
+    const float          width
 )
 {
     float current_starting_x = gradient_bar_pos.x;
@@ -163,7 +163,7 @@ static void draw_mark(
     bool         mark_is_selected
 )
 {
-    const float offset = 1.f;
+    static constexpr auto offset{1.f};
 
     draw_background_mark(
         draw_list,
@@ -173,7 +173,7 @@ static void draw_mark(
     );
     if (mark_is_selected)
     {
-        const float arrow_selected      = 4.f;
+        const float arrow_selected      = 4.f; // TODO(ASG) Rename
         const float arrow_inside_border = arrow_border - offset;
 
         draw_arrow_selected(

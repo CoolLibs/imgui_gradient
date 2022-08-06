@@ -14,7 +14,7 @@ inline auto gradient_position(float x_offset) -> ImVec2
     return ImGui::GetCursorScreenPos() + ImVec2(x_offset, 0.f);
 }
 
-inline auto border_color() -> ImColor
+inline auto border_color() -> ImColor // TODO(ASG) Use ImU32
 {
     return ImGui::GetColorU32(ImGuiCol_Border);
 }

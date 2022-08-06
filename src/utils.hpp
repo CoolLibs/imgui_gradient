@@ -13,6 +13,7 @@
 
 // https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf p260
 
+// TODO(ASG) rename file as Utils (have fun with windows)
 namespace Utils {
 
 /// Always returns a number between 0.f and 1.f, even if x is negative.

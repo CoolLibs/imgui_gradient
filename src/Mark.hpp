@@ -1,7 +1,7 @@
 #pragma once
 
 #include <imgui/imgui.h> // Include ImVec4
-
+#include "RelativePosition.hpp"
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -12,11 +12,9 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "RelativePosition.hpp"
-
 namespace ImGuiGradient {
 
-using ColorRGBA = ImVec4;
+using ColorRGBA = ImVec4; // TODO(ASG) Move in an approprite file
 
 inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
 {
@@ -32,8 +30,8 @@ struct Mark {
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {
-        return (a.position == b.position) &&
-               (a.color == b.color);
+        return a.position == b.position &&
+               a.color == b.color;
     };
 };
 

@@ -32,14 +32,14 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static auto position_mode_combo(WrapMode& position_mode) -> bool
+static auto position_mode_combo(WrapMode& wrap_mode) -> bool
 {
     // Take the greater word to choose combo size
     const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f;
     ImGui::SetNextItemWidth(size);
     return ImGui::Combo(
         "Position Mode",
-        reinterpret_cast<int*>(&position_mode),
+        reinterpret_cast<int*>(&wrap_mode),
         " Clamp\0 Repeat\0 Mirror Clamp\0 Mirror Repeat\0\0"
     );
 }
@@ -93,7 +93,7 @@ static auto precise_position(Mark& selected_mark, const float width) -> bool
     return selected_mark.position.widget(width);
 }
 
-static auto random_mode_box(bool& random_mode, bool should_show_tooltip) -> bool
+static auto random_mode_box(bool& should_use_a_random_color_for_the_new_marks, bool should_show_tooltip) -> bool
 {
     const bool modified = ImGui::Checkbox("Random Mode", &random_mode);
     if (should_show_tooltip)
@@ -132,7 +132,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::border_color());
     if (!gradient.is_empty())
     {
-        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, gradient_botto_barm, width);
+        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, width, height);
     }
     ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height));
 }
@@ -272,35 +272,39 @@ static auto random_color(std::default_random_engine& generator) -> RGBAColor
 
 auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
 {
-    const auto      relative_pos = RelativePosition{[&] {
-        switch (position_mode)
-        {
-        case WrapMode::Clamp:
-        {
-            return ImClamp(position, 0.f, 1.f);
-        }
-        case WrapMode::Repeat:
-        {
-            return Utils::repeat_position(position);
-        }
-        case WrapMode::MirrorClamp:
-        {
-            return Utils::mirror_clamp_position(position);
-        }
-        case WrapMode::MirrorRepeat:
-        {
-            return Utils::mirror_repeat_position(position);
-        }
-        default:
-            assert(false && "[Gradient::get_color_at] Invalid enum value");
-            return 0.5f;
-        }
-    }()};
-    const RGBAColor new_mark_col = (random_mode) ? random_color(generator) : state.gradient.compute_color_at(relative_pos);
+    const auto relative_pos = RelativePosition{
+        [&] {
+            switch (wrap_mode)
+            {
+            case WrapMode::Clamp:
+            {
+                return ImClamp(position, 0.f, 1.f);
+            }
+            case WrapMode::Repeat:
+            {
+                return Utils::repeat_position(position);
+            }
+            case WrapMode::MirrorClamp:
+            {
+                return Utils::mirror_clamp_position(position);
+            }
+            case WrapMode::MirrorRepeat:
+            {
+                return Utils::mirror_repeat_position(position);
+            }
+            default:
+                assert(false && "[Gradient::get_color_at] Invalid enum value"); // TODO(ASG) fix error message
+                return 0.25f;
+            }
+        }()};
+    // TODO(ASG) move the switch to a make_relative_position function
+    const RGBAColor new_mark_col = should_use_a_random_color_for_the_new_marks
+                                       ? random_color(generator)
+                                       : state.gradient.compute_color_at(relative_pos);
     return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{relative_pos}, new_mark_col}));
 }
 
-auto GradientWidget::widget_with_chosen_rnd(
+auto GradientWidget::widget_with_chosen_rng(
     const char*                 label,
     std::default_random_engine& generator,
     const Settings&             settings
@@ -418,7 +422,7 @@ auto GradientWidget::widget_with_chosen_rnd(
         {
             ImGui::SameLine();
         }
-        modified |= position_mode_combo(position_mode);
+        modified |= position_mode_combo(wrap_mode);
     }
 
     if (!(settings.flags & Flag::NoRandomModeChange))
@@ -427,7 +431,7 @@ auto GradientWidget::widget_with_chosen_rnd(
         {
             ImGui::SameLine();
         }
-        modified |= random_mode_box(random_mode, no_tooltip);
+        modified |= random_mode_box(should_use_a_random_color_for_the_new_marks, no_tooltip);
     }
 
     if (!(settings.flags & Flag::NoResetButton))
@@ -487,5 +491,4 @@ auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
     static std::default_random_engine generator{std::random_device{}()};
     return widget_with_chosen_rnd(label, generator, settings);
 }
-
 }; // namespace ImGuiGradient
