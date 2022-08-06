@@ -62,7 +62,6 @@ class GradientWidget {
 public:
     GradientWidget() = default;
     auto get_gradient() const -> const Gradient& { return state.gradient; }
-    auto get_gradient() -> Gradient& { return state.gradient; }
     auto add_mark(const float position, std::default_random_engine& generator) -> bool;
 
     auto widget_with_chosen_rnd(const char* label, std::default_random_engine& generator, const Settings& settings) -> bool;
