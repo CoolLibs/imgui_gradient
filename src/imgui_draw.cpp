@@ -11,7 +11,7 @@ static void draw_uniform_square(
     ImDrawList&  draw_list,
     const ImVec2 top_left_corner,
     const ImVec2 bottom_rigth_corner,
-    ImColor      color
+    ImU32        color
 )
 {
     static constexpr float rounding = 1.f;
@@ -22,7 +22,7 @@ static void draw_gradient_between_two_colors(
     ImDrawList&  draw_list,
     const ImVec2 top_left_corner,
     const ImVec2 bottom_rigth_corner,
-    ImColor colorA, ImColor colorB
+    ImU32 colorA, ImU32 colorB
 )
 {
     draw_list.AddRectFilledMultiColor(
@@ -44,10 +44,10 @@ void draw_gradient(
     {
         const Mark& mark = *markIt;
 
-        ImColor colorBU32 = ImGui::ColorConvertFloat4ToU32(mark.color);
-        ImColor colorAU32 = (markIt != gradient.get_marks().begin())
-                                ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color)
-                                : colorBU32;
+        ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(mark.color);
+        ImU32 colorAU32 = (markIt != gradient.get_marks().begin())
+                              ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color)
+                              : colorBU32;
 
         const float from = current_starting_x;
         const float to   = gradient_pos.x + mark.position.get() * (size.x);
@@ -77,7 +77,7 @@ void draw_gradient(
     // If last element not at the end position extend its color to the end position
     if (gradient.get_marks().back().position.get() != 1.f)
     {
-        ImColor colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color);
+        ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color);
         draw_uniform_square(
             draw_list,
             ImVec2(current_starting_x, gradient_pos.y),
@@ -90,7 +90,7 @@ void draw_gradient(
 static void draw_background_mark(
     ImDrawList&  draw_list,
     const ImVec2 pos,
-    ImColor      arrow_mark,
+    ImU32        arrow_mark,
     const float  arrow_border,
     const float  offset
 )
@@ -128,7 +128,7 @@ static void draw_background_mark(
 static void draw_arrow_selected(
     ImDrawList&  draw_list,
     const ImVec2 pos,
-    ImColor      selected_color,
+    ImU32        selected_color,
     const float  arrow_inside_border,
     const float  arrow_selected,
     const float  offset
@@ -156,8 +156,8 @@ static void draw_arrow_selected(
 static void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 pos,
-    ImColor      background_mark_color,
-    ImColor      mark_color,
+    ImU32        background_mark_color,
+    ImU32        mark_color,
     float        arrow_border,
     bool         mark_is_selected
 )
@@ -207,11 +207,11 @@ static auto mark_invisible_button(
 }
 
 void mark_invisble_hitbox(
-    ImDrawList&    draw_list,
-    const ImVec2   pos,
-    const ImColor& mark_color,
-    float          gradient_editor_height,
-    bool           mark_is_selected
+    ImDrawList&  draw_list,
+    const ImVec2 pos,
+    const ImU32& mark_color,
+    float        gradient_editor_height,
+    bool         mark_is_selected
 )
 {
     const float arrow_border = 6.f;

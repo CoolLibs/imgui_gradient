@@ -7,10 +7,10 @@
 namespace ImGuiGradient {
 
 inline void draw_border(
-    ImDrawList&    draw_list,
-    const ImVec2   top_left_corner,
-    const ImVec2   bottom_rigth_corner,
-    const ImColor& color
+    ImDrawList&  draw_list,
+    const ImVec2 top_left_corner,
+    const ImVec2 bottom_rigth_corner,
+    const ImU32& color
 )
 {
     static constexpr float rounding  = 1.f;
@@ -27,11 +27,11 @@ void draw_gradient(
 );
 
 void mark_invisble_hitbox( // TODO(ASG) Does this function have a single responsibility ? and does its name describe that responsibility ? (answer: NO)
-    ImDrawList&    draw_list,
-    ImVec2         position,
-    const ImColor& mark_color,
-    float          gradient_editor_height, // TODO(ASG) Rename without the editor in the name
-    bool           mark_is_selected
+    ImDrawList&  draw_list,
+    ImVec2       position,
+    const ImU32& mark_color,
+    float        gradient_editor_height, // TODO(ASG) Rename without the editor in the name
+    bool         mark_is_selected
 );
 
 } // namespace ImGuiGradient
