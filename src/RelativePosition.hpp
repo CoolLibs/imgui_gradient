@@ -32,13 +32,13 @@ public:
     auto imgui_widget(float width) -> bool
     {
         ImGui::SetNextItemWidth(width);
-        static constexpr auto speed{1.f}; // TODO(ASG) Find a nice value
+        static constexpr auto speed{.0001f};
         return ImGui::DragFloat(
             "##3",
             &value,
             speed,
             0.f, 1.f,
-            "%.3f", // TODO(ASG) increase precision to 4 or 5
+            "%.4f",
             ImGuiSliderFlags_AlwaysClamp
         );
     }
