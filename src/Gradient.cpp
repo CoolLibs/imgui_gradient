@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Gradient.hpp"
 
 namespace ImGuiGradient {
@@ -20,15 +21,12 @@ auto Gradient::get_marks_surrounding(const RelativePosition& position) const -> 
             lower = &mark;
         }
     }
-    SurroundingMarks surrounding_marks{};
-    surrounding_marks.lower = lower;
-    surrounding_marks.upper = upper;
-    return surrounding_marks;
+    return SurroundingMarks{lower, upper};
 }
 
 auto Gradient::compute_color_at(const RelativePosition& position) const -> ColorRGBA
 {
-    SurroundingMarks surrounding_marks = get_marks_surrounding(position);
+    const auto surrounding_marks = get_marks_surrounding(position);
     if (!surrounding_marks.lower && !surrounding_marks.upper)
     {
         return ColorRGBA{0.f, 0.f, 0.f, 1.f};
