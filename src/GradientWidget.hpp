@@ -51,6 +51,9 @@
 #include "WrapMode.hpp"
 
 namespace ImGuiGradient {
+
+using RGBAColor = ImVec4;
+
 struct State {
     Gradient gradient{};
     Mark*    dragging_mark{};
