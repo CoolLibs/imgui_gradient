@@ -4,6 +4,7 @@
 
 namespace ImGuiGradient {
 
+// TODO(ASG) Documentation
 class RelativePosition {
 public:
     explicit RelativePosition(float position)
