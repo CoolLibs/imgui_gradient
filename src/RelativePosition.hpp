@@ -5,9 +5,9 @@
 namespace ImGuiGradient {
 
 // TODO(ASG) Move the switch here
-auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
-{
-}
+// auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
+// {
+// }
 
 /// Represents a number between 0 and 1.
 class RelativePosition {

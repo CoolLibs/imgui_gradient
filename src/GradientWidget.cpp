@@ -95,7 +95,7 @@ static auto precise_position(Mark& selected_mark, const float width) -> bool
 
 static auto random_mode_box(bool& should_use_a_random_color_for_the_new_marks, bool should_show_tooltip) -> bool
 {
-    const bool modified = ImGui::Checkbox("Random Mode", &random_mode);
+    const bool modified = ImGui::Checkbox("Random Mode", &should_use_a_random_color_for_the_new_marks);
     if (should_show_tooltip)
     {
         tooltip("Add mark with random color");
@@ -132,7 +132,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::border_color());
     if (!gradient.is_empty())
     {
-        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, width, height);
+        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, height, width);
     }
     ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height));
 }
@@ -249,12 +249,12 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
         if (!(settings.flags & Flag::NoDragDowntoDelete))
         { // hide dragging mark when mouse under gradient bar
             float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
-            if (diffY >= settings.delete_mark_by_dragging_down_sensibility)
+            if (diffY >= settings.distance_to_delete_mark_by_dragging_down)
             {
                 state.mark_to_hide = state.dragging_mark;
             }
             // do not hide it anymore when mouse on gradient bar
-            if (state.mark_to_hide && diffY <= settings.delete_mark_by_dragging_down_sensibility)
+            if (state.mark_to_hide && diffY <= settings.distance_to_delete_mark_by_dragging_down)
             {
                 state.dragging_mark = state.mark_to_hide;
                 state.mark_to_hide  = nullptr;
@@ -304,7 +304,7 @@ auto GradientWidget::add_mark(const float position, std::default_random_engine& 
     return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{relative_pos}, new_mark_col}));
 }
 
-auto GradientWidget::widget_with_chosen_rng(
+auto GradientWidget::widget(
     const char*                 label,
     std::default_random_engine& generator,
     const Settings&             settings
@@ -438,7 +438,7 @@ auto GradientWidget::widget_with_chosen_rng(
     {
         if (ImGui::Button("Reset"))
         {
-            state = State{};
+            state = internal::State{};
             modified |= true;
         }
     }
@@ -489,6 +489,6 @@ auto GradientWidget::widget_with_chosen_rng(
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
     static std::default_random_engine generator{std::random_device{}()};
-    return widget_with_chosen_rnd(label, generator, settings);
+    return widget(label, generator, settings);
 }
 }; // namespace ImGuiGradient

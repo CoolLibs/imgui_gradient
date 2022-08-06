@@ -7,9 +7,15 @@ namespace ImGuiGradient {
 
 using RGBAColor = ImVec4; // TODO(ASG) Remove this one
 
+struct SurroundingMarks {
+    const Mark* lower{nullptr}; // first mark positionned before position, or nullptr if there is none
+    const Mark* upper{nullptr}; // first mark positionned after position, or nullptr if there is none
+};
+
 class Gradient {
 public:
-    auto compute_color_at(RelativePosition position) const -> ColorRGBA;
+    auto get_marks_surrounding(const RelativePosition& position) const -> SurroundingMarks;
+    auto compute_color_at(const RelativePosition& position) const -> ColorRGBA;
 
     auto add_mark(const Mark& mark) -> Mark&
     {

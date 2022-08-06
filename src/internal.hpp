@@ -2,6 +2,8 @@
 
 #include <imgui/imgui.h>
 
+namespace ImGuiGradient {
+
 namespace internal {
 
 inline auto button_height() -> float
@@ -34,4 +36,4 @@ inline auto selected_mark_color() -> ImColor
     return ImGui::GetColorU32(ImGuiCol_ButtonActive);
 }
 
-} // namespace internal
+}} // namespace ImGuiGradient::internal

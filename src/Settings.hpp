@@ -1,6 +1,8 @@
 #pragma once
 
+#include <imgui/imgui.h>
 #include "Flags.hpp"
+
 
 namespace ImGuiGradient {
 

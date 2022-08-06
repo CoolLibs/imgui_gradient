@@ -32,12 +32,13 @@ static void draw_gradient_between_two_colors(
 }
 
 void draw_gradient(
-    Gradient&            gradient,
-    ImDrawList&          draw_list,
-    const Interpolation& interpolation_mode,
-    const ImVec2         gradient_bar_pos,
-    const float          gradient_bar_bottom,
-    const float          width
+    Gradient&     gradient,
+    ImDrawList&   draw_list,
+    Interpolation interpolation_mode,
+    ImVec2        gradient_bar_pos, // TODO(ASG) Rename as gradient_pos
+    // ImVec2        size
+    float height,
+    float width
 )
 {
     float current_starting_x = gradient_bar_pos.x;
@@ -59,7 +60,7 @@ void draw_gradient(
                 draw_gradient_between_two_colors(
                     draw_list,
                     ImVec2(from, gradient_bar_pos.y),
-                    ImVec2(to, gradient_bar_bottom),
+                    ImVec2(to, gradient_bar_pos.y + height),
                     colorAU32, colorBU32
                 );
             }
@@ -68,7 +69,7 @@ void draw_gradient(
                 draw_uniform_square(
                     draw_list,
                     ImVec2(from, gradient_bar_pos.y),
-                    ImVec2(to, gradient_bar_bottom),
+                    ImVec2(to, gradient_bar_pos.y + height),
                     colorBU32
                 );
             }
@@ -82,7 +83,7 @@ void draw_gradient(
         draw_uniform_square(
             draw_list,
             ImVec2(current_starting_x, gradient_bar_pos.y),
-            ImVec2(gradient_bar_pos.x + width, gradient_bar_bottom),
+            ImVec2(gradient_bar_pos.x + width, gradient_bar_pos.y + height),
             colorBU32
         );
     }
@@ -208,11 +209,11 @@ static auto mark_invisible_button(
 }
 
 void mark_invisble_hitbox(
-    ImDrawList&  draw_list,
-    const ImVec2 pos,
-    ImColor      mark_color,
-    float        gradient_editor_height,
-    bool         mark_is_selected
+    ImDrawList&    draw_list,
+    const ImVec2   pos,
+    const ImColor& mark_color,
+    float          gradient_editor_height,
+    bool           mark_is_selected
 )
 {
     const float arrow_border = 6.f;

@@ -6,23 +6,15 @@
 
 #include <random>
 #include "Flags.hpp"
-#include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "Settings.hpp"
+#include "State.hpp"
 #include "WrapMode.hpp"
+
 
 namespace ImGuiGradient {
 
 using RGBAColor = ImVec4; // TODO(ASG) REMOVE
-
-namespace internal { // TODO(ASG) move to a separate file
-struct State {
-    Gradient gradient{};
-    Mark*    dragging_mark{};
-    Mark*    selected_mark{};
-    Mark*    mark_to_hide{};
-};
-} // namespace internal
 
 class GradientWidget {
 public:
