@@ -1,6 +1,6 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
-#include "Util.hpp"
+#include "Utils.hpp"
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 #include "random.hpp"
