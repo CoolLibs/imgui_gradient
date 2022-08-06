@@ -22,10 +22,8 @@ void draw_gradient(
     Gradient&     gradient,
     ImDrawList&   draw_list,
     Interpolation interpolation_mode,
-    ImVec2        gradient_bar_pos, // TODO(ASG) Rename as gradient_pos
-    // ImVec2        size
-    float height,
-    float width
+    ImVec2        gradient_pos,
+    ImVec2        size // {width, height}
 );
 
 void mark_invisble_hitbox( // TODO(ASG) Does this function have a single responsibility ? and does its name describe that responsibility ? (answer: NO)

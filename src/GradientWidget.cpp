@@ -132,7 +132,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::border_color());
     if (!gradient.is_empty())
     {
-        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, height, width);
+        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, ImVec2{width, height});
     }
     ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height));
 }

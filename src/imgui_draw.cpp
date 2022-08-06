@@ -35,13 +35,11 @@ void draw_gradient(
     Gradient&     gradient,
     ImDrawList&   draw_list,
     Interpolation interpolation_mode,
-    ImVec2        gradient_bar_pos, // TODO(ASG) Rename as gradient_pos
-    // ImVec2        size
-    float height,
-    float width
+    ImVec2        gradient_pos,
+    ImVec2        size
 )
 {
-    float current_starting_x = gradient_bar_pos.x;
+    float current_starting_x = gradient_pos.x;
     for (auto markIt = gradient.get_marks().begin(); markIt != gradient.get_marks().end(); ++markIt)
     {
         const Mark& mark = *markIt;
@@ -52,15 +50,15 @@ void draw_gradient(
                                 : colorBU32;
 
         const float from = current_starting_x;
-        const float to   = gradient_bar_pos.x + mark.position.get() * (width);
+        const float to   = gradient_pos.x + mark.position.get() * (size.x);
         if (mark.position.get() != 0.f)
         {
             if (interpolation_mode == Interpolation::Linear)
             {
                 draw_gradient_between_two_colors(
                     draw_list,
-                    ImVec2(from, gradient_bar_pos.y),
-                    ImVec2(to, gradient_bar_pos.y + height),
+                    ImVec2(from, gradient_pos.y),
+                    ImVec2(to, gradient_pos.y + size.y),
                     colorAU32, colorBU32
                 );
             }
@@ -68,8 +66,8 @@ void draw_gradient(
             {
                 draw_uniform_square(
                     draw_list,
-                    ImVec2(from, gradient_bar_pos.y),
-                    ImVec2(to, gradient_bar_pos.y + height),
+                    ImVec2(from, gradient_pos.y),
+                    ImVec2(to, gradient_pos.y + size.y),
                     colorBU32
                 );
             }
@@ -82,8 +80,8 @@ void draw_gradient(
         ImColor colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color);
         draw_uniform_square(
             draw_list,
-            ImVec2(current_starting_x, gradient_bar_pos.y),
-            ImVec2(gradient_bar_pos.x + width, gradient_bar_pos.y + height),
+            ImVec2(current_starting_x, gradient_pos.y),
+            ImVec2(gradient_pos.x + size.x, gradient_pos.y + size.y),
             colorBU32
         );
     }
