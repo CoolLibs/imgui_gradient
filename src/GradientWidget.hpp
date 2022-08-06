@@ -47,9 +47,8 @@
 #include "Flags.hpp"
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
+#include "Settings.hpp"
 #include "WrapMode.hpp"
-#include "gradient_settings.hpp"
-
 
 namespace ImGuiGradient {
 struct State {

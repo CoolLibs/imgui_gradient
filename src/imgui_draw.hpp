@@ -2,7 +2,7 @@
 
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
-#include "gradient_settings.hpp"
+#include "Settings.hpp"
 
 namespace ImGuiGradient {
 

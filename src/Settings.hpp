@@ -2,7 +2,6 @@
 
 #include "Flags.hpp"
 
-// TODO(ASG) Rename this file as Settings
 namespace ImGuiGradient {
 
 struct Settings {

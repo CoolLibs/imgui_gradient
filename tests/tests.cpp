@@ -2,7 +2,7 @@
 #include <doctest/doctest.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 #include "../src/Flags.hpp"
-#include "../src/gradient_settings.hpp"
+#include "../src/Settings.hpp"
 #include "../src/utils.hpp"
 #include "gradient_options_debug.hpp"
 
