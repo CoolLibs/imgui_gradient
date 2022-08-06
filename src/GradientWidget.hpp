@@ -11,10 +11,7 @@
 #include "State.hpp"
 #include "WrapMode.hpp"
 
-
 namespace ImGuiGradient {
-
-using RGBAColor = ImVec4; // TODO(ASG) REMOVE
 
 class GradientWidget {
 public:

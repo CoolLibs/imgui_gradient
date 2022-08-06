@@ -264,9 +264,9 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
     return dragging;
 }
 
-static auto random_color(std::default_random_engine& generator) -> RGBAColor
+static auto random_color(std::default_random_engine& generator) -> ColorRGBA
 {
-    const auto color = RGBAColor{Utils::random(generator), Utils::random(generator), Utils::random(generator), 1.f};
+    const auto color = ColorRGBA{Utils::random(generator), Utils::random(generator), Utils::random(generator), 1.f};
     return color;
 }
 
@@ -298,7 +298,7 @@ auto GradientWidget::add_mark(const float position, std::default_random_engine& 
             }
         }()};
     // TODO(ASG) move the switch to a make_relative_position function
-    const RGBAColor new_mark_col = should_use_a_random_color_for_the_new_marks
+    const ColorRGBA new_mark_col = should_use_a_random_color_for_the_new_marks
                                        ? random_color(generator)
                                        : state.gradient.compute_color_at(relative_pos);
     return (state.selected_mark = &state.gradient.add_mark(Mark{RelativePosition{relative_pos}, new_mark_col}));

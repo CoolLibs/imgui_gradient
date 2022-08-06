@@ -1,7 +1,8 @@
 #pragma once
 
-#include <imgui/imgui.h> // Include ImVec4
+#include "ColorRGBA.hpp"
 #include "RelativePosition.hpp"
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
@@ -13,8 +14,6 @@
 #endif
 
 namespace ImGuiGradient {
-
-using ColorRGBA = ImVec4; // TODO(ASG) Move in an approprite file
 
 inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
 {

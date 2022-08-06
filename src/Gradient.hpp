@@ -5,8 +5,6 @@
 
 namespace ImGuiGradient {
 
-using RGBAColor = ImVec4; // TODO(ASG) Remove this one
-
 struct SurroundingMarks {
     const Mark* lower{nullptr}; // first mark positionned before position, or nullptr if there is none
     const Mark* upper{nullptr}; // first mark positionned after position, or nullptr if there is none
@@ -34,7 +32,7 @@ public:
         mark.position.set(position.get());
         sort_marks();
     };
-    void set_mark_color(Mark& mark, const RGBAColor color)
+    void set_mark_color(Mark& mark, const ColorRGBA color)
     {
         mark.color = color;
     };
