@@ -3,7 +3,6 @@
 #include <iterator>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
-#include "random.hpp"
 
 namespace ImGuiGradient {
 
@@ -264,9 +263,14 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
     return dragging;
 }
 
+static auto random(std::default_random_engine& generator) -> float
+{
+    return std::uniform_real_distribution<float>{0.f, 1.f}(generator);
+}
+
 static auto random_color(std::default_random_engine& generator) -> ColorRGBA
 {
-    const auto color = ColorRGBA{Utils::random(generator), Utils::random(generator), Utils::random(generator), 1.f};
+    const auto color = ColorRGBA{random(generator), random(generator), random(generator), 1.f};
     return color;
 }
 
