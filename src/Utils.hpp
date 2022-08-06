@@ -4,7 +4,8 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
-#include <imgui/imgui_internal.h>
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include <imgui/imgui_internal.h> // include ImClamp
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif

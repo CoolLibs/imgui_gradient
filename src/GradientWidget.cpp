@@ -1,9 +1,10 @@
+#include "GradientWidget.hpp"
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <iterator>
-#include "Utils.hpp"
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 #include "random.hpp"
+
 
 namespace ImGuiGradient {
 
@@ -272,32 +273,8 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
 
 auto GradientWidget::add_mark(const float position, std::default_random_engine& generator) -> bool
 {
-    const auto relative_pos = RelativePosition{
-        [&] {
-            switch (wrap_mode)
-            {
-            case WrapMode::Clamp:
-            {
-                return ImClamp(position, 0.f, 1.f);
-            }
-            case WrapMode::Repeat:
-            {
-                return Utils::repeat_position(position);
-            }
-            case WrapMode::MirrorClamp:
-            {
-                return Utils::mirror_clamp_position(position);
-            }
-            case WrapMode::MirrorRepeat:
-            {
-                return Utils::mirror_repeat_position(position);
-            }
-            default:
-                assert(false && "[Gradient::get_color_at] Invalid enum value"); // TODO(ASG) fix error message
-                return 0.25f;
-            }
-        }()};
     // TODO(ASG) move the switch to a make_relative_position function
+    const auto      relative_pos = make_relative_position(position, wrap_mode);
     const ColorRGBA new_mark_col = should_use_a_random_color_for_the_new_marks
                                        ? random_color(generator)
                                        : state.gradient.compute_color_at(relative_pos);
