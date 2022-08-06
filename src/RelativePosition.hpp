@@ -78,7 +78,7 @@ inline auto make_relative_position(float position, WrapMode wrap_mode) -> Relati
                 return Utils::mirror_repeat_position(position);
             }
             default:
-                assert(false && "[Gradient::make_relative_position] Invalid enum value"); // TODO(ASG) fix error message
+                assert(false && "[RelativePosition::make_relative_position] Invalid enum value");
                 return 0.25f;
             }
         }()};
