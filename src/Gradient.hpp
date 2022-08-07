@@ -14,9 +14,9 @@ public:
     auto add_mark(const Mark& mark) -> Mark&
     {
         _marks.push_back(mark);
-        Mark* ptr = &_marks.back(); // TODO(ASG) Why not store a reference directly ?
+        Mark& reference = _marks.back();
         sort_marks();
-        return *ptr;
+        return reference;
     };
 
     void remove_mark(const Mark& mark)
