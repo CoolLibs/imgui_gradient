@@ -2,10 +2,10 @@
 
 namespace ImGuiGradient {
 
-// TODO(ASG) Documentation
+/// Severals ways to compute gradient colors between two marks.
 enum class Interpolation {
-    Linear,   // TODO(ASG) Documentation
-    Constant, // TODO(ASG) Documentation
+    Linear,   /// Linear gradient between two marks.
+    Constant, /// Same color between two marks, it takes the color of right mark.
 };
 
 } // namespace ImGuiGradient
