@@ -15,8 +15,8 @@ struct SurroundingMarks {
 
 class Gradient {
 public:
-    auto get_marks_surrounding(const RelativePosition& position) const -> SurroundingMarks;
-    auto compute_color_at(const RelativePosition& position) const -> ColorRGBA;
+    auto get_marks_surrounding(RelativePosition position) const -> SurroundingMarks;
+    auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
     // TODO(ASG) Move all function implementations to the .cpp
     auto add_mark(const Mark& mark) -> Mark&

@@ -4,8 +4,7 @@
 
 namespace ImGuiGradient {
 
-// TODO(ASG) RelativePosition should be passed by copy
-auto Gradient::get_marks_surrounding(const RelativePosition& position) const -> SurroundingMarks
+auto Gradient::get_marks_surrounding(const RelativePosition position) const -> SurroundingMarks
 {
     const Mark* lower{nullptr};
     const Mark* upper{nullptr};
@@ -25,7 +24,7 @@ auto Gradient::get_marks_surrounding(const RelativePosition& position) const -> 
     return SurroundingMarks{lower, upper};
 }
 
-auto Gradient::compute_color_at(const RelativePosition& position) const -> ColorRGBA
+auto Gradient::compute_color_at(const RelativePosition position) const -> ColorRGBA
 {
     const auto        surrounding_marks = get_marks_surrounding(position);
     const Mark* const lower{surrounding_marks.lower};
