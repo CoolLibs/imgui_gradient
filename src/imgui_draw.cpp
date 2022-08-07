@@ -234,8 +234,8 @@ void mark_invisble_hitbox(
     draw_mark(
         draw_list,
         mark_position,
-        mark_color,
         mark_drawing_color(mark_position, mark_horizontal_size),
+        mark_color,
         mark_horizontal_size,
         mark_is_selected
     );
