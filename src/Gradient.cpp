@@ -26,7 +26,7 @@ auto Gradient::get_marks() const -> const std::list<Mark>&
     return _marks;
 }
 
-void Gradient::set_mark_position(Mark& mark, const RelativePosition position)
+void Gradient::set_mark_position(Mark& mark, const RelativePosition position) // TODO(ASG) Gradient methods wich does not use _marks
 {
     mark.position.set(position.get());
     sort_marks();
@@ -37,7 +37,7 @@ auto Gradient::is_empty() -> bool
     return _marks.empty();
 }
 
-void Gradient::set_mark_color(Mark& mark, const ColorRGBA color)
+void Gradient::set_mark_color(Mark& mark, const ColorRGBA color) // TODO(ASG) Gradient methods wich does not use _marks
 {
     mark.color = color;
 }
