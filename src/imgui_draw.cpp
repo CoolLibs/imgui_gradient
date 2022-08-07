@@ -11,43 +11,46 @@ static void draw_uniform_square(
     ImDrawList&  draw_list,
     const ImVec2 top_left_corner,
     const ImVec2 bottom_rigth_corner,
-    ImU32        color
+    const ImU32& color
 )
 {
     static constexpr float rounding = 1.f;
-    draw_list.AddRectFilled(top_left_corner, bottom_rigth_corner, color, rounding, ImDrawFlags_Closed);
+    draw_list.AddRectFilled(
+        top_left_corner,
+        bottom_rigth_corner,
+        color,
+        rounding, ImDrawFlags_Closed
+    );
 }
 
 static void draw_gradient_between_two_colors(
     ImDrawList&  draw_list,
     const ImVec2 top_left_corner,
     const ImVec2 bottom_rigth_corner,
-    ImU32 colorA, ImU32 colorB
+    const ImU32& color_left, const ImU32& color_right
 )
 {
     draw_list.AddRectFilledMultiColor(
-        top_left_corner, bottom_rigth_corner,
-        colorA, colorB, colorB, colorA
+        top_left_corner,
+        bottom_rigth_corner,
+        color_left, color_right, color_right, color_left
     );
 }
 
 void draw_gradient(
-    Gradient&     gradient,
-    ImDrawList&   draw_list,
-    Interpolation interpolation_mode,
-    ImVec2        gradient_pos,
-    ImVec2        size
+    Gradient&           gradient,
+    ImDrawList&         draw_list,
+    const Interpolation interpolation_mode,
+    const ImVec2        gradient_pos,
+    const ImVec2        size
 )
 {
     float current_starting_x = gradient_pos.x;
-    for (auto markIt = gradient.get_marks().begin(); markIt != gradient.get_marks().end(); ++markIt)
+    for (auto mark_iterator = gradient.get_marks().begin(); mark_iterator != gradient.get_marks().end(); ++mark_iterator)
     {
-        const Mark& mark = *markIt;
+        const Mark& mark = *mark_iterator;
 
-        ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(mark.color);
-        ImU32 colorAU32 = (markIt != gradient.get_marks().begin())
-                              ? ImGui::ColorConvertFloat4ToU32(std::prev(markIt)->color)
-                              : colorBU32;
+        const ImU32 color_right = ImGui::ColorConvertFloat4ToU32(mark.color);
 
         const float from = current_starting_x;
         const float to   = gradient_pos.x + mark.position.get() * (size.x);
@@ -55,11 +58,14 @@ void draw_gradient(
         {
             if (interpolation_mode == Interpolation::Linear)
             {
+                const ImU32 color_left = (mark_iterator != gradient.get_marks().begin())
+                                             ? ImGui::ColorConvertFloat4ToU32(std::prev(mark_iterator)->color)
+                                             : color_right;
                 draw_gradient_between_two_colors(
                     draw_list,
                     ImVec2(from, gradient_pos.y),
                     ImVec2(to, gradient_pos.y + size.y),
-                    colorAU32, colorBU32
+                    color_left, color_right
                 );
             }
             else
@@ -68,7 +74,7 @@ void draw_gradient(
                     draw_list,
                     ImVec2(from, gradient_pos.y),
                     ImVec2(to, gradient_pos.y + size.y),
-                    colorBU32
+                    color_right
                 );
             }
         }
@@ -77,28 +83,27 @@ void draw_gradient(
     // If last element not at the end position extend its color to the end position
     if (gradient.get_marks().back().position.get() != 1.f)
     {
-        ImU32 colorBU32 = ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color);
         draw_uniform_square(
             draw_list,
             ImVec2(current_starting_x, gradient_pos.y),
             ImVec2(gradient_pos.x + size.x, gradient_pos.y + size.y),
-            colorBU32
+            ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color)
         );
     }
 }
 
 static void draw_background_mark(
     ImDrawList&  draw_list,
-    const ImVec2 pos,
-    ImU32        arrow_mark,
-    const float  arrow_border,
+    const ImVec2 mark_position,
+    const ImU32& arrow_mark_color,
+    const float  mark_horizontal_size,
     const float  offset
 )
 {
-    const float arrow_inside_border = arrow_border - offset;
+    const float arrow_inside_border = mark_horizontal_size - offset;
 
-    const auto arrow_border_x = ImVec2{arrow_border, 0.f};
-    const auto arrow_border_y = ImVec2{0.f, arrow_border};
+    const auto mark_horizontal_size_x = ImVec2{mark_horizontal_size, 0.f};
+    const auto mark_horizontal_size_y = ImVec2{0.f, mark_horizontal_size};
 
     const auto offset_y = ImVec2{0.f, offset};
 
@@ -106,31 +111,31 @@ static void draw_background_mark(
     const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
 
     draw_list.AddTriangleFilled(
-        pos - arrow_border_y,
-        pos - arrow_border_x,
-        pos + arrow_border_x,
-        arrow_mark
+        mark_position - mark_horizontal_size_y,
+        mark_position - mark_horizontal_size_x,
+        mark_position + mark_horizontal_size_x,
+        arrow_mark_color
     );
     draw_uniform_square(
         draw_list,
-        pos - arrow_border_x,
-        pos + arrow_border_x + ImVec2{0.f, 2.f} * arrow_border_y,
-        arrow_mark
+        mark_position - mark_horizontal_size_x,
+        mark_position + mark_horizontal_size_x + ImVec2{0.f, 2.f} * mark_horizontal_size_y,
+        arrow_mark_color
     );
     draw_uniform_square(
         draw_list,
-        pos - arrow_inside_border_x + offset_y,
-        pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
-        arrow_mark
+        mark_position - arrow_inside_border_x + offset_y,
+        mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
+        arrow_mark_color
     );
 }
 
 static void draw_arrow_selected(
     ImDrawList&  draw_list,
-    const ImVec2 pos,
-    ImU32        selected_color,
+    const ImVec2 mark_position,
+    const ImU32& selected_color,
     const float  arrow_inside_border,
-    const float  arrow_selected,
+    const float  arrow_selected_horizontal_size,
     const float  offset
 )
 {
@@ -139,26 +144,29 @@ static void draw_arrow_selected(
     const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
     const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
 
-    const auto arrow_selected_x = ImVec2{arrow_selected, 0.f};
-    const auto arrow_selected_y = ImVec2{0.f, arrow_selected};
+    const auto arrow_selected_horizontal_size_x = ImVec2{arrow_selected_horizontal_size, 0.f};
+    const auto arrow_selected_horizontal_size_y = ImVec2{0.f, arrow_selected_horizontal_size};
 
     draw_list.AddTriangleFilled(
-        pos - arrow_selected_y - offset_y,
-        pos + offset_y - arrow_selected_x, pos + arrow_selected_x + offset_y,
+        mark_position - arrow_selected_horizontal_size_y - offset_y,
+        mark_position + offset_y - arrow_selected_horizontal_size_x, mark_position + arrow_selected_horizontal_size_x + offset_y,
         selected_color
     );
     draw_list.AddRect(
-        pos - arrow_inside_border_x + offset_y,
-        pos + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y, selected_color, 1.0f, ImDrawFlags_Closed
+        mark_position - arrow_inside_border_x + offset_y,
+        mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
+        selected_color,
+        1.0f,
+        ImDrawFlags_Closed
     );
 }
 
 static void draw_mark(
     ImDrawList&  draw_list,
-    const ImVec2 pos,
-    ImU32        background_mark_color,
-    ImU32        mark_color,
-    float        arrow_border,
+    const ImVec2 mark_position,
+    const ImU32& background_mark_color,
+    const ImU32& mark_color,
+    float        mark_horizontal_size,
     bool         mark_is_selected
 )
 {
@@ -166,20 +174,20 @@ static void draw_mark(
 
     draw_background_mark(
         draw_list,
-        pos,
+        mark_position,
         background_mark_color,
-        arrow_border, offset
+        mark_horizontal_size, offset
     );
     if (mark_is_selected)
     {
-        const float arrow_selected      = 4.f; // TODO(ASG) Rename
-        const float arrow_inside_border = arrow_border - offset;
+        const float arrow_selected_horizontal_size = 4.f;
+        const float arrow_inside_border            = mark_horizontal_size - offset;
 
         draw_arrow_selected(
             draw_list,
-            pos,
+            mark_position,
             internal::selected_mark_color(),
-            arrow_inside_border, arrow_selected, offset
+            arrow_inside_border, arrow_selected_horizontal_size, offset
         );
     }
 
@@ -188,41 +196,41 @@ static void draw_mark(
     const auto square_height_y = ImVec2{0.f, square_height};
     draw_uniform_square(
         draw_list,
-        pos - square_height_x + square_height_y,
-        pos + square_height_x + square_height_y * square_height_y,
+        mark_position - square_height_x + square_height_y,
+        mark_position + square_height_x + square_height_y * square_height_y,
         mark_color
     );
 }
 
 static auto mark_invisible_button(
     const ImVec2 vec,
-    float        arrow_border,
-    float        gradient_editor_height
+    const float  mark_horizontal_size,
+    const float  gradient_editor_height
 ) -> bool
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{arrow_border * 1.5f, gradient_editor_height});
-    const auto button_size = ImVec2{arrow_border * 3.f, gradient_editor_height + arrow_border * 2.f};
+    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, gradient_editor_height});
+    const auto button_size = ImVec2{mark_horizontal_size * 3.f, gradient_editor_height + mark_horizontal_size * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
 
 void mark_invisble_hitbox(
     ImDrawList&  draw_list,
-    const ImVec2 pos,
+    const ImVec2 mark_position,
     const ImU32& mark_color,
-    float        gradient_editor_height,
-    bool         mark_is_selected
+    const float  gradient_editor_height,
+    const bool   mark_is_selected
 )
 {
-    const float arrow_border = 6.f;
+    const float mark_horizontal_size = 6.f;
     draw_mark(
         draw_list,
-        pos,
-        mark_invisible_button(pos, arrow_border, gradient_editor_height)
+        mark_position,
+        mark_invisible_button(mark_position, mark_horizontal_size, gradient_editor_height)
             ? internal::hovered_mark_color()
             : internal::mark_color(),
         mark_color,
-        arrow_border,
+        mark_horizontal_size,
         mark_is_selected
     );
 }
