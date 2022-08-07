@@ -5,4 +5,5 @@
 namespace ImGuiGradient {
 
 using ColorRGBA = ImVec4;
+
 }

@@ -1,6 +1,7 @@
 ---
 Checks: '
   *,
+  -readability-implicit-bool-conversion,
   -readability-redundant-access-specifiers,
   -readability-else-after-return,
   -readability-redundant-string-init,
