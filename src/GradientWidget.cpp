@@ -19,11 +19,10 @@ static void tooltip(const char* text)
 static auto button_with_tooltip(
     const char* label,
     const char* tooltip_message,
-    ImVec2      size                = ImVec2{0.f, 0.f},
     bool        should_show_tooltip = true
 ) -> bool
 {
-    const bool clicked = ImGui::Button(label, size);
+    const bool clicked = ImGui::Button(label, ImVec2{internal::button_height(), internal::button_height()});
     if (should_show_tooltip)
     {
         tooltip(tooltip_message);
@@ -55,22 +54,20 @@ static auto gradient_interpolation_mode(Interpolation& interpolation_mode) -> bo
     );
 }
 
-static auto delete_button(const float size, bool should_show_tooltip) -> bool
+static auto delete_button(bool should_show_tooltip) -> bool
 {
     return button_with_tooltip(
         "-",
         "Select a mark to remove it\nor middle click on it\nor drag it down",
-        ImVec2{size, size},
         should_show_tooltip
     );
 }
 
-static auto add_button(const float size, bool should_show_tooltip) -> bool
+static auto add_button(bool should_show_tooltip) -> bool
 {
     return button_with_tooltip(
         "+",
         "Add a mark here\nor click on the gradient to choose its position",
-        ImVec2{size, size},
         should_show_tooltip
     );
 }
@@ -347,7 +344,7 @@ auto GradientWidget::widget(
     if (!state.gradient.is_empty())
     {
         if (((remove_button_exists &&
-              delete_button(internal::button_height(), no_tooltip)) ||
+              delete_button(no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
@@ -363,7 +360,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        if (add_button(internal::button_height(), no_tooltip))
+        if (add_button(no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
