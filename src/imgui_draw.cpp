@@ -213,6 +213,16 @@ static auto mark_invisible_button(
     return ImGui::IsItemHovered();
 }
 
+static auto mark_drawing_color(
+    const ImVec2 mark_position,
+    const float  mark_horizontal_size
+) -> ImU32
+{
+    return mark_invisible_button(mark_position, mark_horizontal_size)
+               ? internal::hovered_mark_color()
+               : internal::mark_color();
+}
+
 void mark_invisble_hitbox(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
@@ -224,10 +234,8 @@ void mark_invisble_hitbox(
     draw_mark(
         draw_list,
         mark_position,
-        mark_invisible_button(mark_position, mark_horizontal_size)
-            ? internal::hovered_mark_color()
-            : internal::mark_color(),
         mark_color,
+        mark_drawing_color(mark_position, mark_horizontal_size),
         mark_horizontal_size,
         mark_is_selected
     );
