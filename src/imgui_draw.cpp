@@ -94,24 +94,24 @@ void draw_gradient(
 }
 
 static auto mark_invisible_button(
-    const ImVec2 vec,
-    const float  mark_horizontal_size
+    const ImVec2 mark_position,
+    const float  mark_square_size
 ) -> bool
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, 0.f});
+    ImGui::SetCursorScreenPos(mark_position - ImVec2{mark_square_size * 1.5f, 0.f});
     const auto button_size = ImVec2{
-        mark_horizontal_size * 3.f,
-        mark_horizontal_size * 2.f};
+        mark_square_size * 3.f,
+        mark_square_size * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
 
 static auto mark_drawing_color(
     const ImVec2 mark_position,
-    const float  mark_horizontal_size
+    const float  mark_square_size
 ) -> ImU32
 {
-    return mark_invisible_button(mark_position, mark_horizontal_size)
+    return mark_invisible_button(mark_position, mark_square_size)
                ? internal::hovered_mark_color()
                : internal::mark_color();
 }
@@ -119,38 +119,38 @@ static auto mark_drawing_color(
 static void draw_background_mark(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
-    const float  mark_horizontal_size,
+    const float  mark_square_size,
     const float  offset
 )
 {
-    const auto mark_color = mark_drawing_color(mark_position, mark_horizontal_size);
+    const auto mark_color = mark_drawing_color(mark_position, mark_square_size);
 
-    const float arrow_inside_border = mark_horizontal_size - offset;
+    const float mark_inside_border = mark_square_size - offset;
 
-    const auto mark_horizontal_size_x = ImVec2{mark_horizontal_size, 0.f};
-    const auto mark_horizontal_size_y = ImVec2{0.f, mark_horizontal_size};
+    const auto mark_square_size_x = ImVec2{mark_square_size, 0.f};
+    const auto mark_square_size_y = ImVec2{0.f, mark_square_size};
 
     const auto offset_y = ImVec2{0.f, offset};
 
-    const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
-    const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
+    const auto mark_inside_border_x = ImVec2{mark_inside_border, 0.f};
+    const auto mark_inside_border_y = ImVec2{0.f, mark_inside_border};
 
     draw_list.AddTriangleFilled(
-        mark_position - mark_horizontal_size_y,
-        mark_position - mark_horizontal_size_x,
-        mark_position + mark_horizontal_size_x,
+        mark_position - mark_square_size_y,
+        mark_position - mark_square_size_x,
+        mark_position + mark_square_size_x,
         mark_color
     );
     draw_uniform_square(
         draw_list,
-        mark_position - mark_horizontal_size_x,
-        mark_position + mark_horizontal_size_x + ImVec2{0.f, 2.f} * mark_horizontal_size_y,
+        mark_position - mark_square_size_x,
+        mark_position + mark_square_size_x + ImVec2{0.f, 2.f} * mark_square_size_y,
         mark_color
     );
     draw_uniform_square(
         draw_list,
-        mark_position - arrow_inside_border_x + offset_y,
-        mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
+        mark_position - mark_inside_border_x + offset_y,
+        mark_position + mark_inside_border_x + ImVec2{0.f, 2.f} * mark_inside_border_y + offset_y,
         mark_color
     );
 }
@@ -158,60 +158,60 @@ static void draw_background_mark(
 static void draw_arrow_selected(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
-    const float  arrow_inside_border,
-    const float  arrow_selected_horizontal_size,
+    const float  mark_inside_border,
+    const float  mark_selected_square_size,
     const float  offset
 )
 {
     const auto offset_y = ImVec2{0.f, offset};
 
-    const auto arrow_inside_border_x = ImVec2{arrow_inside_border, 0.f};
-    const auto arrow_inside_border_y = ImVec2{0.f, arrow_inside_border};
+    const auto mark_inside_border_x = ImVec2{mark_inside_border, 0.f};
+    const auto mark_inside_border_y = ImVec2{0.f, mark_inside_border};
 
-    const auto arrow_selected_horizontal_size_x = ImVec2{arrow_selected_horizontal_size, 0.f};
-    const auto arrow_selected_horizontal_size_y = ImVec2{0.f, arrow_selected_horizontal_size};
+    const auto mark_selected_square_size_x = ImVec2{mark_selected_square_size, 0.f};
+    const auto mark_selected_square_size_y = ImVec2{0.f, mark_selected_square_size};
 
     const auto selected_mark_color = internal::selected_mark_color();
 
     draw_list.AddTriangleFilled(
-        mark_position - arrow_selected_horizontal_size_y - offset_y,
-        mark_position + offset_y - arrow_selected_horizontal_size_x, mark_position + arrow_selected_horizontal_size_x + offset_y,
+        mark_position - mark_selected_square_size_y - offset_y,
+        mark_position + offset_y - mark_selected_square_size_x, mark_position + mark_selected_square_size_x + offset_y,
         selected_mark_color
     );
     draw_list.AddRect(
-        mark_position - arrow_inside_border_x + offset_y,
-        mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
+        mark_position - mark_inside_border_x + offset_y,
+        mark_position + mark_inside_border_x + ImVec2{0.f, 2.f} * mark_inside_border_y + offset_y,
         selected_mark_color,
         1.0f,
         ImDrawFlags_Closed
     );
 }
 
-static void draw_mark(
+void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
     const ImU32& mark_color,
-    float        mark_horizontal_size,
     bool         mark_is_selected
 )
 {
+    static constexpr auto mark_square_size{6.f};
     static constexpr auto offset{1.f};
 
     draw_background_mark(
         draw_list,
         mark_position,
-        mark_horizontal_size,
+        mark_square_size,
         offset
     );
     if (mark_is_selected)
     {
-        const float arrow_selected_horizontal_size = 4.f;
-        const float arrow_inside_border            = mark_horizontal_size - offset;
+        const float mark_selected_square_size = 4.f;
+        const float mark_inside_border        = mark_square_size - offset;
 
         draw_arrow_selected(
             draw_list,
             mark_position,
-            arrow_inside_border, arrow_selected_horizontal_size, offset
+            mark_inside_border, mark_selected_square_size, offset
         );
     }
 
@@ -223,23 +223,6 @@ static void draw_mark(
         mark_position - square_height_x + square_height_y,
         mark_position + square_height_x + square_height_y * square_height_y,
         mark_color
-    );
-}
-
-void mark_invisble_hitbox(
-    ImDrawList&  draw_list,
-    const ImVec2 mark_position,
-    const ImU32& mark_color,
-    const bool   mark_is_selected
-)
-{
-    const float mark_horizontal_size = 6.f;
-    draw_mark(
-        draw_list,
-        mark_position,
-        mark_color,
-        mark_horizontal_size,
-        mark_is_selected
     );
 }
 

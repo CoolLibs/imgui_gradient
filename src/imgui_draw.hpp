@@ -26,9 +26,9 @@ void draw_gradient(
     ImVec2        size // {width, height}
 );
 
-void mark_invisble_hitbox( // TODO(ASG) Does this function have a single responsibility ? and does its name describe that responsibility ? (answer: NO)
+void draw_mark(
     ImDrawList&  draw_list,
-    ImVec2       position,
+    const ImVec2 mark_position,
     const ImU32& mark_color,
     bool         mark_is_selected
 );

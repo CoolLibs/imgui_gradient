@@ -164,7 +164,7 @@ auto GradientWidget::draw_gradient_marks(
     {
         if (state.mark_to_hide != &mark_hovered)
         {
-            mark_invisble_hitbox(
+            draw_mark(
                 draw_list,
                 gradient_bar_pos + ImVec2(mark_hovered.position.get() * size.x, size.y),
                 ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
@@ -339,7 +339,7 @@ auto GradientWidget::widget(
         modified |= true;
     }
     ImGui::EndGroup();
-    const bool no_tooltip           = !(settings.flags & Flag::NoTooltip);
+    const bool no_tooltip           = !(settings.flags & Flag::NoTooltip); // TODO(ASG) rename boolean
     const bool remove_button_exists = !(settings.flags & Flag::NoRemoveButton);
     if (!state.gradient.is_empty())
     {
