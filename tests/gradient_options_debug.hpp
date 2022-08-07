@@ -32,10 +32,10 @@ auto gradient_options_debug() -> ImGuiGradient::Flags
         options |= ImGuiGradient::Flag::NoLabel;
     }
     static bool no_random_mode = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoRandomModeChange", &no_random_mode);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoRandomModeCheckBox", &no_random_mode);
     if (no_random_mode)
     {
-        options |= ImGuiGradient::Flag::NoRandomModeChange;
+        options |= ImGuiGradient::Flag::NoRandomModeCheckBox;
     }
     static bool no_add_button = false;
     ImGui::Checkbox("ImGuiGradient::Flag::NoAddButton", &no_add_button);
@@ -62,22 +62,22 @@ auto gradient_options_debug() -> ImGuiGradient::Flags
         options |= ImGuiGradient::Flag::NoColorEdit;
     }
     static bool no_posittion_mode_combo = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoWrapModeCombo", &no_posittion_mode_combo);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoWrapModeSelector", &no_posittion_mode_combo);
     if (no_posittion_mode_combo)
     {
-        options |= ImGuiGradient::Flag::NoWrapModeCombo;
+        options |= ImGuiGradient::Flag::NoWrapModeSelector;
     }
     static bool no_interpolation_combo = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoInterpolationCombo", &no_interpolation_combo);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoInterpolationSelector", &no_interpolation_combo);
     if (no_interpolation_combo)
     {
-        options |= ImGuiGradient::Flag::NoInterpolationCombo;
+        options |= ImGuiGradient::Flag::NoInterpolationSelector;
     }
     static bool no_drag_down_to_delete = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoDragDowntoDelete", &no_drag_down_to_delete);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoDragDownToDelete", &no_drag_down_to_delete);
     if (no_drag_down_to_delete)
     {
-        options |= ImGuiGradient::Flag::NoDragDowntoDelete;
+        options |= ImGuiGradient::Flag::NoDragDownToDelete;
     }
     static bool no_border = false;
     ImGui::Checkbox("ImGuiGradient::Flag::NoBorder", &no_border);
@@ -86,10 +86,10 @@ auto gradient_options_debug() -> ImGuiGradient::Flags
         options |= ImGuiGradient::Flag::NoBorder;
     }
     static bool no_add_and_remove_button = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoAddAndRemoveButton", &no_add_and_remove_button);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoAddAndRemoveButtons", &no_add_and_remove_button);
     if (no_add_and_remove_button)
     {
-        options |= ImGuiGradient::Flag::NoAddAndRemoveButton;
+        options |= ImGuiGradient::Flag::NoAddAndRemoveButtons;
     }
     static bool no_mark_options = false;
     ImGui::Checkbox("ImGuiGradient::Flag::NoMarkOptions", &no_mark_options);
@@ -98,10 +98,10 @@ auto gradient_options_debug() -> ImGuiGradient::Flags
         options |= ImGuiGradient::Flag::NoMarkOptions;
     }
     static bool no_combo = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoCombo", &no_combo);
+    ImGui::Checkbox("ImGuiGradient::Flag::NoSelector", &no_combo);
     if (no_combo)
     {
-        options |= ImGuiGradient::Flag::NoCombo;
+        options |= ImGuiGradient::Flag::NoSelector;
     }
     return options;
 }

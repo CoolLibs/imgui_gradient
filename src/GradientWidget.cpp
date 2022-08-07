@@ -245,7 +245,7 @@ auto GradientWidget::mouse_dragging(const float gradient_bar_bottom, float width
             state.gradient.set_mark_position(*state.dragging_mark, state.dragging_mark->position);
             dragging = true;
         }
-        if (!(settings.flags & Flag::NoDragDowntoDelete))
+        if (!(settings.flags & Flag::NoDragDownToDelete))
         { // hide dragging mark when mouse under gradient bar
             float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
             if (diffY >= settings.distance_to_delete_mark_by_dragging_down)
@@ -315,7 +315,7 @@ auto GradientWidget::widget(
     }
 
     modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_pos.x, settings);
-    if (!(settings.flags & Flag::NoDragDowntoDelete))
+    if (!(settings.flags & Flag::NoDragDownToDelete))
     { // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
@@ -389,12 +389,12 @@ auto GradientWidget::widget(
         }
     }
 
-    const bool interpolation_combo_exists = !(settings.flags & Flag::NoInterpolationCombo);
+    const bool interpolation_combo_exists = !(settings.flags & Flag::NoInterpolationSelector);
     if (interpolation_combo_exists)
     {
         modified |= gradient_interpolation_mode(interpolation_mode);
     }
-    const bool position_mode_combo_exists = !(settings.flags & Flag::NoWrapModeCombo);
+    const bool position_mode_combo_exists = !(settings.flags & Flag::NoWrapModeSelector);
     if (position_mode_combo_exists)
     {
         if (interpolation_combo_exists)
@@ -404,7 +404,7 @@ auto GradientWidget::widget(
         modified |= position_mode_combo(wrap_mode);
     }
 
-    if (!(settings.flags & Flag::NoRandomModeChange))
+    if (!(settings.flags & Flag::NoRandomModeCheckBox))
     {
         if (position_mode_combo_exists || interpolation_combo_exists)
         {
@@ -435,8 +435,8 @@ auto GradientWidget::widget(
             y_space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
         }
         float number_of_line_under_bar = 0.f;
-        if (!(settings.flags & Flag::NoRandomModeChange) ||
-            !(settings.flags & Flag::NoCombo))
+        if (!(settings.flags & Flag::NoRandomModeCheckBox) ||
+            !(settings.flags & Flag::NoSelector))
         {
             number_of_line_under_bar += 1.f;
         }
