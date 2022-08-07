@@ -22,7 +22,7 @@ static auto button_with_tooltip(
     bool        should_show_tooltip = true
 ) -> bool
 {
-    const bool clicked = ImGui::Button(label, ImVec2{internal::button_height(), internal::button_height()});
+    const bool clicked = ImGui::Button(label, internal::button_size());
     if (should_show_tooltip)
     {
         tooltip(tooltip_message);
@@ -424,7 +424,7 @@ auto GradientWidget::widget(
 
     if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*state.selected_mark, internal::button_height() * 12.f, no_tooltip, settings.flags);
+        modified |= open_color_picker_popup(*state.selected_mark, internal::line_height() * 12.f, no_tooltip, settings.flags);
     }
 
     if (!(settings.flags & Flag::NoBorder))
@@ -453,7 +453,7 @@ auto GradientWidget::widget(
         }
         ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
-        const float y_space_under_bar = gradient_bar_bottom + internal::button_height() * number_of_line_under_bar;
+        const float y_space_under_bar = gradient_bar_bottom + internal::line_height() * number_of_line_under_bar;
         draw_border(
             draw_list,
             gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),

@@ -6,9 +6,14 @@ namespace ImGuiGradient {
 
 namespace internal {
 
-inline auto button_height() -> float
+inline auto line_height() -> float
 {
     return ImGui::GetFrameHeight();
+}
+
+inline auto button_size() -> ImVec2
+{
+    return ImVec2{line_height(), line_height()};
 }
 
 inline auto gradient_position(float x_offset) -> ImVec2
