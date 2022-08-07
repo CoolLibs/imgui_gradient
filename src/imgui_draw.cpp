@@ -14,7 +14,7 @@ static void draw_uniform_square(
     const ImU32& color
 )
 {
-    static constexpr float rounding = 1.f;
+    static constexpr auto rounding{1.f};
     draw_list.AddRectFilled(
         top_left_corner,
         bottom_rigth_corner,
@@ -51,10 +51,10 @@ void draw_gradient(
     {
         const Mark& mark = *mark_iterator;
 
-        const ImU32 color_right = ImGui::ColorConvertFloat4ToU32(mark.color);
+        const auto color_right = ImU32{ImGui::ColorConvertFloat4ToU32(mark.color)};
 
-        const float from = current_starting_x;
-        const float to   = gradient_pos.x + mark.position.get() * (size.x);
+        const auto from{current_starting_x};
+        const auto to{gradient_pos.x + mark.position.get() * (size.x)};
         if (mark.position.get() != 0.f)
         {
             if (interpolation_mode == Interpolation::Linear)
@@ -125,7 +125,7 @@ static void draw_background_mark(
 {
     const auto mark_color = mark_drawing_color(mark_position, mark_square_size);
 
-    const float mark_inside_border = mark_square_size - offset;
+    const auto mark_inside_border{mark_square_size - offset};
 
     const auto mark_square_size_x = ImVec2{mark_square_size, 0.f};
     const auto mark_square_size_y = ImVec2{0.f, mark_square_size};
@@ -178,11 +178,13 @@ static void draw_arrow_selected(
         mark_position + offset_y - mark_selected_square_size_x, mark_position + mark_selected_square_size_x + offset_y,
         selected_mark_color
     );
+
+    static constexpr auto rounding = 1.f;
     draw_list.AddRect(
         mark_position - mark_inside_border_x + offset_y,
         mark_position + mark_inside_border_x + ImVec2{0.f, 2.f} * mark_inside_border_y + offset_y,
         selected_mark_color,
-        1.0f,
+        rounding,
         ImDrawFlags_Closed
     );
 }
@@ -205,8 +207,8 @@ void draw_mark(
     );
     if (mark_is_selected)
     {
-        const float mark_selected_square_size = 4.f;
-        const float mark_inside_border        = mark_square_size - offset;
+        static constexpr auto mark_selected_square_size{4.f};
+        static constexpr auto mark_inside_border{mark_square_size - offset};
 
         draw_arrow_selected(
             draw_list,
@@ -215,9 +217,9 @@ void draw_mark(
         );
     }
 
-    const auto square_height   = 3.f;
-    const auto square_height_x = ImVec2{square_height, 0.f};
-    const auto square_height_y = ImVec2{0.f, square_height};
+    static constexpr auto square_height{3.f};
+    static constexpr auto square_height_x = ImVec2{square_height, 0.f};
+    static constexpr auto square_height_y = ImVec2{0.f, square_height};
     draw_uniform_square(
         draw_list,
         mark_position - square_height_x + square_height_y,
