@@ -19,7 +19,8 @@ static void draw_uniform_square(
         top_left_corner,
         bottom_rigth_corner,
         color,
-        rounding, ImDrawFlags_Closed
+        rounding,
+        ImDrawFlags_Closed
     );
 }
 
@@ -92,14 +93,38 @@ void draw_gradient(
     }
 }
 
+static auto mark_invisible_button(
+    const ImVec2 vec,
+    const float  mark_horizontal_size
+) -> bool
+{
+    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, 0.f});
+    const auto button_size = ImVec2{
+        mark_horizontal_size * 3.f,
+        mark_horizontal_size * 2.f};
+    ImGui::InvisibleButton("mark", button_size);
+    return ImGui::IsItemHovered();
+}
+
+static auto mark_drawing_color(
+    const ImVec2 mark_position,
+    const float  mark_horizontal_size
+) -> ImU32
+{
+    return mark_invisible_button(mark_position, mark_horizontal_size)
+               ? internal::hovered_mark_color()
+               : internal::mark_color();
+}
+
 static void draw_background_mark(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
-    const ImU32& arrow_mark_color,
     const float  mark_horizontal_size,
     const float  offset
 )
 {
+    const auto mark_color = mark_drawing_color(mark_position, mark_horizontal_size);
+
     const float arrow_inside_border = mark_horizontal_size - offset;
 
     const auto mark_horizontal_size_x = ImVec2{mark_horizontal_size, 0.f};
@@ -114,26 +139,25 @@ static void draw_background_mark(
         mark_position - mark_horizontal_size_y,
         mark_position - mark_horizontal_size_x,
         mark_position + mark_horizontal_size_x,
-        arrow_mark_color
+        mark_color
     );
     draw_uniform_square(
         draw_list,
         mark_position - mark_horizontal_size_x,
         mark_position + mark_horizontal_size_x + ImVec2{0.f, 2.f} * mark_horizontal_size_y,
-        arrow_mark_color
+        mark_color
     );
     draw_uniform_square(
         draw_list,
         mark_position - arrow_inside_border_x + offset_y,
         mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
-        arrow_mark_color
+        mark_color
     );
 }
 
 static void draw_arrow_selected(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
-    const ImU32& selected_color,
     const float  arrow_inside_border,
     const float  arrow_selected_horizontal_size,
     const float  offset
@@ -147,15 +171,17 @@ static void draw_arrow_selected(
     const auto arrow_selected_horizontal_size_x = ImVec2{arrow_selected_horizontal_size, 0.f};
     const auto arrow_selected_horizontal_size_y = ImVec2{0.f, arrow_selected_horizontal_size};
 
+    const auto selected_mark_color = internal::selected_mark_color();
+
     draw_list.AddTriangleFilled(
         mark_position - arrow_selected_horizontal_size_y - offset_y,
         mark_position + offset_y - arrow_selected_horizontal_size_x, mark_position + arrow_selected_horizontal_size_x + offset_y,
-        selected_color
+        selected_mark_color
     );
     draw_list.AddRect(
         mark_position - arrow_inside_border_x + offset_y,
         mark_position + arrow_inside_border_x + ImVec2{0.f, 2.f} * arrow_inside_border_y + offset_y,
-        selected_color,
+        selected_mark_color,
         1.0f,
         ImDrawFlags_Closed
     );
@@ -164,7 +190,6 @@ static void draw_arrow_selected(
 static void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
-    const ImU32& background_mark_color,
     const ImU32& mark_color,
     float        mark_horizontal_size,
     bool         mark_is_selected
@@ -175,8 +200,8 @@ static void draw_mark(
     draw_background_mark(
         draw_list,
         mark_position,
-        background_mark_color,
-        mark_horizontal_size, offset
+        mark_horizontal_size,
+        offset
     );
     if (mark_is_selected)
     {
@@ -186,7 +211,6 @@ static void draw_mark(
         draw_arrow_selected(
             draw_list,
             mark_position,
-            internal::selected_mark_color(),
             arrow_inside_border, arrow_selected_horizontal_size, offset
         );
     }
@@ -202,27 +226,6 @@ static void draw_mark(
     );
 }
 
-static auto mark_invisible_button(
-    const ImVec2 vec,
-    const float  mark_horizontal_size
-) -> bool
-{
-    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, 0.f});
-    const auto button_size = ImVec2{mark_horizontal_size * 3.f, mark_horizontal_size * 2.f};
-    ImGui::InvisibleButton("mark", button_size);
-    return ImGui::IsItemHovered();
-}
-
-static auto mark_drawing_color(
-    const ImVec2 mark_position,
-    const float  mark_horizontal_size
-) -> ImU32
-{
-    return mark_invisible_button(mark_position, mark_horizontal_size)
-               ? internal::hovered_mark_color()
-               : internal::mark_color();
-}
-
 void mark_invisble_hitbox(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
@@ -234,7 +237,6 @@ void mark_invisble_hitbox(
     draw_mark(
         draw_list,
         mark_position,
-        mark_drawing_color(mark_position, mark_horizontal_size),
         mark_color,
         mark_horizontal_size,
         mark_is_selected
