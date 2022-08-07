@@ -158,7 +158,7 @@ void handle_interactions_with_hovered_mark(const Mark*& dragging_mark, const Mar
 auto GradientWidget::draw_gradient_marks(
     const Mark*   mark_to_delete,
     const ImVec2& gradient_bar_pos,
-    float width, float height
+    const ImVec2  size
 ) -> bool
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
@@ -169,7 +169,7 @@ auto GradientWidget::draw_gradient_marks(
         {
             mark_invisble_hitbox(
                 draw_list,
-                gradient_bar_pos + ImVec2(mark_hovered.position.get() * width, height),
+                gradient_bar_pos + ImVec2(mark_hovered.position.get() * size.x, size.y),
                 ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
                 state.selected_mark == &mark_hovered
             );
@@ -191,7 +191,7 @@ auto GradientWidget::draw_gradient_marks(
         }
     }
     static constexpr float space_between_gradient_marks_and_options = 20.f;
-    ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height + space_between_gradient_marks_and_options));
+    ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + size.y + space_between_gradient_marks_and_options));
     return hitbox_is_hovered;
 }
 
@@ -304,7 +304,11 @@ auto GradientWidget::widget(
 
     Mark*      mark_to_delete         = nullptr;
     const bool add_mark_possible      = ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
-    const bool mark_hitbox_is_hovered = draw_gradient_marks(mark_to_delete, gradient_bar_pos, width, settings.widget_height);
+    const bool mark_hitbox_is_hovered = draw_gradient_marks(
+        mark_to_delete,
+        gradient_bar_pos,
+        ImVec2{width, settings.widget_height}
+    );
 
     bool modified = false;
     if (add_mark_possible && !mark_hitbox_is_hovered)

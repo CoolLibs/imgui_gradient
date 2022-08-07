@@ -24,7 +24,7 @@ public:
     auto widget(const char* label, const Settings& settings) -> bool;
 
 private:
-    auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, float width, float height) -> bool;
+    auto draw_gradient_marks(const Mark* mark_to_delete, const ImVec2& gradient_bar_pos, ImVec2 size) -> bool;
     auto mouse_dragging(float gradient_bar_bottom, float width, float gradient_bar_pos_x, const Settings& settings) -> bool;
 
 private:
