@@ -128,7 +128,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     ImDrawList& draw_list           = *ImGui::GetWindowDrawList();
     const float gradient_botto_barm = gradient_bar_pos.y + height;
 
-    draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm), internal::border_color());
+    draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm));
     if (!gradient.is_empty())
     {
         draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, ImVec2{width, height});
@@ -460,8 +460,7 @@ auto GradientWidget::widget(
         draw_border(
             draw_list,
             gradient_bar_pos - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
-            ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f),
-            internal::border_color()
+            ImVec2(gradient_bar_pos.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f)
         );
     }
 
