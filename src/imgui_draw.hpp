@@ -30,7 +30,6 @@ void mark_invisble_hitbox( // TODO(ASG) Does this function have a single respons
     ImDrawList&  draw_list,
     ImVec2       position,
     const ImU32& mark_color,
-    float        gradient_editor_height, // TODO(ASG) Rename without the editor in the name
     bool         mark_is_selected
 );
 

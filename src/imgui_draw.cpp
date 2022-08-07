@@ -204,12 +204,11 @@ static void draw_mark(
 
 static auto mark_invisible_button(
     const ImVec2 vec,
-    const float  mark_horizontal_size,
-    const float  gradient_editor_height
+    const float  mark_horizontal_size
 ) -> bool
 {
-    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, gradient_editor_height});
-    const auto button_size = ImVec2{mark_horizontal_size * 3.f, gradient_editor_height + mark_horizontal_size * 2.f};
+    ImGui::SetCursorScreenPos(vec - ImVec2{mark_horizontal_size * 1.5f, 0.f});
+    const auto button_size = ImVec2{mark_horizontal_size * 3.f, mark_horizontal_size * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
@@ -218,7 +217,6 @@ void mark_invisble_hitbox(
     ImDrawList&  draw_list,
     const ImVec2 mark_position,
     const ImU32& mark_color,
-    const float  gradient_editor_height,
     const bool   mark_is_selected
 )
 {
@@ -226,7 +224,7 @@ void mark_invisble_hitbox(
     draw_mark(
         draw_list,
         mark_position,
-        mark_invisible_button(mark_position, mark_horizontal_size, gradient_editor_height)
+        mark_invisible_button(mark_position, mark_horizontal_size)
             ? internal::hovered_mark_color()
             : internal::mark_color(),
         mark_color,

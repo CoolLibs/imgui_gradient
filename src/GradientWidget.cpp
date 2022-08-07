@@ -171,7 +171,6 @@ auto GradientWidget::draw_gradient_marks(
                 draw_list,
                 gradient_bar_pos + ImVec2(mark_hovered.position.get() * width, height),
                 ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
-                height,
                 state.selected_mark == &mark_hovered
             );
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
