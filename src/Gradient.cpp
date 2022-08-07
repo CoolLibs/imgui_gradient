@@ -4,7 +4,7 @@
 
 namespace ImGuiGradient {
 
-auto Gradient::get_marks_surrounding(const RelativePosition position) const -> SurroundingMarks
+auto Gradient::get_marks_surrounding(const RelativePosition position) const -> internal::SurroundingMarks
 {
     const Mark* lower{nullptr};
     const Mark* upper{nullptr};
@@ -21,7 +21,7 @@ auto Gradient::get_marks_surrounding(const RelativePosition position) const -> S
             lower = &mark;
         }
     }
-    return SurroundingMarks{lower, upper};
+    return internal::SurroundingMarks{lower, upper};
 }
 
 auto Gradient::compute_color_at(const RelativePosition position) const -> ColorRGBA

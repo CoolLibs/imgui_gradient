@@ -1,21 +1,13 @@
 #pragma once
 
 #include <list>
-#include "Mark.hpp"
+#include "SurroundingMarks.hpp"
 
 namespace ImGuiGradient {
 
-// TODO(ASG) put in namespace internal
-struct SurroundingMarks {
-    /// First mark positionned before `position`, or nullptr if there is none // TODO(ASG) This comment is wrong because I have no idea what "position" is. The comments would make more sense if they were around get_marks_surrounding()
-    const Mark* lower{nullptr};
-    /// First mark positionned after `position`, or nullptr if there is none // TODO(ASG) same
-    const Mark* upper{nullptr};
-};
-
 class Gradient {
 public:
-    auto get_marks_surrounding(RelativePosition position) const -> SurroundingMarks;
+    auto get_marks_surrounding(RelativePosition position) const -> internal::SurroundingMarks;
     auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
     // TODO(ASG) Move all function implementations to the .cpp
