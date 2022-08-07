@@ -22,7 +22,6 @@ public:
     void remove_mark(const Mark& mark)
     {
         _marks.remove(mark);
-        sort_marks(); // TODO(ASG) I think that sorting is useless here because removing a mark preserves the relative order of the other marks
     };
 
     void set_mark_position(Mark& mark, const RelativePosition position)
