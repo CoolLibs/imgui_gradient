@@ -16,8 +16,8 @@ public:
 
     auto get_marks() const -> const std::list<Mark>&;
 
-    void set_mark_position(Mark& mark, const RelativePosition position);
-    void set_mark_color(Mark& mark, const ColorRGBA color); // TODO(ASG) Warning from clang-tidy: "method 'set_mark_color' can be made static (clang-tidy(readability-convert-member-functions-to-static))"
+    void set_mark_position(const Mark& mark, const RelativePosition position);
+    void set_mark_color(const Mark& mark, const ColorRGBA color);
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
 
