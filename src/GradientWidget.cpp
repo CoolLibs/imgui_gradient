@@ -361,11 +361,9 @@ auto GradientWidget::widget(
     }
 
     const auto gradient_bar_position = ImVec2{internal::gradient_position(settings.horizontal_margin)};
-
-    const float width               = std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin);
-    const float gradient_bar_bottom = gradient_bar_position.y + settings.widget_height;
-
-    const auto gradient_size = ImVec2{width, settings.widget_height};
+    const auto gradient_size         = ImVec2{
+        std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin),
+        settings.widget_height};
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);
@@ -457,7 +455,7 @@ auto GradientWidget::widget(
             ImGui::SameLine();
         }
 
-        if (state.selected_mark && precise_position(*state.selected_mark, width * .25f))
+        if (state.selected_mark && precise_position(*state.selected_mark, gradient_size.x * .25f))
         {
             state.gradient.set_mark_position(*state.selected_mark, state.selected_mark->position);
             modified = true;
@@ -528,11 +526,11 @@ auto GradientWidget::widget(
         }
         ImDrawList& draw_list = *ImGui::GetWindowDrawList();
 
-        const float y_space_under_bar = gradient_bar_bottom + internal::line_height() * number_of_line_under_bar;
+        const float y_space_under_bar = internal::line_height() * number_of_line_under_bar;
         draw_border(
             draw_list,
-            gradient_bar_position - ImVec2(settings.horizontal_margin + 4.f, y_space_over_bar),
-            ImVec2(gradient_bar_position.x + width + settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f)
+            gradient_bar_position - ImVec2{settings.horizontal_margin + 4.f, y_space_over_bar},
+            gradient_bar_position + gradient_size + ImVec2{settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f}
         );
     }
 
