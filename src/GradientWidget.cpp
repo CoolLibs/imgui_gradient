@@ -30,9 +30,9 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static auto position_mode_combo(WrapMode& wrap_mode) -> bool
+static auto position_mode_selector(WrapMode& wrap_mode) -> bool
 {
-    // Take the greater word to choose combo size
+    // Take the greater word to choose selector size
     const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f;
     ImGui::SetNextItemWidth(size);
     return ImGui::Combo(
@@ -42,9 +42,9 @@ static auto position_mode_combo(WrapMode& wrap_mode) -> bool
     );
 }
 
-static auto gradient_interpolation_mode(Interpolation& interpolation_mode) -> bool
+static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode) -> bool
 {
-    // Take the greater word to choose combo size
+    // Take the greater word to choose selector size
     const float size = ImGui::CalcTextSize("Constant").x + 50.f;
     ImGui::SetNextItemWidth(size);
     return ImGui::Combo(
@@ -412,12 +412,12 @@ auto GradientWidget::widget(
         modified |= true;
     }
     ImGui::EndGroup();
-    const bool no_tooltip           = !(settings.flags & Flag::NoTooltip); // TODO(ASG) rename boolean
-    const bool remove_button_exists = !(settings.flags & Flag::NoRemoveButton);
+    const bool is_there_no_tooltip    = !(settings.flags & Flag::NoTooltip);
+    const bool is_there_remove_button = !(settings.flags & Flag::NoRemoveButton);
     if (!state.gradient.is_empty())
     {
-        if (((remove_button_exists &&
-              delete_button(no_tooltip)) ||
+        if (((is_there_remove_button &&
+              delete_button(is_there_no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
@@ -426,31 +426,31 @@ auto GradientWidget::widget(
             modified |= true;
         }
     }
-    const bool add_button_exists = !(settings.flags & Flag::NoAddButton);
-    if (add_button_exists)
+    const bool is_there_add_button = !(settings.flags & Flag::NoAddButton);
+    if (is_there_add_button)
     {
-        if (remove_button_exists && !state.gradient.is_empty())
+        if (is_there_remove_button && !state.gradient.is_empty())
         {
             ImGui::SameLine();
         }
-        if (add_button(no_tooltip))
+        if (add_button(is_there_no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
             modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
         }
     }
-    const bool color_edit_exists = !(settings.flags & Flag::NoColorEdit);
-    if (color_edit_exists)
+    const bool is_there_color_edit = !(settings.flags & Flag::NoColorEdit);
+    if (is_there_color_edit)
     {
-        if ((remove_button_exists || add_button_exists) && state.selected_mark)
+        if ((is_there_remove_button || is_there_add_button) && state.selected_mark)
         {
             ImGui::SameLine();
         }
-        modified |= color_button(state.selected_mark, no_tooltip, settings.color_flags);
+        modified |= color_button(state.selected_mark, is_there_no_tooltip, settings.color_flags);
     }
     if (!(settings.flags & Flag::NoPositionSlider))
     {
-        if ((remove_button_exists || add_button_exists || color_edit_exists) && state.selected_mark)
+        if ((is_there_remove_button || is_there_add_button || is_there_color_edit) && state.selected_mark)
         {
             ImGui::SameLine();
         }
@@ -462,28 +462,28 @@ auto GradientWidget::widget(
         }
     }
 
-    const bool interpolation_combo_exists = !(settings.flags & Flag::NoInterpolationSelector);
-    if (interpolation_combo_exists)
+    const bool is_there_interpolation_selector = !(settings.flags & Flag::NoInterpolationSelector);
+    if (is_there_interpolation_selector)
     {
-        modified |= gradient_interpolation_mode(interpolation_mode);
+        modified |= gradient_interpolation_mode_selector(interpolation_mode);
     }
-    const bool position_mode_combo_exists = !(settings.flags & Flag::NoWrapModeSelector);
-    if (position_mode_combo_exists)
+    const bool is_there_position_mode_selector = !(settings.flags & Flag::NoWrapModeSelector);
+    if (is_there_position_mode_selector)
     {
-        if (interpolation_combo_exists)
+        if (is_there_interpolation_selector)
         {
             ImGui::SameLine();
         }
-        modified |= position_mode_combo(wrap_mode);
+        modified |= position_mode_selector(wrap_mode);
     }
 
     if (!(settings.flags & Flag::NoRandomModeCheckBox))
     {
-        if (position_mode_combo_exists || interpolation_combo_exists)
+        if (is_there_position_mode_selector || is_there_interpolation_selector)
         {
             ImGui::SameLine();
         }
-        modified |= random_mode_box(should_use_a_random_color_for_the_new_marks, no_tooltip);
+        modified |= random_mode_box(should_use_a_random_color_for_the_new_marks, is_there_no_tooltip);
     }
 
     if (!(settings.flags & Flag::NoResetButton))
@@ -497,7 +497,7 @@ auto GradientWidget::widget(
 
     if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*state.selected_mark, internal::line_height() * 12.f, no_tooltip, settings.flags);
+        modified |= open_color_picker_popup(*state.selected_mark, internal::line_height() * 12.f, is_there_no_tooltip, settings.flags);
     }
 
     if (!(settings.flags & Flag::NoBorder))
