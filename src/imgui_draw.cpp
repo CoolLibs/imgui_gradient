@@ -165,30 +165,27 @@ static void draw_arrow_selected(
 {
     const auto            selected_mark_color = internal::selected_mark_color();
     static constexpr auto offset_between_mark_and_selected_mark{1.f};
-    const auto            offset_between_mark_and_selected_mark_vec_y = ImVec2{0.f, offset_between_mark_and_selected_mark};
 
     static constexpr auto mark_selected_triangle_size{4.f};
-    const auto            mark_selected_triangle_size_x = ImVec2{mark_selected_triangle_size, 0.f};
-    const auto            mark_selected_triangle_size_y = ImVec2{0.f, mark_selected_triangle_size};
+    static constexpr auto mark_top_triangle          = ImVec2{0.f, -mark_selected_triangle_size - offset_between_mark_and_selected_mark};
+    static constexpr auto mark_bottom_right_triangle = ImVec2{-mark_selected_triangle_size, offset_between_mark_and_selected_mark};
+    static constexpr auto mark_bottom_left_triangle  = ImVec2{mark_selected_triangle_size, offset_between_mark_and_selected_mark};
+
     draw_list.AddTriangleFilled(
-        position_to_draw_mark - mark_selected_triangle_size_y - offset_between_mark_and_selected_mark_vec_y,
-        position_to_draw_mark + offset_between_mark_and_selected_mark_vec_y - mark_selected_triangle_size_x, position_to_draw_mark + mark_selected_triangle_size_x + offset_between_mark_and_selected_mark_vec_y,
+        position_to_draw_mark + mark_top_triangle,
+        position_to_draw_mark + mark_bottom_right_triangle,
+        position_to_draw_mark + mark_bottom_left_triangle,
         selected_mark_color
     );
 
-    const auto            mark_selected_square_size{mark_square_size - offset_between_mark_and_selected_mark};
-    const auto            mark_selected_square_size_vec_x = ImVec2{mark_selected_square_size, 0.f};
-    const auto            mark_selected_square_size_vec_y = ImVec2{0.f, mark_selected_square_size};
-    static constexpr auto multiply                        = ImVec2{0.f, 2.f};
-    static constexpr auto rounding                        = 1.f;
+    const auto mark_selected_square_size{mark_square_size - offset_between_mark_and_selected_mark};
+    const auto mark_top_left_corner     = ImVec2{-mark_selected_square_size, offset_between_mark_and_selected_mark};
+    const auto mark_bottom_right_corner = ImVec2{mark_selected_square_size, 2.f * mark_selected_square_size + offset_between_mark_and_selected_mark};
+
+    static constexpr auto rounding = 1.f;
     draw_list.AddRect(
-        position_to_draw_mark -
-            mark_selected_square_size_vec_x +
-            offset_between_mark_and_selected_mark_vec_y,
-        position_to_draw_mark +
-            mark_selected_square_size_vec_x +
-            multiply * mark_selected_square_size_vec_y +
-            offset_between_mark_and_selected_mark_vec_y,
+        position_to_draw_mark + mark_top_left_corner,
+        position_to_draw_mark + mark_bottom_right_corner,
         selected_mark_color,
         rounding,
         ImDrawFlags_Closed
