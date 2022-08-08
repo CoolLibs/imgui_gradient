@@ -141,7 +141,7 @@ jobs:
         submodules: recursive
 
     - name: Update package
-    run: sudo apt-get update -y
+      run: sudo apt-get update -y
       
     - name: Install libxrandr-dev
       run: sudo apt-get install -y libxrandr-dev
@@ -169,7 +169,7 @@ jobs:
       
     - name: Install libxrandr-dev
       run: sudo apt-get install -y libxrandr-dev
-      
+
     - name: Configure CMake
       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++
 
