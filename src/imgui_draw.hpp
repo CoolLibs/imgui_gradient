@@ -19,17 +19,18 @@ inline void draw_border(
 }
 
 void draw_gradient(
-    Gradient&     gradient,
     ImDrawList&   draw_list,
+    Gradient&     gradient,
     Interpolation interpolation_mode,
-    ImVec2        gradient_pos,
+    ImVec2        gradient_position,
     ImVec2        size // {width, height}
 );
 
 void draw_mark(
     ImDrawList&  draw_list,
-    const ImVec2 mark_position,
+    ImVec2       mark_position,
     const ImU32& mark_color,
+    float        gradient_height,
     bool         mark_is_selected
 );
 
