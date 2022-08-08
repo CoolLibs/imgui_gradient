@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     {
         gpu_flag += argv[1];
     }
-    if (gpu_flag.compare("-nogpu") == 0)
+    if (gpu_flag.compare("-nogpu") != 0)
     {
         quick_imgui::loop("Test Gradient Widget", []() {
             static ImGuiGradient::Flags          flags{};
