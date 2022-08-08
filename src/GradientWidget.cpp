@@ -389,10 +389,12 @@ auto GradientWidget::widget(
 
     modified |= mouse_dragging(gradient_bar_position, gradient_size, settings);
     if (!(settings.flags & Flag::NoDragDownToDelete))
-    { // If mouse released and there is still a mark hidden, then it become a mark to delete
+    {
+        // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
-            if (state.dragging_mark && *state.dragging_mark == *state.mark_to_hide)
+            if (state.dragging_mark &&
+                *state.dragging_mark == *state.mark_to_hide)
             {
                 state.dragging_mark = nullptr;
             }
@@ -404,7 +406,8 @@ auto GradientWidget::widget(
     // Remove mark_to_delete if it exists
     if (mark_to_delete)
     {
-        if (state.selected_mark && *state.selected_mark == *mark_to_delete)
+        if (state.selected_mark &&
+            *state.selected_mark == *mark_to_delete)
         {
             state.selected_mark = nullptr;
         }
@@ -418,7 +421,8 @@ auto GradientWidget::widget(
     {
         if (((is_there_remove_button &&
               delete_button(is_there_no_tooltip)) ||
-             ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
+             ImGui::IsKeyPressed(ImGuiKey_Delete) ||
+             ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
             state.gradient.remove_mark(*state.selected_mark);
@@ -429,7 +433,8 @@ auto GradientWidget::widget(
     const auto is_there_add_button{!(settings.flags & Flag::NoAddButton)};
     if (is_there_add_button)
     {
-        if (is_there_remove_button && !state.gradient.is_empty())
+        if (is_there_remove_button &&
+            !state.gradient.is_empty())
         {
             ImGui::SameLine();
         }
@@ -442,7 +447,8 @@ auto GradientWidget::widget(
     const auto is_there_color_edit{!(settings.flags & Flag::NoColorEdit)};
     if (is_there_color_edit)
     {
-        if ((is_there_remove_button || is_there_add_button) && state.selected_mark)
+        if ((is_there_remove_button || is_there_add_button) &&
+            state.selected_mark)
         {
             ImGui::SameLine();
         }
@@ -450,12 +456,14 @@ auto GradientWidget::widget(
     }
     if (!(settings.flags & Flag::NoPositionSlider))
     {
-        if ((is_there_remove_button || is_there_add_button || is_there_color_edit) && state.selected_mark)
+        if ((is_there_remove_button || is_there_add_button || is_there_color_edit) &&
+            state.selected_mark)
         {
             ImGui::SameLine();
         }
 
-        if (state.selected_mark && precise_position(*state.selected_mark, gradient_size.x * .25f))
+        if (state.selected_mark &&
+            precise_position(*state.selected_mark, gradient_size.x * .25f))
         {
             state.gradient.set_mark_position(*state.selected_mark, state.selected_mark->position);
             modified = true;
@@ -497,7 +505,13 @@ auto GradientWidget::widget(
 
     if (state.selected_mark)
     {
-        modified |= open_color_picker_popup(*state.selected_mark, internal::line_height() * 12.f, is_there_no_tooltip, settings.flags);
+        static const auto picker_popup_size{internal::line_height() * 12.f};
+        modified |= open_color_picker_popup(
+            *state.selected_mark,
+            picker_popup_size,
+            is_there_no_tooltip,
+            settings.flags
+        );
     }
 
     if (!(settings.flags & Flag::NoBorder))
@@ -529,8 +543,13 @@ auto GradientWidget::widget(
         const auto y_space_under_bar{internal::line_height() * number_of_line_under_bar};
         draw_border(
             draw_list,
-            gradient_bar_position - ImVec2{settings.horizontal_margin + 4.f, y_space_over_bar},
-            gradient_bar_position + gradient_size + ImVec2{settings.horizontal_margin + 4.f, y_space_under_bar * 1.25f}
+            gradient_bar_position -
+                ImVec2{settings.horizontal_margin + 4.f, y_space_over_bar},
+            gradient_bar_position +
+                gradient_size +
+                ImVec2{
+                    settings.horizontal_margin + 4.f,
+                    y_space_under_bar * 1.25f}
         );
     }
 
