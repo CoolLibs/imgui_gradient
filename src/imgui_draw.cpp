@@ -168,9 +168,18 @@ static void draw_mark_selected(
     static constexpr auto offset_between_mark_and_selected_mark{1.f};
 
     static constexpr auto mark_selected_triangle_size{4.f};
-    static constexpr auto mark_top_triangle          = ImVec2{0.f, -mark_selected_triangle_size - offset_between_mark_and_selected_mark};
-    static constexpr auto mark_bottom_right_triangle = ImVec2{-mark_selected_triangle_size, offset_between_mark_and_selected_mark};
-    static constexpr auto mark_bottom_left_triangle  = ImVec2{mark_selected_triangle_size, offset_between_mark_and_selected_mark};
+    static constexpr auto mark_top_triangle =
+        ImVec2{
+            0.f,
+            -mark_selected_triangle_size - offset_between_mark_and_selected_mark};
+    static constexpr auto mark_bottom_right_triangle =
+        ImVec2{
+            -mark_selected_triangle_size,
+            offset_between_mark_and_selected_mark};
+    static constexpr auto mark_bottom_left_triangle =
+        ImVec2{
+            mark_selected_triangle_size,
+            offset_between_mark_and_selected_mark};
 
     draw_list.AddTriangleFilled(
         position_to_draw_mark + mark_top_triangle,
@@ -180,8 +189,14 @@ static void draw_mark_selected(
     );
 
     const auto mark_selected_square_size{mark_square_size - offset_between_mark_and_selected_mark};
-    const auto mark_top_left_corner     = ImVec2{-mark_selected_square_size, offset_between_mark_and_selected_mark};
-    const auto mark_bottom_right_corner = ImVec2{mark_selected_square_size, 2.f * mark_selected_square_size + offset_between_mark_and_selected_mark};
+    const auto mark_top_left_corner =
+        ImVec2{
+            -mark_selected_square_size,
+            offset_between_mark_and_selected_mark};
+    const auto mark_bottom_right_corner =
+        ImVec2{
+            mark_selected_square_size,
+            2.f * mark_selected_square_size + offset_between_mark_and_selected_mark};
 
     static constexpr auto rounding = 1.f;
     draw_list.AddRect(
@@ -218,8 +233,10 @@ void draw_mark(
     }
 
     static constexpr auto square_size{3.f};
-    static constexpr auto mark_top_left_corner     = ImVec2{-square_size, square_size};
-    static constexpr auto mark_bottom_right_corner = ImVec2{square_size, square_size * square_size};
+    static constexpr auto mark_top_left_corner =
+        ImVec2{-square_size, square_size};
+    static constexpr auto mark_bottom_right_corner =
+        ImVec2{square_size, square_size * square_size};
     draw_uniform_square(
         draw_list,
         position_to_draw_mark + mark_top_left_corner,
