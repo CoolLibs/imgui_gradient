@@ -95,11 +95,8 @@ jobs:
     - name: Update package
       run: sudo apt-get update -y
 
-    - name: Install libxrandr-dev
-      run: sudo apt-get install -y libxrandr-dev
-    
-    - name: Install libxinerama-dev
-      run: sudo apt-get install -y libxinerama-dev
+    - name: Install glfw dependencies
+      run: sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev
 
     - name: Configure CMake
       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
@@ -122,11 +119,8 @@ jobs:
     - name: Update package
       run: sudo apt-get update -y
       
-    - name: Install libxrandr-dev
-      run: sudo apt-get install -y libxrandr-dev
-
-    - name: Install libxinerama-dev
-      run: sudo apt-get install -y libxinerama-dev
+    - name: Install glfw dependencies
+      run: sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev
 
     - name: Configure CMake
       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
@@ -149,11 +143,8 @@ jobs:
     - name: Update package
       run: sudo apt-get update -y
       
-    - name: Install libxrandr-dev
-      run: sudo apt-get install -y libxrandr-dev
-
-    - name: Install libxinerama-dev
-      run: sudo apt-get install -y libxinerama-dev
+    - name: Install glfw dependencies
+      run: sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev
 
     - name: Configure CMake
       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++
@@ -176,11 +167,8 @@ jobs:
     - name: Update package
       run: sudo apt-get update -y
       
-    - name: Install libxrandr-dev
-      run: sudo apt-get install -y libxrandr-dev
-
-    - name: Install libxinerama-dev
-      run: sudo apt-get install -y libxinerama-dev
+    - name: Install glfw dependencies
+      run: sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev
 
     - name: Configure CMake
       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++
