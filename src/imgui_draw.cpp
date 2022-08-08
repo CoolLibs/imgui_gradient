@@ -157,7 +157,7 @@ static void draw_background_mark(
     );
 }
 
-static void draw_arrow_selected(
+static void draw_mark_selected(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
     const float  mark_square_size
@@ -207,7 +207,7 @@ void draw_mark(
     );
     if (mark_is_selected)
     {
-        draw_arrow_selected(
+        draw_mark_selected(
             draw_list,
             position_to_draw_mark,
             mark_square_size
