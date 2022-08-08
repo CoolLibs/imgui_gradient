@@ -128,7 +128,7 @@ static void draw_gradient_bar(Gradient& gradient, Interpolation interpolation_mo
     draw_border(draw_list, gradient_bar_pos, ImVec2(gradient_bar_pos.x + width, gradient_botto_barm));
     if (!gradient.is_empty())
     {
-        draw_gradient(gradient, draw_list, interpolation_mode, gradient_bar_pos, ImVec2{width, height});
+        draw_gradient(draw_list, gradient, interpolation_mode, gradient_bar_pos, ImVec2{width, height});
     }
     ImGui::SetCursorScreenPos(ImVec2(gradient_bar_pos.x, gradient_bar_pos.y + height));
 }
@@ -159,7 +159,7 @@ auto GradientWidget::draw_gradient_marks(
 ) -> bool
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
-    bool        hitbox_is_hovered = false;
+    bool hitbox_is_hovered = false;
     for (const Mark& mark_hovered : state.gradient.get_marks())
     {
         if (state.mark_to_hide != &mark_hovered)

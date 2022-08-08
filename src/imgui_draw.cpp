@@ -39,14 +39,14 @@ static void draw_gradient_between_two_colors(
 }
 
 void draw_gradient(
-    Gradient&           gradient,
     ImDrawList&         draw_list,
+    Gradient&           gradient,
     const Interpolation interpolation_mode,
-    const ImVec2        gradient_pos,
+    const ImVec2        gradient_position,
     const ImVec2        size
 )
 {
-    float current_starting_x = gradient_pos.x;
+    float current_starting_x = gradient_position.x;
     for (auto mark_iterator = gradient.get_marks().begin(); mark_iterator != gradient.get_marks().end(); ++mark_iterator)
     {
         const Mark& mark = *mark_iterator;
@@ -54,7 +54,7 @@ void draw_gradient(
         const auto color_right = ImU32{ImGui::ColorConvertFloat4ToU32(mark.color)};
 
         const auto from{current_starting_x};
-        const auto to{gradient_pos.x + mark.position.get() * (size.x)};
+        const auto to{gradient_position.x + mark.position.get() * (size.x)};
         if (mark.position.get() != 0.f)
         {
             if (interpolation_mode == Interpolation::Linear)
@@ -64,8 +64,8 @@ void draw_gradient(
                                              : color_right;
                 draw_gradient_between_two_colors(
                     draw_list,
-                    ImVec2(from, gradient_pos.y),
-                    ImVec2(to, gradient_pos.y + size.y),
+                    ImVec2(from, gradient_position.y),
+                    ImVec2(to, gradient_position.y + size.y),
                     color_left, color_right
                 );
             }
@@ -73,8 +73,8 @@ void draw_gradient(
             {
                 draw_uniform_square(
                     draw_list,
-                    ImVec2(from, gradient_pos.y),
-                    ImVec2(to, gradient_pos.y + size.y),
+                    ImVec2(from, gradient_position.y),
+                    ImVec2(to, gradient_position.y + size.y),
                     color_right
                 );
             }
@@ -86,19 +86,19 @@ void draw_gradient(
     {
         draw_uniform_square(
             draw_list,
-            ImVec2(current_starting_x, gradient_pos.y),
-            ImVec2(gradient_pos.x + size.x, gradient_pos.y + size.y),
+            ImVec2(current_starting_x, gradient_position.y),
+            ImVec2(gradient_position.x + size.x, gradient_position.y + size.y),
             ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color)
         );
     }
 }
 
 static auto mark_invisible_button(
-    const ImVec2 mark_position,
+    const ImVec2 position_to_draw_mark,
     const float  mark_square_size
 ) -> bool
 {
-    ImGui::SetCursorScreenPos(mark_position - ImVec2{mark_square_size * 1.5f, 0.f});
+    ImGui::SetCursorScreenPos(position_to_draw_mark - ImVec2{mark_square_size * 1.5f, 0.f});
     const auto button_size = ImVec2{
         mark_square_size * 3.f,
         mark_square_size * 2.f};
@@ -107,82 +107,88 @@ static auto mark_invisible_button(
 }
 
 static auto mark_drawing_color(
-    const ImVec2 mark_position,
+    const ImVec2 position_to_draw_mark,
     const float  mark_square_size
 ) -> ImU32
 {
-    return mark_invisible_button(mark_position, mark_square_size)
+    return mark_invisible_button(position_to_draw_mark, mark_square_size)
                ? internal::hovered_mark_color()
                : internal::mark_color();
 }
 
 static void draw_background_mark(
     ImDrawList&  draw_list,
-    const ImVec2 mark_position,
-    const float  mark_square_size,
-    const float  offset
+    const ImVec2 position_to_draw_mark,
+    const float  mark_square_size
 )
 {
-    const auto mark_color = mark_drawing_color(mark_position, mark_square_size);
+    const auto mark_color = mark_drawing_color(position_to_draw_mark, mark_square_size);
 
-    const auto mark_inside_border{mark_square_size - offset};
-
-    const auto mark_square_size_x = ImVec2{mark_square_size, 0.f};
-    const auto mark_square_size_y = ImVec2{0.f, mark_square_size};
-
-    const auto offset_y = ImVec2{0.f, offset};
-
-    const auto mark_inside_border_x = ImVec2{mark_inside_border, 0.f};
-    const auto mark_inside_border_y = ImVec2{0.f, mark_inside_border};
-
+    const auto mark_square_size_vec_x = ImVec2{mark_square_size, 0.f};
+    const auto mark_square_size_vec_y = ImVec2{0.f, mark_square_size};
     draw_list.AddTriangleFilled(
-        mark_position - mark_square_size_y,
-        mark_position - mark_square_size_x,
-        mark_position + mark_square_size_x,
+        position_to_draw_mark - mark_square_size_vec_y,
+        position_to_draw_mark - mark_square_size_vec_x,
+        position_to_draw_mark + mark_square_size_vec_x,
         mark_color
     );
+    static constexpr auto multiply = ImVec2{0.f, 2.f};
     draw_uniform_square(
         draw_list,
-        mark_position - mark_square_size_x,
-        mark_position + mark_square_size_x + ImVec2{0.f, 2.f} * mark_square_size_y,
+        position_to_draw_mark - mark_square_size_vec_x,
+        position_to_draw_mark + mark_square_size_vec_x + multiply * mark_square_size_vec_y,
         mark_color
     );
+    static constexpr auto offset_between_mark_square_and_mark_square_inside{1.f};
+    const auto            mark_inside_square_size{mark_square_size - offset_between_mark_square_and_mark_square_inside};
+    const auto            mark_inside_square_size_vec_x                           = ImVec2{mark_inside_square_size, 0.f};
+    const auto            mark_inside_square_size_vec_y                           = ImVec2{0.f, mark_inside_square_size};
+    const auto            offset_between_mark_square_and_mark_square_inside_vec_y = ImVec2{0.f, offset_between_mark_square_and_mark_square_inside};
     draw_uniform_square(
         draw_list,
-        mark_position - mark_inside_border_x + offset_y,
-        mark_position + mark_inside_border_x + ImVec2{0.f, 2.f} * mark_inside_border_y + offset_y,
+        position_to_draw_mark -
+            mark_inside_square_size_vec_x +
+            offset_between_mark_square_and_mark_square_inside_vec_y,
+        position_to_draw_mark +
+            mark_inside_square_size_vec_x +
+            multiply * mark_inside_square_size_vec_y +
+            offset_between_mark_square_and_mark_square_inside_vec_y,
         mark_color
     );
 }
 
 static void draw_arrow_selected(
     ImDrawList&  draw_list,
-    const ImVec2 mark_position,
-    const float  mark_inside_border,
-    const float  mark_selected_square_size,
-    const float  offset
+    const ImVec2 position_to_draw_mark,
+    const float  mark_square_size
 )
 {
-    const auto offset_y = ImVec2{0.f, offset};
+    const auto            selected_mark_color = internal::selected_mark_color();
+    static constexpr auto offset_between_mark_and_selected_mark{1.f};
+    const auto            offset_between_mark_and_selected_mark_vec_y = ImVec2{0.f, offset_between_mark_and_selected_mark};
 
-    const auto mark_inside_border_x = ImVec2{mark_inside_border, 0.f};
-    const auto mark_inside_border_y = ImVec2{0.f, mark_inside_border};
-
-    const auto mark_selected_square_size_x = ImVec2{mark_selected_square_size, 0.f};
-    const auto mark_selected_square_size_y = ImVec2{0.f, mark_selected_square_size};
-
-    const auto selected_mark_color = internal::selected_mark_color();
-
+    static constexpr auto mark_selected_triangle_size{4.f};
+    const auto            mark_selected_triangle_size_x = ImVec2{mark_selected_triangle_size, 0.f};
+    const auto            mark_selected_triangle_size_y = ImVec2{0.f, mark_selected_triangle_size};
     draw_list.AddTriangleFilled(
-        mark_position - mark_selected_square_size_y - offset_y,
-        mark_position + offset_y - mark_selected_square_size_x, mark_position + mark_selected_square_size_x + offset_y,
+        position_to_draw_mark - mark_selected_triangle_size_y - offset_between_mark_and_selected_mark_vec_y,
+        position_to_draw_mark + offset_between_mark_and_selected_mark_vec_y - mark_selected_triangle_size_x, position_to_draw_mark + mark_selected_triangle_size_x + offset_between_mark_and_selected_mark_vec_y,
         selected_mark_color
     );
 
-    static constexpr auto rounding = 1.f;
+    const auto            mark_selected_square_size{mark_square_size - offset_between_mark_and_selected_mark};
+    const auto            mark_selected_square_size_vec_x = ImVec2{mark_selected_square_size, 0.f};
+    const auto            mark_selected_square_size_vec_y = ImVec2{0.f, mark_selected_square_size};
+    static constexpr auto multiply                        = ImVec2{0.f, 2.f};
+    static constexpr auto rounding                        = 1.f;
     draw_list.AddRect(
-        mark_position - mark_inside_border_x + offset_y,
-        mark_position + mark_inside_border_x + ImVec2{0.f, 2.f} * mark_inside_border_y + offset_y,
+        position_to_draw_mark -
+            mark_selected_square_size_vec_x +
+            offset_between_mark_and_selected_mark_vec_y,
+        position_to_draw_mark +
+            mark_selected_square_size_vec_x +
+            multiply * mark_selected_square_size_vec_y +
+            offset_between_mark_and_selected_mark_vec_y,
         selected_mark_color,
         rounding,
         ImDrawFlags_Closed
@@ -191,39 +197,33 @@ static void draw_arrow_selected(
 
 void draw_mark(
     ImDrawList&  draw_list,
-    const ImVec2 mark_position,
+    const ImVec2 position_to_draw_mark,
     const ImU32& mark_color,
     bool         mark_is_selected
 )
 {
     static constexpr auto mark_square_size{6.f};
-    static constexpr auto offset{1.f};
-
     draw_background_mark(
         draw_list,
-        mark_position,
-        mark_square_size,
-        offset
+        position_to_draw_mark,
+        mark_square_size
     );
     if (mark_is_selected)
     {
-        static constexpr auto mark_selected_square_size{4.f};
-        static constexpr auto mark_inside_border{mark_square_size - offset};
-
         draw_arrow_selected(
             draw_list,
-            mark_position,
-            mark_inside_border, mark_selected_square_size, offset
+            position_to_draw_mark,
+            mark_square_size
         );
     }
 
-    static constexpr auto square_height{3.f};
-    static constexpr auto square_height_x = ImVec2{square_height, 0.f};
-    static constexpr auto square_height_y = ImVec2{0.f, square_height};
+    static constexpr auto square_size{3.f};
+    static constexpr auto square_size_x = ImVec2{square_size, 0.f};
+    static constexpr auto square_size_y = ImVec2{0.f, square_size};
     draw_uniform_square(
         draw_list,
-        mark_position - square_height_x + square_height_y,
-        mark_position + square_height_x + square_height_y * square_height_y,
+        position_to_draw_mark - square_size_x + square_size_y,
+        position_to_draw_mark + square_size_x + square_size_y * square_size_y,
         mark_color
     );
 }

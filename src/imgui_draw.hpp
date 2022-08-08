@@ -19,10 +19,10 @@ inline void draw_border(
 }
 
 void draw_gradient(
-    Gradient&     gradient,
     ImDrawList&   draw_list,
+    Gradient&     gradient,
     Interpolation interpolation_mode,
-    ImVec2        gradient_pos,
+    ImVec2        gradient_position,
     ImVec2        size // {width, height}
 );
 
