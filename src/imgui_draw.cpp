@@ -124,35 +124,33 @@ static void draw_background_mark(
 {
     const auto mark_color = mark_drawing_color(position_to_draw_mark, mark_square_size);
 
-    const auto mark_square_size_vec_x = ImVec2{mark_square_size, 0.f};
-    const auto mark_square_size_vec_y = ImVec2{0.f, mark_square_size};
+    const auto mark_top_triangle    = ImVec2{0.f, -mark_square_size};
+    const auto mark_bottom_triangle = ImVec2{mark_square_size, 0.f};
     draw_list.AddTriangleFilled(
-        position_to_draw_mark - mark_square_size_vec_y,
-        position_to_draw_mark - mark_square_size_vec_x,
-        position_to_draw_mark + mark_square_size_vec_x,
+        position_to_draw_mark + mark_top_triangle,
+        position_to_draw_mark - mark_bottom_triangle,
+        position_to_draw_mark + mark_bottom_triangle,
         mark_color
     );
-    static constexpr auto multiply = ImVec2{0.f, 2.f};
+
+    const auto mark_top_left_corner =
+        ImVec2{-mark_square_size, 0.f};
+    const auto mark_bottom_right_corner =
+        ImVec2{
+            mark_square_size,
+            2.f * mark_square_size};
     draw_uniform_square(
         draw_list,
-        position_to_draw_mark - mark_square_size_vec_x,
-        position_to_draw_mark + mark_square_size_vec_x + multiply * mark_square_size_vec_y,
+        position_to_draw_mark + mark_top_left_corner,
+        position_to_draw_mark + mark_bottom_right_corner,
         mark_color
     );
-    static constexpr auto offset_between_mark_square_and_mark_square_inside{1.f};
-    const auto            mark_inside_square_size{mark_square_size - offset_between_mark_square_and_mark_square_inside};
-    const auto            mark_inside_square_size_vec_x                           = ImVec2{mark_inside_square_size, 0.f};
-    const auto            mark_inside_square_size_vec_y                           = ImVec2{0.f, mark_inside_square_size};
-    const auto            offset_between_mark_square_and_mark_square_inside_vec_y = ImVec2{0.f, offset_between_mark_square_and_mark_square_inside};
+
+    static constexpr auto offset_between_mark_square_and_mark_square_inside = ImVec2{1.f, 1.f};
     draw_uniform_square(
         draw_list,
-        position_to_draw_mark -
-            mark_inside_square_size_vec_x +
-            offset_between_mark_square_and_mark_square_inside_vec_y,
-        position_to_draw_mark +
-            mark_inside_square_size_vec_x +
-            multiply * mark_inside_square_size_vec_y +
-            offset_between_mark_square_and_mark_square_inside_vec_y,
+        position_to_draw_mark + mark_top_left_corner + offset_between_mark_square_and_mark_square_inside,
+        position_to_draw_mark + mark_bottom_right_corner - offset_between_mark_square_and_mark_square_inside,
         mark_color
     );
 }
