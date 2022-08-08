@@ -549,7 +549,7 @@ auto GradientWidget::widget(
                 gradient_size +
                 ImVec2{
                     settings.horizontal_margin + 4.f,
-                    space_under_bar * 1.25f}
+                    space_under_bar * 1.75f}
         );
     }
 
