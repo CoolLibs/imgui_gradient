@@ -218,12 +218,12 @@ void draw_mark(
     }
 
     static constexpr auto square_size{3.f};
-    static constexpr auto square_size_x = ImVec2{square_size, 0.f};
-    static constexpr auto square_size_y = ImVec2{0.f, square_size};
+    static constexpr auto mark_top_left_corner     = ImVec2{-square_size, square_size};
+    static constexpr auto mark_bottom_right_corner = ImVec2{square_size, square_size * square_size};
     draw_uniform_square(
         draw_list,
-        position_to_draw_mark - square_size_x + square_size_y,
-        position_to_draw_mark + square_size_x + square_size_y * square_size_y,
+        position_to_draw_mark + mark_top_left_corner,
+        position_to_draw_mark + mark_bottom_right_corner,
         mark_color
     );
 }
