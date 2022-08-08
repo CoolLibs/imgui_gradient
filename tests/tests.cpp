@@ -12,15 +12,15 @@
 
 int main(int argc, char* argv[])
 {
-    doctest::Context context;
-    context.run();
     std::string gpu_flag = "";
     if (argc == 2)
     {
-        gpu_flag += argv[1];
+        gpu_flag = argv[1];
     }
     if (gpu_flag.compare("-nogpu") != 0)
     {
+        doctest::Context context;
+        context.run();
         quick_imgui::loop("Test Gradient Widget", []() {
             static ImGuiGradient::Flags          flags{};
             static std::default_random_engine    generator{std::random_device{}()};
