@@ -14,12 +14,8 @@ int main(int argc, char* argv[])
 {
     doctest::Context context;
     context.run();
-    std::string gpu_flag = "";
-    if (argc == 2)
-    {
-        gpu_flag = argv[1];
-    }
-    if (gpu_flag.compare("-nogpu") != 0)
+    const bool should_run_imgui_tests = argc < 2 || strcmp(argv[1], "-nogpu") != 0;
+    if (should_run_imgui_tests)
     {
         quick_imgui::loop("Test Gradient Widget", []() {
             static ImGuiGradient::Flags          flags{};
