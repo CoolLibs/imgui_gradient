@@ -1,5 +1,6 @@
 ﻿tests/build
-build
+build/*
+!build/imgui.ini
 .vs
 .vscode/*
 !.vscode/settings.json
