@@ -298,7 +298,7 @@ auto GradientWidget::mouse_dragging(
     }
     if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && state.dragging_mark)
     {
-        const float map = ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x, 0.f, 1.f);
+        const auto map{ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x, 0.f, 1.f)};
         if (state.dragging_mark->position.get() != map)
         {
             state.dragging_mark->position.set(map);
@@ -307,7 +307,7 @@ auto GradientWidget::mouse_dragging(
         }
         if (!(settings.flags & Flag::NoDragDownToDelete))
         { // hide dragging mark when mouse under gradient bar
-            const float diffY = ImGui::GetIO().MousePos.y - gradient_bar_position.y - gradient_size.y;
+            const auto diffY{ImGui::GetIO().MousePos.y - gradient_bar_position.y - gradient_size.y};
             if (diffY >= settings.distance_to_delete_mark_by_dragging_down)
             {
                 state.mark_to_hide = state.dragging_mark;
