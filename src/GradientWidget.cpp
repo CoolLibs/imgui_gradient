@@ -516,10 +516,10 @@ auto GradientWidget::widget(
 
     if (!(settings.flags & Flag::NoBorder))
     {
-        auto y_space_over_bar{8.f};
+        auto space_over_bar{8.f};
         if (!(settings.flags & Flag::NoLabel))
         {
-            y_space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
+            space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
         }
         auto number_of_line_under_bar{0.f};
         if (!(settings.flags & Flag::NoRandomModeCheckBox) ||
@@ -540,16 +540,16 @@ auto GradientWidget::widget(
         }
         ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
 
-        const auto y_space_under_bar{internal::line_height() * number_of_line_under_bar};
+        const auto space_under_bar{internal::line_height() * number_of_line_under_bar};
         draw_border(
             draw_list,
             gradient_bar_position -
-                ImVec2{settings.horizontal_margin + 4.f, y_space_over_bar},
+                ImVec2{settings.horizontal_margin + 4.f, space_over_bar},
             gradient_bar_position +
                 gradient_size +
                 ImVec2{
                     settings.horizontal_margin + 4.f,
-                    y_space_under_bar * 1.25f}
+                    space_under_bar * 1.25f}
         );
     }
 
