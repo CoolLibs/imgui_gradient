@@ -286,9 +286,8 @@ static auto position_where_to_add_next_mark(Gradient& gradient) -> float
 }
 
 auto GradientWidget::mouse_dragging(
-    const float     gradient_bar_bottom,
-    const float     width,
-    const float     gradient_bar_position_x,
+    const ImVec2    gradient_bar_position,
+    const ImVec2    gradient_size,
     const Settings& settings
 ) -> bool
 {
@@ -299,7 +298,7 @@ auto GradientWidget::mouse_dragging(
     }
     if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && state.dragging_mark)
     {
-        const float map = ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position_x) / width, 0.f, 1.f);
+        const float map = ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x, 0.f, 1.f);
         if (state.dragging_mark->position.get() != map)
         {
             state.dragging_mark->position.set(map);
@@ -308,7 +307,7 @@ auto GradientWidget::mouse_dragging(
         }
         if (!(settings.flags & Flag::NoDragDownToDelete))
         { // hide dragging mark when mouse under gradient bar
-            const float diffY = ImGui::GetIO().MousePos.y - gradient_bar_bottom;
+            const float diffY = ImGui::GetIO().MousePos.y - gradient_bar_position.y - gradient_size.y;
             if (diffY >= settings.distance_to_delete_mark_by_dragging_down)
             {
                 state.mark_to_hide = state.dragging_mark;
@@ -383,11 +382,14 @@ auto GradientWidget::widget(
     bool modified{false};
     if (add_mark_possible && !mark_hitbox_is_hovered)
     {
-        modified = add_mark((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / width, generator);
+        modified = add_mark(
+            (ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x,
+            generator
+        );
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
-    modified |= mouse_dragging(gradient_bar_bottom, width, gradient_bar_position.x, settings);
+    modified |= mouse_dragging(gradient_bar_position, gradient_size, settings);
     if (!(settings.flags & Flag::NoDragDownToDelete))
     { // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))

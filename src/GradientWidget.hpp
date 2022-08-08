@@ -46,9 +46,8 @@ private:
         ImVec2        size
     ) -> bool;
     auto mouse_dragging(
-        float           gradient_bar_bottom,
-        float           width,
-        float           gradient_bar_pos_x,
+        ImVec2          gradient_bar_position,
+        ImVec2          gradient_size,
         const Settings& settings
     ) -> bool;
 
