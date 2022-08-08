@@ -95,23 +95,25 @@ void draw_gradient(
 
 static auto mark_invisible_button(
     const ImVec2 position_to_draw_mark,
-    const float  mark_square_size
+    const float  mark_square_size,
+    const float  gradient_height
 ) -> bool
 {
-    ImGui::SetCursorScreenPos(position_to_draw_mark - ImVec2{mark_square_size * 1.5f, 0.f});
+    ImGui::SetCursorScreenPos(position_to_draw_mark - ImVec2{mark_square_size * 1.5f, gradient_height});
     const auto button_size = ImVec2{
         mark_square_size * 3.f,
-        mark_square_size * 2.f};
+        gradient_height + mark_square_size * 2.f};
     ImGui::InvisibleButton("mark", button_size);
     return ImGui::IsItemHovered();
 }
 
 static auto mark_drawing_color(
     const ImVec2 position_to_draw_mark,
-    const float  mark_square_size
+    const float  mark_square_size,
+    const float  gradient_height
 ) -> ImU32
 {
-    return mark_invisible_button(position_to_draw_mark, mark_square_size)
+    return mark_invisible_button(position_to_draw_mark, mark_square_size, gradient_height)
                ? internal::hovered_mark_color()
                : internal::mark_color();
 }
@@ -119,10 +121,11 @@ static auto mark_drawing_color(
 static void draw_background_mark(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
-    const float  mark_square_size
+    const float  mark_square_size,
+    const float  gradient_height
 )
 {
-    const auto mark_color = mark_drawing_color(position_to_draw_mark, mark_square_size);
+    const auto mark_color = mark_drawing_color(position_to_draw_mark, mark_square_size, gradient_height);
 
     const auto mark_top_triangle    = ImVec2{0.f, -mark_square_size};
     const auto mark_bottom_triangle = ImVec2{mark_square_size, 0.f};
@@ -194,14 +197,16 @@ void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
     const ImU32& mark_color,
-    bool         mark_is_selected
+    const float  gradient_height,
+    const bool   mark_is_selected
 )
 {
     static constexpr auto mark_square_size{6.f};
     draw_background_mark(
         draw_list,
         position_to_draw_mark,
-        mark_square_size
+        mark_square_size,
+        gradient_height
     );
     if (mark_is_selected)
     {
