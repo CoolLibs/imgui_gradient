@@ -370,14 +370,14 @@ auto GradientWidget::widget(
     draw_gradient_bar(state.gradient, interpolation_mode, gradient_bar_position, gradient_size);
 
     Mark*      mark_to_delete{nullptr};
-    const bool add_mark_possible{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)};
-    const bool mark_hitbox_is_hovered{draw_gradient_marks(
+    const auto add_mark_possible{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)};
+    const auto mark_hitbox_is_hovered{draw_gradient_marks(
         mark_to_delete,
         gradient_bar_position,
         gradient_size
     )};
 
-    bool modified{false};
+    auto modified{false};
     if (add_mark_possible && !mark_hitbox_is_hovered)
     {
         modified = add_mark(
@@ -412,8 +412,8 @@ auto GradientWidget::widget(
         modified |= true;
     }
     ImGui::EndGroup();
-    const bool is_there_no_tooltip    = !(settings.flags & Flag::NoTooltip);
-    const bool is_there_remove_button = !(settings.flags & Flag::NoRemoveButton);
+    const auto is_there_no_tooltip{!(settings.flags & Flag::NoTooltip)};
+    const auto is_there_remove_button{!(settings.flags & Flag::NoRemoveButton)};
     if (!state.gradient.is_empty())
     {
         if (((is_there_remove_button &&
@@ -426,7 +426,7 @@ auto GradientWidget::widget(
             modified |= true;
         }
     }
-    const bool is_there_add_button = !(settings.flags & Flag::NoAddButton);
+    const auto is_there_add_button{!(settings.flags & Flag::NoAddButton)};
     if (is_there_add_button)
     {
         if (is_there_remove_button && !state.gradient.is_empty())
@@ -439,7 +439,7 @@ auto GradientWidget::widget(
             modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
         }
     }
-    const bool is_there_color_edit = !(settings.flags & Flag::NoColorEdit);
+    const auto is_there_color_edit{!(settings.flags & Flag::NoColorEdit)};
     if (is_there_color_edit)
     {
         if ((is_there_remove_button || is_there_add_button) && state.selected_mark)
@@ -462,12 +462,12 @@ auto GradientWidget::widget(
         }
     }
 
-    const bool is_there_interpolation_selector = !(settings.flags & Flag::NoInterpolationSelector);
+    const auto is_there_interpolation_selector{!(settings.flags & Flag::NoInterpolationSelector)};
     if (is_there_interpolation_selector)
     {
         modified |= gradient_interpolation_mode_selector(interpolation_mode);
     }
-    const bool is_there_position_mode_selector = !(settings.flags & Flag::NoWrapModeSelector);
+    const auto is_there_position_mode_selector{!(settings.flags & Flag::NoWrapModeSelector)};
     if (is_there_position_mode_selector)
     {
         if (is_there_interpolation_selector)
@@ -502,12 +502,12 @@ auto GradientWidget::widget(
 
     if (!(settings.flags & Flag::NoBorder))
     {
-        float y_space_over_bar = 8.f;
+        auto y_space_over_bar{8.f};
         if (!(settings.flags & Flag::NoLabel))
         {
             y_space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
         }
-        float number_of_line_under_bar = 0.f;
+        auto number_of_line_under_bar{0.f};
         if (!(settings.flags & Flag::NoRandomModeCheckBox) ||
             !(settings.flags & Flag::NoSelector))
         {
@@ -524,9 +524,9 @@ auto GradientWidget::widget(
         {
             number_of_line_under_bar += 1.f;
         }
-        ImDrawList& draw_list = *ImGui::GetWindowDrawList();
+        ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
 
-        const float y_space_under_bar = internal::line_height() * number_of_line_under_bar;
+        const auto y_space_under_bar{internal::line_height() * number_of_line_under_bar};
         draw_border(
             draw_list,
             gradient_bar_position - ImVec2{settings.horizontal_margin + 4.f, y_space_over_bar},
