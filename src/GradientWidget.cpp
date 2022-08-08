@@ -333,18 +333,26 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
     return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
 }
 
+auto GradientWidget::add_mark(float position) -> bool
+{
+    const auto relative_pos = make_relative_position(position, wrap_mode);
+    return state.selected_mark =
+               &state.gradient.add_mark(
+                   Mark{
+                       RelativePosition{relative_pos},
+                       state.gradient.compute_color_at(relative_pos)}
+               );
+}
+
 auto GradientWidget::add_mark(
     const float                 position,
     std::default_random_engine& generator
 ) -> bool
 {
-    const auto      relative_pos = make_relative_position(position, wrap_mode);
-    const ColorRGBA new_mark_col = should_use_a_random_color_for_the_new_marks
-                                       ? random_color(generator)
-                                       : state.gradient.compute_color_at(relative_pos);
+    const auto relative_pos = make_relative_position(position, wrap_mode);
     return state.selected_mark =
                &state.gradient.add_mark(
-                   Mark{RelativePosition{relative_pos}, new_mark_col}
+                   Mark{RelativePosition{relative_pos}, random_color(generator)}
                );
 }
 
@@ -380,10 +388,10 @@ auto GradientWidget::widget(
     auto modified{false};
     if (add_mark_possible && !mark_hitbox_is_hovered)
     {
-        modified = add_mark(
-            (ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x,
-            generator
-        );
+        const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
+        modified = should_use_a_random_color_for_the_new_marks
+                       ? add_mark(position, generator)
+                       : add_mark(position);
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
@@ -441,7 +449,10 @@ auto GradientWidget::widget(
         if (add_button(is_there_no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
-            modified = add_mark(position_where_to_add_next_mark(state.gradient), generator);
+            const auto position{position_where_to_add_next_mark(state.gradient)};
+            modified = should_use_a_random_color_for_the_new_marks
+                           ? add_mark(position, generator)
+                           : add_mark(position);
         }
     }
     const auto is_there_color_edit{!(settings.flags & Flag::NoColorEdit)};
