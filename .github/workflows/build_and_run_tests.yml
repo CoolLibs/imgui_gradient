@@ -105,7 +105,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config Debug --target ${{env.TARGET}}
 
     - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}}
+      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
       
 #-----------------------------------------------------------------------------------------------
   Linux_GCC_Release: 
@@ -129,7 +129,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config Release --target ${{env.TARGET}}
 
     - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}}
+      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
 
 #-----------------------------------------------------------------------------------------------
   Linux_Clang_Debug:
@@ -153,7 +153,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config Debug --target ${{env.TARGET}}
 
     - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}}
+      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
 
 #-----------------------------------------------------------------------------------------------
   Linux_Clang_Release: 
@@ -177,7 +177,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config Release --target ${{env.TARGET}}
 
     - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}}
+      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
                         
 #-----------------------------------------------------------------------------------------------
   MacOS_GCC_Debug: 
