@@ -2,6 +2,8 @@
 
 #include "Gradient.hpp"
 
+// TODO(ASG) Fix builds on all platforms (see CI in GitHub Actions https://github.com/CoolLibs/imgui_gradient/actions)
+
 namespace ImGuiGradient {
 
 void Gradient::sort_marks()
