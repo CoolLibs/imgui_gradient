@@ -1,14 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest/doctest.h>
 #include <imgui_gradient/imgui_gradient.hpp>
-#include "../src/Flags.hpp"
-#include "../src/Settings.hpp"
-#include "../src/utils.hpp"
-#include "gradient_options_debug.hpp"
-
-// Check out doctest's documentation: https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md
-
 #include <quick_imgui/quick_imgui.hpp>
+#include "checkboxes_for_all_flags.hpp"
 
 auto main(int argc, char* argv[]) -> int
 {
@@ -19,11 +13,16 @@ auto main(int argc, char* argv[]) -> int
         exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )
     {
-        quick_imgui::loop("Test Gradient Widget", []() {
-            static ImGuiGradient::Flags          flags{};
-            static std::default_random_engine    generator{std::random_device{}()};
-            static ImGuiGradient::GradientWidget gradient;
-            ImGui::Begin("Gradient Editor");
+        auto generator = std::default_random_engine{std::random_device{}()}; // TODO(ASG) This isn't used anywhere. Put a checkbox in the Options window to decide if we use our custom generator or imgui_gradient's default one.
+        auto gradient  = ImGuiGradient::GradientWidget{};
+        quick_imgui::loop("imgui_gradient tests", [&]() {
+            ImGui::Begin("Flags");
+            const auto flags = checkboxes_for_all_flags();
+            ImGui::End();
+            ImGui::Begin("Programmatic Actions");
+            // TODO(ASG) test the programmatic setters (mark position, mark color, adding or removing marks, changing the wrap mode / interpolation mode, etc.)
+            ImGui::End();
+            ImGui::Begin("imgui_gradient tests");
             gradient.widget(
                 "Gradient",
                 ImGuiGradient::Settings{
@@ -33,20 +32,18 @@ auto main(int argc, char* argv[]) -> int
                 }
             );
             ImGui::End();
-            ImGui::Begin("Tests");
-            flags = gradient_options_debug();
-            ImGui::End();
         });
     }
     return exit_code;
 }
 
-TEST_CASE(
-    "Position Mode functions tests"
-)
+// Check out doctest's documentation: https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md
+
+TEST_CASE("Wrap modes")
 {
     SUBCASE("repeat_position() when position in the range [0,1]")
     {
+        // TODO(ASG) const everywhere
         float position   = 0.2f;
         float repeat_pos = Utils::repeat_position(position);
 
@@ -59,7 +56,7 @@ TEST_CASE(
 
         CHECK(doctest::Approx(repeat_pos) == 0.7f);
     }
-    SUBCASE("repeat_position() when position is negative and < -1")
+    SUBCASE("repeat_position() when position is < -1")
     {
         float position   = -1.4f;
         float repeat_pos = Utils::repeat_position(position);
@@ -196,7 +193,7 @@ TEST_CASE(
 
         CHECK(doctest::Approx(modulo_res) == 0.f);
     }
-    SUBCASE("test intermediate functions : modulo(x,mod) when x = 1")
+    SUBCASE("test intermediate functions : modulo(x, mod) when x = 1")
     {
         float x          = 1.f;
         float mod        = 2.f;

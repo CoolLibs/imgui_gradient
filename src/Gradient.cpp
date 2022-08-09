@@ -16,6 +16,7 @@ auto Gradient::add_mark(const Mark& mark) -> Mark&
     sort_marks();
     return reference;
 }
+
 void Gradient::remove_mark(const Mark& mark)
 {
     _marks.remove(mark);
@@ -32,20 +33,20 @@ void Gradient::set_mark_position(const Mark& mark, const RelativePosition positi
     sort_marks();
 }
 
-auto Gradient::is_empty() -> bool
-{
-    return _marks.empty();
-}
-
 void Gradient::set_mark_color(const Mark& mark, const ColorRGBA color)
 {
     const_cast<Mark&>(mark).color = color;
 }
 
+auto Gradient::is_empty() const -> bool
+{
+    return _marks.empty();
+}
+
 auto Gradient::get_marks_surrounding(const RelativePosition position) const -> internal::SurroundingMarks
 {
-    const Mark* lower{nullptr}; /// First mark positionned before `position`, or nullptr if there is none.
-    const Mark* upper{nullptr}; /// First mark positionned after `position`, or nullptr if there is none.
+    const Mark* lower{nullptr};
+    const Mark* upper{nullptr};
     for (const Mark& mark : _marks)
     {
         if (mark.position > position &&

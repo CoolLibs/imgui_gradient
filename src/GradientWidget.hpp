@@ -13,19 +13,28 @@
 
 namespace ImGuiGradient {
 
+// TODO(ASG) When we remove the selected mark, a new one
+
 class GradientWidget {
 public:
-    GradientWidget() = default;
+    /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.
     auto get_gradient() const -> const Gradient& { return state.gradient; }
     auto add_mark(float position) -> bool;
-    auto add_mark(
-        float                       position,
-        std::default_random_engine& generator
-    ) -> bool;
+    auto add_mark(float position, std::default_random_engine& generator) -> bool;
+
+    // TODO(ASG) implement these three functions
+    void remove_mark(const Mark& mark);
+    void set_mark_position(const Mark& mark, RelativePosition position);
+    void set_mark_color(const Mark& mark, ColorRGBA color);
+
+    // TODO(ASG) implement these three functions
+    // void set_wrap_mode(...
+    // void set_interpolation_mode(...
+    // bool set_should_use_a_random_color_for_the_new_marks(... // TODO(ASG) Better name
 
     auto widget(
         const char*                 label,
-        std::default_random_engine& generator,
+        std::default_random_engine& generator, // TODO(ASG) put this as the last argument so that the signature looks like the other `widget()`
         const Settings&             settings
     ) -> bool;
     auto widget(
@@ -35,7 +44,7 @@ public:
 
 private:
     void handle_interactions_with_hovered_mark(
-        const Mark*& dragging_mark,
+        const Mark*& dragging_mark, // TODO(ASG) Why does this receive the internal state if this is a method ? Can't it be a free function then ?
         const Mark*& selected_mark,
         const Mark*& mark_to_delete,
         const Mark&  hovered_mark
@@ -45,7 +54,7 @@ private:
         const ImVec2& gradient_bar_pos,
         ImVec2        size
     ) -> bool;
-    auto mouse_dragging(
+    auto mouse_dragging( // TODO(ASG) better name
         ImVec2          gradient_bar_position,
         ImVec2          gradient_size,
         const Settings& settings

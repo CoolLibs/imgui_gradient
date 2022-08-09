@@ -42,10 +42,11 @@ static auto position_mode_selector(WrapMode& wrap_mode) -> bool
     );
 }
 
+// TODO(ASG) Tooltip when hovering each Interpolation Mode to explain what it does
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode) -> bool
 {
     // Take the greater word to choose selector size
-    const float size = ImGui::CalcTextSize("Constant").x + 50.f;
+    const float size = ImGui::CalcTextSize("Constant").x + 50.f; // TODO(ASG) Instead of a hardcoded constant, use one of ImGui's style settings (probably called PaddingXxx, check out the demo window the find it (ask me where all the style options are))
     ImGui::SetNextItemWidth(size);
     return ImGui::Combo(
         "Interpolation Mode",
@@ -509,7 +510,7 @@ auto GradientWidget::widget(
     {
         if (ImGui::Button("Reset"))
         {
-            state = internal::State{};
+            state = internal::State{}; // TODO(ASG) `reset()` should be a public method
             modified |= true;
         }
     }

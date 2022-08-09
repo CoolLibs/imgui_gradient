@@ -3,7 +3,10 @@
 #include <imgui/imgui.h>
 #include "../src/Flags.hpp"
 
-auto gradient_options_debug() -> ImGuiGradient::Flags
+// TODO(ASG) clang-tidy says "function 'checkboxes_for_all_flags' defined in a header file; function definitions in header files can lead to ODR violations"
+// TODO(ASG) use a Python script to generate that
+
+auto checkboxes_for_all_flags() -> ImGuiGradient::Flags
 {
     ImGuiGradient::Flags options = ImGuiGradient::Flag::None;
 

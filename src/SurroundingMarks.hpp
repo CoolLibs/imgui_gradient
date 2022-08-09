@@ -2,9 +2,7 @@
 
 #include "Mark.hpp"
 
-namespace ImGuiGradient {
-
-namespace internal {
+namespace ImGuiGradient { namespace internal {
 
 struct SurroundingMarks {
     const Mark* lower{nullptr};

@@ -5,6 +5,8 @@
 #include "Settings.hpp"
 #include "internal.hpp"
 
+// TODO(ASG) Make the delete button disabled if there is no selected mark
+
 namespace ImGuiGradient {
 
 static void draw_uniform_square(

@@ -7,17 +7,18 @@ namespace ImGuiGradient {
 
 class Gradient {
 public:
-    auto get_marks_surrounding(RelativePosition position) const -> internal::SurroundingMarks;
     auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
     auto add_mark(const Mark& mark) -> Mark&;
     void remove_mark(const Mark& mark);
-    auto is_empty() -> bool;
+    void set_mark_position(const Mark& mark, RelativePosition position);
+    void set_mark_color(const Mark& mark, ColorRGBA color);
 
     auto get_marks() const -> const std::list<Mark>&;
+    auto is_empty() const -> bool;
 
-    void set_mark_position(const Mark& mark, const RelativePosition position);
-    void set_mark_color(const Mark& mark, const ColorRGBA color);
+    /// Returns the marks positionned just before and after `position`, or nullptr if there is none.
+    auto get_marks_surrounding(RelativePosition position) const -> internal::SurroundingMarks;
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
 

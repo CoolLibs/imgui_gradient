@@ -5,6 +5,7 @@
 
 namespace ImGuiGradient {
 
+// TODO(ASG) Lots of documentation here
 struct Settings {
     float                widget_height                            = 40.f;
     float                distance_to_delete_mark_by_dragging_down = 40.f; // This behaviour can also be disabled with the Flag::NoDragDowntoDelete

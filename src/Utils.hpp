@@ -13,8 +13,10 @@
 
 #include <cmath>
 
-// https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf p260
+// https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf page 260
 
+// TODO(ASG) Return RelativePositions from these functions.
+// TODO(ASG) Put in namespace internal, remove Utils. Because they are included in our public headers.
 namespace Utils {
 
 /// Always returns a number between 0.f and 1.f, even if x is negative.
@@ -32,8 +34,6 @@ inline auto repeat_position(float position) -> float
 {
     return fract(position);
 }
-
-// TODO(ASG) Apply the actua wrap mode on textures and see what happens
 
 // Applies a mirror transform on position given around 0.f, then clamp it between 0.f and 1.f
 inline auto mirror_clamp_position(float position) -> float

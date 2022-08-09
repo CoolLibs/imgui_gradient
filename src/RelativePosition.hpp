@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include "Utils.hpp"
+#include "Utils.hpp" //TODO(ASG) move this include to the .cpp
 #include "WrapMode.hpp"
 
 namespace ImGuiGradient {
@@ -9,9 +9,9 @@ namespace ImGuiGradient {
 /// Represents a number between 0 and 1.
 class RelativePosition {
 public:
-    /// `position` has to be betweend 0 and 1.
+    /// `position` must be between 0 and 1.
     explicit RelativePosition(float position)
-        : value(position)
+        : value{position}
     {
         assert_invariants();
     }
@@ -19,7 +19,7 @@ public:
     /// Returns a number between 0 and 1.
     auto get() const -> float { return value; }
 
-    /// `position` has to be betweend 0 and 1.
+    /// `position` must be between 0 and 1.
     void set(float position)
     {
         value = position;
@@ -29,12 +29,11 @@ public:
     auto imgui_widget(float width) -> bool
     {
         ImGui::SetNextItemWidth(width);
-        static constexpr auto speed{.0001f};
         return ImGui::DragFloat(
-            "##3",
+            "##3", // TODO(ASG) Receive this as a parameter (with a default value). If we want to render two RelativePosition in the same window this will be a problem if they have the same label.
             &value,
-            speed,
-            0.f, 1.f,
+            .0001f,   /* speed */
+            0.f, 1.f, /* min and max */
             "%.4f",
             ImGuiSliderFlags_AlwaysClamp
         );
