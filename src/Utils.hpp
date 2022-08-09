@@ -4,7 +4,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
-#define IMGUI_DEFINE_MATH_OPERATORS // Need ImVec operators in other files but we have to include imgui_internal there,
+#define IMGUI_DEFINE_MATH_OPERATORS // Need ImVec operators in other files but we have to include imgui_internal there, // TODO(ASG) That comment is a lie, we don't need imgui_internal here at all!
                                     // therefore to include imgui_internal in the library with these operators we have to define it there
 #include <imgui/imgui_internal.h>   // include ImClamp
 #if defined(__GNUC__)

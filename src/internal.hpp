@@ -2,9 +2,7 @@
 
 #include <imgui/imgui.h>
 
-namespace ImGuiGradient {
-
-namespace internal {
+namespace ImGuiGradient { namespace internal {
 
 inline auto line_height() -> float
 {

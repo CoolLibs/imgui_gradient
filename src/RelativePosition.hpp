@@ -54,6 +54,7 @@ private:
     float value{0.f};
 };
 
+// TODO(ASG) I changed my mind, this will be better suited as a constructor O:)
 auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition;
 
 } // namespace ImGuiGradient

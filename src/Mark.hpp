@@ -5,6 +5,7 @@
 
 namespace ImGuiGradient {
 
+// TODO(ASG) This should be defined in the ColorRGBA file, not here
 inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
 {
     return (a.x == b.x) &&
