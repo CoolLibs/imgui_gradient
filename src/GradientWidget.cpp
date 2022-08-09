@@ -1,6 +1,4 @@
 #include "GradientWidget.hpp"
-#include <imgui_gradient/imgui_gradient.hpp>
-#include <iterator>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 
@@ -32,8 +30,7 @@ static auto button_with_tooltip(
 
 static auto position_mode_selector(WrapMode& wrap_mode) -> bool
 {
-    // Take the greater word to choose selector size
-    const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f;
+    const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f; // Use the longuest word to choose the selector's size
     ImGui::SetNextItemWidth(size);
     return ImGui::Combo(
         "Position Mode",
@@ -494,7 +491,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        modified |= position_mode_selector(wrap_mode);
+        modified |= position_mode_selector(wrap_mode); // TODO(ASG) Why are we passing the wrap mode to the POSITION mode selector ?
     }
 
     if (!(settings.flags & Flag::NoRandomModeCheckBox))
