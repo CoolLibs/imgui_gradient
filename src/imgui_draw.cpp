@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "Settings.hpp"

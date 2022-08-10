@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Gradient.hpp"
 #include <imgui/imgui_internal.h>
 
