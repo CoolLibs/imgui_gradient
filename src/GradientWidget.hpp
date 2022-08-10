@@ -42,12 +42,6 @@ public:
     ) -> bool;
 
 private:
-    void handle_interactions_with_hovered_mark(
-        const Mark*& dragging_mark, // TODO(ASG) Why does this receive the internal state if this is a method ? Can't it be a free function then ?
-        const Mark*& selected_mark,
-        const Mark*& mark_to_delete,
-        const Mark&  hovered_mark
-    );
     auto draw_gradient_marks(
         const Mark*   mark_to_delete,
         const ImVec2& gradient_bar_pos,

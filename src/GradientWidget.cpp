@@ -203,7 +203,7 @@ static void draw_gradient_bar(
     );
 }
 
-void GradientWidget::handle_interactions_with_hovered_mark(
+static void handle_interactions_with_hovered_mark(
     const Mark*& dragging_mark,
     const Mark*& selected_mark,
     const Mark*& mark_to_delete,
