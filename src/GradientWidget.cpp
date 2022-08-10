@@ -63,7 +63,7 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static auto position_mode_selector(WrapMode& wrap_mode) -> bool
+static auto wrap_mode_selector(WrapMode& wrap_mode) -> bool
 {
     const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f; // Use the longuest word to choose the selector's size
     ImGui::SetNextItemWidth(size);
@@ -526,7 +526,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        modified |= position_mode_selector(wrap_mode); // TODO(ASG) Why are we passing the wrap mode to the POSITION mode selector ?
+        modified |= wrap_mode_selector(wrap_mode);
     }
 
     if (!(settings.flags & Flag::NoRandomModeCheckBox))
