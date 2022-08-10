@@ -318,7 +318,7 @@ static auto position_where_to_add_next_mark(Gradient& gradient) -> float
     }
 }
 
-auto GradientWidget::mouse_dragging(
+auto GradientWidget::mouse_dragging_interactions(
     const ImVec2    gradient_bar_position,
     const ImVec2    gradient_size,
     const Settings& settings
@@ -428,7 +428,7 @@ auto GradientWidget::widget(
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
-    modified |= mouse_dragging(gradient_bar_position, gradient_size, settings);
+    modified |= mouse_dragging_interactions(gradient_bar_position, gradient_size, settings);
     if (!(settings.flags & Flag::NoDragDownToDelete))
     {
         // If mouse released and there is still a mark hidden, then it become a mark to delete

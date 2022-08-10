@@ -47,7 +47,7 @@ private:
         const ImVec2& gradient_bar_pos,
         ImVec2        size
     ) -> bool;
-    auto mouse_dragging( // TODO(ASG) better name
+    auto mouse_dragging_interactions(
         ImVec2          gradient_bar_position,
         ImVec2          gradient_size,
         const Settings& settings
