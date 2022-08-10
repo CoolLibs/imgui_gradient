@@ -31,6 +31,8 @@ public:
     void set_interpolation_mode(Interpolation new_interpolation_mode);
     void enable_random_color_mode(bool is_random_enable);
 
+    void reset();
+
     auto widget(
         const char*                 label,
         std::default_random_engine& generator, // TODO(ASG) put this as the last argument so that the signature looks like the other `widget()`

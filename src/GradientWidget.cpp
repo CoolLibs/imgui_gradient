@@ -39,6 +39,11 @@ void GradientWidget::enable_random_color_mode(bool is_random_color_mode_enable)
     should_use_a_random_color_for_the_new_marks = is_random_color_mode_enable;
 }
 
+void GradientWidget::reset()
+{
+    state = internal::State{};
+}
+
 static void tooltip(const char* text)
 {
     if (ImGui::IsItemHovered())
@@ -542,7 +547,7 @@ auto GradientWidget::widget(
     {
         if (ImGui::Button("Reset"))
         {
-            state = internal::State{}; // TODO(ASG) `reset()` should be a public method
+            reset();
             modified |= true;
         }
     }
