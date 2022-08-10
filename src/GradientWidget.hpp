@@ -35,8 +35,8 @@ public:
 
     auto widget(
         const char*                 label,
-        std::default_random_engine& generator, // TODO(ASG) put this as the last argument so that the signature looks like the other `widget()`
-        const Settings&             settings
+        const Settings&             settings,
+        std::default_random_engine& generator
     ) -> bool;
     auto widget(
         const char*     label,

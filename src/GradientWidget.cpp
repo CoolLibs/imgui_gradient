@@ -396,8 +396,8 @@ auto GradientWidget::add_mark(
 
 auto GradientWidget::widget(
     const char*                 label,
-    std::default_random_engine& generator,
-    const Settings&             settings
+    const Settings&             settings,
+    std::default_random_engine& generator
 ) -> bool
 {
     if (!(settings.flags & Flag::NoLabel))
@@ -608,7 +608,7 @@ auto GradientWidget::widget(
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
     static std::default_random_engine generator{std::random_device{}()};
-    return widget(label, generator, settings);
+    return widget(label, settings, generator);
 }
 
 }; // namespace ImGuiGradient
