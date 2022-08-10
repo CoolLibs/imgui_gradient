@@ -45,56 +45,56 @@ TEST_CASE("Wrap modes")
     SUBCASE("repeat_position() when position in the range [0,1]")
     {
         const float position   = 0.2f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.2f);
     }
     SUBCASE("repeat_position() when position in the range [-1,0]")
     {
         const float position   = -0.3f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.7f);
     }
     SUBCASE("repeat_position() when position is < -1")
     {
         const float position   = -1.4f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.6f);
     }
     SUBCASE("repeat_position() when position > 1")
     {
         const float position   = 1.8f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.8f);
     }
     SUBCASE("repeat_position() when position just before 1")
     {
         const float position   = .99f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == .99f);
     }
     SUBCASE("repeat_position() when position just after 1")
     {
         const float position   = 1.01f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == .01f);
     }
     SUBCASE("repeat_position() when position just before 0")
     {
         const float position   = -0.01f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.99f);
     }
     SUBCASE("repeat_position() when position just after 0")
     {
         const float position   = 0.01f;
-        const float repeat_pos = Utils::repeat_position(position);
+        const float repeat_pos = internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos) == 0.01f);
     }
@@ -102,42 +102,42 @@ TEST_CASE("Wrap modes")
     SUBCASE("mirror_repeat_position() when position in the range [0,1]")
     {
         const float position          = 0.4f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.4f);
     }
     SUBCASE("mirror_repeat_position() when position in the range [-1,0]")
     {
         const float position          = -0.2f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.2f);
     }
     SUBCASE("mirror_repeat_position() when position is negative and < -1")
     {
         const float position          = -1.6f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.4f);
     }
     SUBCASE("mirror_repeat_position() when position > 1")
     {
         const float position          = 1.8f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.2f);
     }
     SUBCASE("mirror_repeat_position() when position = 1")
     {
         const float position          = 1.f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 1.f);
     }
     SUBCASE("mirror_repeat_position() when position = 0")
     {
         const float position          = 0.f;
-        const float mirror_repeat_pos = Utils::mirror_repeat_position(position);
+        const float mirror_repeat_pos = internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos) == 0.f);
     }
@@ -146,7 +146,7 @@ TEST_CASE("Wrap modes")
     {
         const float x          = 0.f;
         const float mod        = 2.f;
-        const float modulo_res = Utils::modulo(x, mod);
+        const float modulo_res = internal::modulo(x, mod);
 
         CHECK(doctest::Approx(modulo_res) == 0.f);
     }
@@ -154,7 +154,7 @@ TEST_CASE("Wrap modes")
     {
         const float x          = 1.f;
         const float mod        = 2.f;
-        const float modulo_res = Utils::modulo(x, mod);
+        const float modulo_res = internal::modulo(x, mod);
 
         CHECK(doctest::Approx(modulo_res) == 1.f);
     }

@@ -4,8 +4,7 @@
 // https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf page 260
 
 // TODO(ASG) Return RelativePositions from these functions.
-// TODO(ASG) Put in namespace internal, remove Utils. Because they are included in our public headers.
-namespace Utils {
+namespace internal {
 
 inline auto clamp(float x) -> float
 {
@@ -34,4 +33,4 @@ inline auto mirror_repeat_position(float position) -> float
     return 1.f - (abs(modulo(position, 2.f) - 1.f));
 }
 
-} // namespace Utils
+} // namespace internal

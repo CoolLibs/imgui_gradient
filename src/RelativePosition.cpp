@@ -10,15 +10,15 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         {
         case WrapMode::Clamp:
         {
-            return Utils::clamp(position);
+            return internal::clamp(position);
         }
         case WrapMode::Repeat:
         {
-            return Utils::repeat_position(position);
+            return internal::repeat_position(position);
         }
         case WrapMode::MirrorRepeat:
         {
-            return Utils::mirror_repeat_position(position);
+            return internal::mirror_repeat_position(position);
         }
         default:
             assert(false && "[RelativePosition::make_relative_position] Invalid enum value");
