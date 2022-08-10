@@ -5,7 +5,6 @@
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode fonctions
 
-
 auto main(int argc, char* argv[]) -> int
 {
     const int  exit_code              = doctest::Context{}.run(); // Run all unit tests
@@ -15,24 +14,39 @@ auto main(int argc, char* argv[]) -> int
         exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )
     {
-        auto generator = std::default_random_engine{std::random_device{}()}; // TODO(ASG) This isn't used anywhere. Put a checkbox in the Options window to decide if we use our custom generator or imgui_gradient's default one.
-        auto gradient  = ImGuiGradient::GradientWidget{};
+        auto gradient = ImGuiGradient::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
             ImGui::Begin("Flags");
             const auto flags = checkboxes_for_all_flags();
+            ImGui::End();
+            ImGui::Begin("Options");
+            static auto custom_generator = false;
+            ImGui::Checkbox("Use our custom generator", &custom_generator);
             ImGui::End();
             ImGui::Begin("Programmatic Actions");
             // TODO(ASG) test the programmatic setters (mark position, mark color, adding or removing marks, changing the wrap mode / interpolation mode, etc.)
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
             ImGuiGradient::Settings settings{};
-            settings.horizontal_margin = 10.f,
-            settings.flags             = flags,
-            settings.color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR,
-            gradient.widget(
-                "Gradient",
-                settings
-            );
+            settings.horizontal_margin = 10.f;
+            settings.flags             = flags;
+            settings.color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
+            if (custom_generator)
+            {
+                static auto generator = std::default_random_engine{std::random_device{}()};
+                gradient.widget(
+                    "Gradient",
+                    settings,
+                    generator
+                );
+            }
+            else
+            {
+                gradient.widget(
+                    "Gradient",
+                    settings
+                );
+            }
             ImGui::End();
         });
     }
