@@ -409,7 +409,7 @@ auto GradientWidget::widget(
     const auto gradient_bar_position = ImVec2{internal::gradient_position(settings.horizontal_margin)};
     const auto gradient_size         = ImVec2{
         std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin),
-        settings.widget_height};
+        settings.gradient_height};
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);
