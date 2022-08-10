@@ -42,6 +42,49 @@ auto main(int argc, char* argv[]) -> int
 
 TEST_CASE("Wrap modes")
 {
+    SUBCASE("clamp_position() when position in the range [0,1]")
+    {
+        const float position   = 0.3f;
+        const auto  repeat_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(repeat_pos.get()) == 0.3f);
+    }
+    SUBCASE("clamp_position() when position in the range [-1,0]")
+    {
+        const float position  = -0.4f;
+        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
+    }
+    SUBCASE("clamp_position() when position is < -1")
+    {
+        const float position  = -1.4f;
+        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
+    }
+    SUBCASE("clamp_position() when position > 1")
+    {
+        const float position  = 1.9f;
+        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(clamp_pos.get()) == 1.f);
+    }
+    SUBCASE("clamp_position() when position = 1")
+    {
+        const float position  = 1.f;
+        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(clamp_pos.get()) == 1.f);
+    }
+    SUBCASE("clamp_position() when position = 0")
+    {
+        const float position  = 0.f;
+        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+
+        CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
+    }
+
     SUBCASE("repeat_position() when position in the range [0,1]")
     {
         const float position   = 0.2f;

@@ -8,9 +8,9 @@ namespace ImGuiGradient {
 
 namespace internal {
 
-inline auto clamp(float x) -> RelativePosition
+inline auto clamp_position(float position) -> RelativePosition
 {
-    return RelativePosition{std::fmin(std::fmax(x, 0.f), 1.f)};
+    return RelativePosition{std::fmin(std::fmax(position, 0.f), 1.f)};
 }
 
 /// Always returns a number between 0.f and 1.f, even if x is negative.

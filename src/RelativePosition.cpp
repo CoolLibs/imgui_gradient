@@ -10,7 +10,7 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         {
         case WrapMode::Clamp:
         {
-            return internal::clamp(position);
+            return internal::clamp_position(position);
         }
         case WrapMode::Repeat:
         {
