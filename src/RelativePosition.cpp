@@ -5,7 +5,7 @@ namespace ImGuiGradient {
 
 auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
 {
-    return RelativePosition{[&] {
+    return [&] {
         switch (wrap_mode)
         {
         case WrapMode::Clamp:
@@ -22,9 +22,9 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         }
         default:
             assert(false && "[RelativePosition::make_relative_position] Invalid enum value");
-            return 0.25f;
+            return RelativePosition{0.f};
         }
-    }()};
+    }();
 }
 
 auto RelativePosition::imgui_widget(const char* label, const float width) -> bool
