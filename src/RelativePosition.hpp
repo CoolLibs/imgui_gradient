@@ -26,7 +26,7 @@ public:
         assert_invariants();
     }
 
-    auto imgui_widget(float width) -> bool;
+    auto imgui_widget(const char* label, float width) -> bool;
 
     friend auto operator<(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() < b.get(); }
     friend auto operator>(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() > b.get(); }

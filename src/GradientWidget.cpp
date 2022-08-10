@@ -134,7 +134,8 @@ static auto precise_position(
     const float width
 ) -> bool
 {
-    return selected_mark.position.imgui_widget(width);
+    const char* label{"##3"};
+    return selected_mark.position.imgui_widget(label, width);
 }
 
 static auto random_mode_box(
