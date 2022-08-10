@@ -209,7 +209,7 @@ static void draw_gradient_bar(
 }
 
 static void handle_interactions_with_hovered_mark(
-    const Mark*& dragging_mark,
+    const Mark*& dragged_mark,
     const Mark*& selected_mark,
     const Mark*& mark_to_delete,
     const Mark&  hovered_mark
@@ -217,7 +217,7 @@ static void handle_interactions_with_hovered_mark(
 {
     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
-        dragging_mark = &hovered_mark;
+        dragged_mark  = &hovered_mark;
         selected_mark = &hovered_mark;
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
@@ -254,10 +254,10 @@ auto GradientWidget::draw_gradient_marks(
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
                 hitbox_is_hovered = true;
-                const Mark* const_dragging_mark{state.dragging_mark};
+                const Mark* const_dragged_mark{state.dragged_mark};
                 const Mark* const_selected_mark{state.selected_mark};
                 handle_interactions_with_hovered_mark(
-                    const_dragging_mark,
+                    const_dragged_mark,
                     const_selected_mark,
                     mark_to_delete,
                     mark_hovered
@@ -266,9 +266,9 @@ auto GradientWidget::draw_gradient_marks(
                 {
                     state.selected_mark = const_cast<Mark*>(const_selected_mark);
                 }
-                if (const_dragging_mark)
+                if (const_dragged_mark)
                 {
-                    state.dragging_mark = const_cast<Mark*>(const_dragging_mark);
+                    state.dragged_mark = const_cast<Mark*>(const_dragged_mark);
                 }
             }
         }
@@ -330,17 +330,17 @@ auto GradientWidget::mouse_dragging_interactions(
 ) -> bool
 {
     bool is_dragging = false;
-    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && state.dragging_mark)
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && state.dragged_mark)
     {
-        state.dragging_mark = nullptr;
+        state.dragged_mark = nullptr;
     }
-    if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && state.dragging_mark)
+    if (ImGui::IsMouseDragging(ImGuiMouseButton_Left) && state.dragged_mark)
     {
         const auto map{ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x, 0.f, 1.f)};
-        if (state.dragging_mark->position.get() != map)
+        if (state.dragged_mark->position.get() != map)
         {
-            state.dragging_mark->position.set(map);
-            set_mark_position(*state.dragging_mark, state.dragging_mark->position);
+            state.dragged_mark->position.set(map);
+            set_mark_position(*state.dragged_mark, state.dragged_mark->position);
             is_dragging = true;
         }
         if (!(settings.flags & Flag::NoDragDownToDelete))
@@ -348,13 +348,13 @@ auto GradientWidget::mouse_dragging_interactions(
             const auto diffY{ImGui::GetIO().MousePos.y - gradient_bar_position.y - gradient_size.y};
             if (diffY >= settings.distance_to_delete_mark_by_dragging_down)
             {
-                state.mark_to_hide = state.dragging_mark;
+                state.mark_to_hide = state.dragged_mark;
             }
             // do not hide it anymore when mouse on gradient bar
             if (state.mark_to_hide && diffY <= settings.distance_to_delete_mark_by_dragging_down)
             {
-                state.dragging_mark = state.mark_to_hide;
-                state.mark_to_hide  = nullptr;
+                state.dragged_mark = state.mark_to_hide;
+                state.mark_to_hide = nullptr;
             }
         }
     }
@@ -439,10 +439,10 @@ auto GradientWidget::widget(
         // If mouse released and there is still a mark hidden, then it become a mark to delete
         if (state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
-            if (state.dragging_mark &&
-                *state.dragging_mark == *state.mark_to_hide)
+            if (state.dragged_mark &&
+                *state.dragged_mark == *state.mark_to_hide)
             {
-                state.dragging_mark = nullptr;
+                state.dragged_mark = nullptr;
             }
             mark_to_delete     = state.mark_to_hide;
             state.mark_to_hide = nullptr;
