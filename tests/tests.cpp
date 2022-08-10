@@ -2,8 +2,9 @@
 #include <doctest/doctest.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <quick_imgui/quick_imgui.hpp>
+#include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode fonctions
-#include "checkboxes_for_all_flags.hpp"
+
 
 auto main(int argc, char* argv[]) -> int
 {
