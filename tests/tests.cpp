@@ -24,13 +24,13 @@ auto main(int argc, char* argv[]) -> int
             // TODO(ASG) test the programmatic setters (mark position, mark color, adding or removing marks, changing the wrap mode / interpolation mode, etc.)
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
+            ImGuiGradient::Settings settings{};
+            settings.horizontal_margin = 10.f,
+            settings.flags             = flags,
+            settings.color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR,
             gradient.widget(
                 "Gradient",
-                ImGuiGradient::Settings{
-                    .horizontal_margin = 10.f,
-                    .flags             = flags,
-                    .color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR,
-                }
+                settings
             );
             ImGui::End();
         });
