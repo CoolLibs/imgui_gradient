@@ -11,9 +11,6 @@ enum class WrapMode {
     /// Basically adds or substracts 1 to the position until it is in the [0, 1] range.
     /// 1.2 maps to 0.2, 1.8 maps to 0.8, -0.2 maps to 0.8, -0.8 maps to 0.2
     Repeat,
-    /// `position` mirrored when negative, then clamp it between 0.f and 1.f.
-    // TODO(ASG) remove mirror clamp
-    MirrorClamp,
     /// Like `Repeat` except that every other range is flipped.
     /// 1.2 maps to 0.8, 1.8 maps to 0.2, -0.2 maps to 0.2, -0.8 maps to 0.8, -1.2 maps to 0.8
     MirrorRepeat,

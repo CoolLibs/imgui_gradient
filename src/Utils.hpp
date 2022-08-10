@@ -11,6 +11,7 @@ inline auto clamp(float x) -> float
 {
     return std::fmin(std::fmax(x, 0.f), 1.f);
 }
+
 /// Always returns a number between 0.f and 1.f, even if x is negative.
 inline auto fract(float x) -> float
 {
@@ -25,12 +26,6 @@ inline auto modulo(float x, float mod) -> float
 inline auto repeat_position(float position) -> float
 {
     return fract(position);
-}
-
-// Applies a mirror transform on position given around 0.f, then clamp it between 0.f and 1.f
-inline auto mirror_clamp_position(float position) -> float
-{
-    return clamp(abs(position));
 }
 
 // Applies a mirror transform on position given around 0.f, then repeat it

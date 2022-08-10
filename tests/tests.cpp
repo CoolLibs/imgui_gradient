@@ -99,49 +99,6 @@ TEST_CASE("Wrap modes")
         CHECK(doctest::Approx(repeat_pos) == 0.01f);
     }
 
-    SUBCASE("mirror_clamp_position() when position in the range [0,1]")
-    {
-        const float position         = 0.7f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 0.7f);
-    }
-    SUBCASE("mirror_clamp_position() when position in the range [-1,0]")
-    {
-        const float position         = -0.4f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 0.4f);
-    }
-    SUBCASE("mirror_clamp_position() when position is negative and < -1")
-    {
-        const float position         = -1.3f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 1.f);
-    }
-    SUBCASE("mirror_clamp_position() when position > 1")
-    {
-        const float position         = 1.8f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 1.f);
-    }
-    SUBCASE("mirror_clamp_position() when position = 1")
-    {
-        const float position         = 1.f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 1.f);
-    }
-    SUBCASE("mirror_clamp_position() when position = 0")
-    {
-        const float position         = 0.f;
-        const float mirror_clamp_pos = Utils::mirror_clamp_position(position);
-
-        CHECK(doctest::Approx(mirror_clamp_pos) == 0.f);
-    }
-
     SUBCASE("mirror_repeat_position() when position in the range [0,1]")
     {
         const float position          = 0.4f;

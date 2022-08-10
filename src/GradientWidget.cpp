@@ -75,7 +75,7 @@ static auto wrap_mode_selector(WrapMode& wrap_mode) -> bool
     return ImGui::Combo(
         "Position Mode",
         reinterpret_cast<int*>(&wrap_mode),
-        " Clamp\0 Repeat\0 Mirror Clamp\0 Mirror Repeat\0\0"
+        " Clamp\0 Repeat\0 Mirror Repeat\0\0"
     );
 }
 

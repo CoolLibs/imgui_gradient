@@ -16,10 +16,6 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         {
             return Utils::repeat_position(position);
         }
-        case WrapMode::MirrorClamp:
-        {
-            return Utils::mirror_clamp_position(position);
-        }
         case WrapMode::MirrorRepeat:
         {
             return Utils::mirror_repeat_position(position);
