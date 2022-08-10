@@ -1,4 +1,5 @@
 #include "GradientWidget.hpp"
+#include <functional>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 
@@ -68,6 +69,33 @@ static auto button_with_tooltip(
     return clicked;
 }
 
+static void maybe_disabled(
+    bool                  condition,
+    const char*           reason_to_disable,
+    std::function<void()> widgets
+)
+{
+    if (condition)
+    {
+        ImGui::BeginGroup();
+        ImGui::BeginDisabled(true);
+
+        widgets();
+
+        ImGui::EndDisabled();
+        ImGui::EndGroup();
+        tooltip(reason_to_disable);
+    }
+    else
+    {
+        ImGui::BeginGroup();
+
+        widgets();
+
+        ImGui::EndGroup();
+    }
+}
+
 static auto wrap_mode_selector(WrapMode& wrap_mode) -> bool
 {
     const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f; // Use the longuest word to choose the selector's size
@@ -92,13 +120,28 @@ static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mo
     );
 }
 
-static auto delete_button(const bool should_show_tooltip) -> bool
+static void button_disabled(const char* label, const char* reason_for_disabling)
 {
-    return button_with_tooltip(
-        "-",
-        "Select a mark to remove it\nor middle click on it\nor drag it down",
-        should_show_tooltip
-    );
+    maybe_disabled(true, reason_for_disabling, [&]() {
+        ImGui::Button(label, internal::button_size());
+    });
+}
+
+static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip) -> bool
+{
+    if (disable)
+    {
+        button_disabled("-", reason_for_disabling);
+        return false;
+    }
+    else
+    {
+        return button_with_tooltip(
+            "-",
+            "Select a mark to remove it\nor middle click on it\nor drag it down",
+            should_show_tooltip
+        );
+    }
 }
 
 static auto add_button(const bool should_show_tooltip) -> bool
@@ -467,7 +510,7 @@ auto GradientWidget::widget(
     if (!state.gradient.is_empty())
     {
         if (((is_there_remove_button &&
-              delete_button(is_there_no_tooltip)) ||
+              delete_button(!state.selected_mark, "There is no mark selected", is_there_no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) ||
              ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
