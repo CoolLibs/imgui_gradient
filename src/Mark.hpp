@@ -5,15 +5,6 @@
 
 namespace ImGuiGradient {
 
-// TODO(ASG) This should be defined in the ColorRGBA file, not here
-inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
-{
-    return (a.x == b.x) &&
-           (a.y == b.y) &&
-           (a.z == b.z) &&
-           (a.w == b.w);
-}
-
 struct Mark {
     RelativePosition position{0.f};
     ColorRGBA        color{0.f, 0.f, 0.f, 1.f};
