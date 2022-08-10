@@ -18,19 +18,18 @@ namespace ImGuiGradient {
 class GradientWidget {
 public:
     /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.
-    auto get_gradient() const -> const Gradient& { return state.gradient; }
+    auto get_gradient() const -> const Gradient&;
+
     auto add_mark(float position) -> bool;
     auto add_mark(float position, std::default_random_engine& generator) -> bool;
 
-    // TODO(ASG) implement these three functions
     void remove_mark(const Mark& mark);
+
     void set_mark_position(const Mark& mark, RelativePosition position);
     void set_mark_color(const Mark& mark, ColorRGBA color);
-
-    // TODO(ASG) implement these three functions
-    // void set_wrap_mode(...
-    // void set_interpolation_mode(...
-    // bool set_should_use_a_random_color_for_the_new_marks(... // TODO(ASG) Better name
+    void set_wrap_mode(WrapMode new_wrap_mode);
+    void set_interpolation_mode(Interpolation new_interpolation_mode);
+    void enable_random_color_mode(bool is_random_enable);
 
     auto widget(
         const char*                 label,

@@ -4,6 +4,41 @@
 
 namespace ImGuiGradient {
 
+auto GradientWidget::get_gradient() const -> const Gradient&
+{
+    return state.gradient;
+}
+
+void GradientWidget::remove_mark(const Mark& mark)
+{
+    state.gradient.remove_mark(mark);
+}
+
+void GradientWidget::set_mark_position(const Mark& mark, RelativePosition position)
+{
+    state.gradient.set_mark_position(mark, position);
+}
+
+void GradientWidget::set_mark_color(const Mark& mark, ColorRGBA color)
+{
+    state.gradient.set_mark_color(mark, color);
+}
+
+void GradientWidget::set_wrap_mode(WrapMode new_wrap_mode)
+{
+    wrap_mode = new_wrap_mode;
+}
+
+void GradientWidget::set_interpolation_mode(Interpolation new_interpolation_mode)
+{
+    interpolation_mode = new_interpolation_mode;
+}
+
+void GradientWidget::enable_random_color_mode(bool is_random_color_mode_enable)
+{
+    should_use_a_random_color_for_the_new_marks = is_random_color_mode_enable;
+}
+
 static void tooltip(const char* text)
 {
     if (ImGui::IsItemHovered())
@@ -300,7 +335,7 @@ auto GradientWidget::mouse_dragging(
         if (state.dragging_mark->position.get() != map)
         {
             state.dragging_mark->position.set(map);
-            state.gradient.set_mark_position(*state.dragging_mark, state.dragging_mark->position);
+            set_mark_position(*state.dragging_mark, state.dragging_mark->position);
             is_dragging = true;
         }
         if (!(settings.flags & Flag::NoDragDownToDelete))
@@ -417,7 +452,7 @@ auto GradientWidget::widget(
         {
             state.selected_mark = nullptr;
         }
-        state.gradient.remove_mark(*mark_to_delete);
+        remove_mark(*mark_to_delete);
         modified |= true;
     }
     ImGui::EndGroup();
@@ -431,7 +466,7 @@ auto GradientWidget::widget(
              ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
-            state.gradient.remove_mark(*state.selected_mark);
+            remove_mark(*state.selected_mark);
             state.selected_mark = nullptr;
             modified |= true;
         }
@@ -474,7 +509,7 @@ auto GradientWidget::widget(
         if (state.selected_mark &&
             precise_position(*state.selected_mark, gradient_size.x * .25f))
         {
-            state.gradient.set_mark_position(*state.selected_mark, state.selected_mark->position);
+            set_mark_position(*state.selected_mark, state.selected_mark->position);
             modified = true;
         }
     }
