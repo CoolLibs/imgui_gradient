@@ -27,4 +27,17 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
     }()};
 }
 
+auto RelativePosition::imgui_widget(float width) -> bool
+{
+    ImGui::SetNextItemWidth(width);
+    return ImGui::DragFloat(
+        "##3", // TODO(ASG) Receive this as a parameter (with a default value). If we want to render two RelativePosition in the same window this will be a problem if they have the same label.
+        &value,
+        .0001f,   /* speed */
+        0.f, 1.f, /* min and max */
+        "%.4f",
+        ImGuiSliderFlags_AlwaysClamp
+    );
+}
+
 } // namespace ImGuiGradient
