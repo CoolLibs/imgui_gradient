@@ -1,4 +1,5 @@
 #include "RelativePosition.hpp"
+#include "Utils.hpp"
 
 namespace ImGuiGradient {
 
@@ -9,7 +10,7 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         {
         case WrapMode::Clamp:
         {
-            return ImClamp(position, 0.f, 1.f);
+            return Utils::clamp(position);
         }
         case WrapMode::Repeat:
         {

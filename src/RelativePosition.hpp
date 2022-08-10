@@ -1,7 +1,7 @@
 #pragma once
 
+#include <imgui/imgui.h>
 #include <cassert>
-#include "Utils.hpp" //TODO(ASG) move this include to the .cpp
 #include "WrapMode.hpp"
 
 namespace ImGuiGradient {
