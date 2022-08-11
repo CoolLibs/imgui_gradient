@@ -24,7 +24,56 @@ auto main(int argc, char* argv[]) -> int
             ImGui::Checkbox("Use our custom generator", &custom_generator);
             ImGui::End();
             ImGui::Begin("Programmatic Actions");
-            // TODO(ASG) test the programmatic setters (mark position, mark color, adding or removing marks, changing the wrap mode / interpolation mode, etc.)
+            if (ImGui::Button("Remove a mark"))
+            {
+                gradient.remove_mark(gradient.get_gradient().get_marks().front());
+            };
+            if (ImGui::Button("Add a mark"))
+            {
+                gradient.add_mark(0.5f);
+            };
+            static auto position{0.f};
+            if (ImGui::Button("Set mark position"))
+            {
+                gradient.set_mark_position(
+                    gradient.get_gradient().get_marks().front(),
+                    ImGuiGradient::RelativePosition{position}
+                );
+            };
+            ImGui::SameLine();
+            ImGui::DragFloat("position to add a mark", &position, .0001f, /* speed */
+                             0.f, 1.f,                                    /* min and max */
+                             "%.4f" /* precision */);
+            static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
+            if (ImGui::Button("Set mark color"))
+            {
+                gradient.set_mark_color(gradient.get_gradient().get_marks().front(), color);
+            };
+            ImGui::SameLine();
+            ImGui::ColorEdit4(
+                "##colorpicker1",
+                reinterpret_cast<float*>(&color),
+                ImGuiColorEditFlags_NoTooltip |
+                    ImGuiColorEditFlags_NoInputs
+            );
+            static auto wrap_mode = ImGuiGradient::WrapMode::Clamp;
+            if (ImGui::Combo(
+                    "Position Mode",
+                    reinterpret_cast<int*>(&wrap_mode),
+                    " Clamp\0 Repeat\0 Mirror Repeat\0\0"
+                ))
+            {
+                gradient.set_wrap_mode(wrap_mode);
+            }
+            static auto interpolation_mode = ImGuiGradient::Interpolation::Linear;
+            if (ImGui::Combo(
+                    "Interpolation Mode",
+                    reinterpret_cast<int*>(&interpolation_mode),
+                    " Linear\0 Constant\0\0"
+                ))
+            {
+                gradient.set_interpolation_mode(interpolation_mode);
+            }
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
             ImGuiGradient::Settings settings{};
