@@ -32,7 +32,7 @@ inline auto repeat_position(float position) -> RelativePosition
 // Applies a mirror transform on position given around 0.f, then repeat it
 inline auto mirror_repeat_position(float position) -> RelativePosition
 {
-    return RelativePosition{1.f - (abs(modulo(position, 2.f) - 1.f))};
+    return RelativePosition{1.f - (std::abs(modulo(position, 2.f) - 1.f))};
 }
 
 }} // namespace ImGuiGradient::internal
