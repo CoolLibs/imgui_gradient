@@ -13,8 +13,6 @@
 
 namespace ImGuiGradient {
 
-// TODO(ASG) When we remove the selected mark, a new one
-
 class GradientWidget {
 public:
     /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.

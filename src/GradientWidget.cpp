@@ -438,6 +438,23 @@ void GradientWidget::add_mark(
         );
 }
 
+static auto next_mark_after_removing_it(const std::list<Mark>& gradient, const Mark& mark) -> Mark*
+{
+    if (gradient.empty() ||
+        gradient.size() == 1)
+    {
+        return nullptr;
+    }
+    else if (mark == gradient.front())
+    {
+        return const_cast<Mark*>(&gradient.back());
+    }
+    else
+    {
+        return const_cast<Mark*>(&gradient.front());
+    }
+}
+
 auto GradientWidget::widget(
     const char*                 label,
     const Settings&             settings,
@@ -505,7 +522,7 @@ auto GradientWidget::widget(
         if (state.selected_mark &&
             *state.selected_mark == *mark_to_delete)
         {
-            state.selected_mark = nullptr;
+            state.selected_mark = next_mark_after_removing_it(state.gradient.get_marks(), *state.selected_mark);
         }
         remove_mark(*mark_to_delete);
         modified |= true;
@@ -521,8 +538,9 @@ auto GradientWidget::widget(
              ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
             state.selected_mark)
         {
+            const Mark* new_selected_mark = next_mark_after_removing_it(state.gradient.get_marks(), *state.selected_mark);
             remove_mark(*state.selected_mark);
-            state.selected_mark = nullptr;
+            state.selected_mark = const_cast<Mark*>(new_selected_mark);
             modified |= true;
         }
     }
