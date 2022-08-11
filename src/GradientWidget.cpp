@@ -55,6 +55,43 @@ static void tooltip(const char* text)
     }
 }
 
+static auto selector_with_tooltip(
+    const char* label,
+    int*        item_current_index,
+    const char* items[],
+    const int   number_of_items,
+    const char* tooltips[],
+    const bool  should_show_tooltip
+)
+{
+    auto        modified{false};                                 // Here we store our selection data as an index.
+    const char* combo_preview_value{items[*item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
+    if (ImGui::BeginCombo(label, combo_preview_value))
+    {
+        for (int n = 0; n < number_of_items; n++)
+        {
+            const auto is_selected{(*item_current_index == n)};
+            if (ImGui::Selectable(items[n], is_selected))
+            {
+                *item_current_index = n;
+                modified            = true;
+            }
+
+            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+            if (is_selected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+            if (should_show_tooltip)
+            {
+                tooltip(tooltips[n]);
+            }
+        }
+        ImGui::EndCombo();
+    }
+    return true;
+}
+
 static auto button_with_tooltip(
     const char* label,
     const char* tooltip_message,
@@ -96,27 +133,47 @@ static void maybe_disabled(
     }
 }
 
-static auto wrap_mode_selector(WrapMode& wrap_mode) -> bool
+static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const float size = ImGui::CalcTextSize("Mirror Repeat").x + 30.f; // Use the longuest word to choose the selector's size
+    const auto size{ImGui::CalcTextSize("Mirror Repeat").x + 30.f}; // Use the longuest word to choose the selector's size
     ImGui::SetNextItemWidth(size);
-    return ImGui::Combo(
+
+    const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"};
+    const char* tooltips[] = {
+        "Clamp mark position in range [0.,1.]",
+        "Repeat mark position in range [0.,1.]",
+        "Repeat and mirror mark position in range [0.,1.]"};
+
+    return selector_with_tooltip(
         "Position Mode",
         reinterpret_cast<int*>(&wrap_mode),
-        " Clamp\0 Repeat\0 Mirror Repeat\0\0"
+        items,
+        IM_ARRAYSIZE(items),
+        tooltips,
+        should_show_tooltip
     );
 }
 
-// TODO(ASG) Tooltip when hovering each Interpolation Mode to explain what it does
-static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode) -> bool
+// TODO(ASG) Instead of a hardcoded constant, use one of ImGui's style settings (probably called PaddingXxx, check out the demo window the find it (ask me where all the style options are))
+
+static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
     // Take the greater word to choose selector size
-    const float size = ImGui::CalcTextSize("Constant").x + 50.f; // TODO(ASG) Instead of a hardcoded constant, use one of ImGui's style settings (probably called PaddingXxx, check out the demo window the find it (ask me where all the style options are))
+    const float size = ImGui::CalcTextSize("Constant").x + 50.f;
     ImGui::SetNextItemWidth(size);
-    return ImGui::Combo(
+
+    const char* items[]    = {"Linear", "Constant"};
+    const char* tooltips[] = {
+        "Linear interpolation between two marks",
+        "Constant color between two marks"};
+
+    return selector_with_tooltip(
         "Interpolation Mode",
         reinterpret_cast<int*>(&interpolation_mode),
-        " Linear\0 Constant\0\0"
+        items,
+        IM_ARRAYSIZE(items),
+        tooltips,
+        should_show_tooltip
     );
 }
 
@@ -596,7 +653,7 @@ auto GradientWidget::widget(
     const auto is_there_interpolation_selector{!(settings.flags & Flag::NoInterpolationSelector)};
     if (is_there_interpolation_selector)
     {
-        modified |= gradient_interpolation_mode_selector(interpolation_mode);
+        modified |= gradient_interpolation_mode_selector(interpolation_mode, is_there_no_tooltip);
     }
     const auto is_there_position_mode_selector{!(settings.flags & Flag::NoWrapModeSelector)};
     if (is_there_position_mode_selector)
@@ -605,7 +662,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        modified |= wrap_mode_selector(wrap_mode);
+        modified |= wrap_mode_selector(wrap_mode, is_there_no_tooltip);
     }
 
     if (!(settings.flags & Flag::NoRandomModeCheckBox))
