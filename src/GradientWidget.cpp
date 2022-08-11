@@ -60,10 +60,18 @@ static auto selector_with_tooltip(
     int*        item_current_index,
     const char* items[],
     const int   number_of_items,
+    const char* greater_items, // Use the longuest word to choose the selector's size
     const char* tooltips[],
     const bool  should_show_tooltip
 )
 {
+    ImGuiContext& g{*GImGui};
+    const auto    size{
+        ImGui::CalcTextSize(greater_items).x +
+        ImGui::GetFrameHeightWithSpacing() +
+        g.Style.FramePadding.x * 2.f};
+    ImGui::SetNextItemWidth(size);
+
     auto        modified{false};                                 // Here we store our selection data as an index.
     const char* combo_preview_value{items[*item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
@@ -135,9 +143,6 @@ static void maybe_disabled(
 
 static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const auto size{ImGui::CalcTextSize("Mirror Repeat").x + 30.f}; // Use the longuest word to choose the selector's size
-    ImGui::SetNextItemWidth(size);
-
     const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"};
     const char* tooltips[] = {
         "Clamp mark position in range [0.,1.]",
@@ -149,6 +154,7 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
         reinterpret_cast<int*>(&wrap_mode),
         items,
         IM_ARRAYSIZE(items),
+        "Mirror Repeat",
         tooltips,
         should_show_tooltip
     );
@@ -158,10 +164,6 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    // Take the greater word to choose selector size
-    const float size = ImGui::CalcTextSize("Constant").x + 50.f;
-    ImGui::SetNextItemWidth(size);
-
     const char* items[]    = {"Linear", "Constant"};
     const char* tooltips[] = {
         "Linear interpolation between two marks",
@@ -172,6 +174,7 @@ static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mo
         reinterpret_cast<int*>(&interpolation_mode),
         items,
         IM_ARRAYSIZE(items),
+        "Constant",
         tooltips,
         should_show_tooltip
     );
