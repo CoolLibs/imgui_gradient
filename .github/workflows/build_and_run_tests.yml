@@ -179,41 +179,41 @@ jobs:
     - name: Run
       run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
                         
-#-----------------------------------------------------------------------------------------------
-  MacOS_GCC_Debug: 
-    name: MacOS GCC Debug
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+# #-----------------------------------------------------------------------------------------------
+#   MacOS_GCC_Debug: 
+#     name: MacOS GCC Debug
+#     runs-on: macos-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#       with:
+#         submodules: recursive
 
-    - name: Configure CMake
-      run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
+#     - name: Configure CMake
+#       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config Debug --target ${{env.TARGET}}
+#     - name: Build
+#       run: cmake --build ${{github.workspace}}/build --config Debug --target ${{env.TARGET}}
 
-    - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
+#     - name: Run
+#       run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
       
-#-----------------------------------------------------------------------------------------------
-  MacOS_GCC_Release: 
-    name: MacOS GCC Release
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+# #-----------------------------------------------------------------------------------------------
+#   MacOS_GCC_Release: 
+#     name: MacOS GCC Release
+#     runs-on: macos-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#       with:
+#         submodules: recursive
 
-    - name: Configure CMake
-      run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
+#     - name: Configure CMake
+#       run: cmake ./tests -B ${{github.workspace}}/build -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=gcc-11 -D CMAKE_CXX_COMPILER=g++-11
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config Release --target ${{env.TARGET}}
+#     - name: Build
+#       run: cmake --build ${{github.workspace}}/build --config Release --target ${{env.TARGET}}
 
-    - name: Run
-      run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
+#     - name: Run
+#       run: ${{github.workspace}}/build/${{env.TARGET}} -nogpu
 
 #-----------------------------------------------------------------------------------------------
   MacOS_Clang_Debug:
