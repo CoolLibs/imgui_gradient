@@ -160,8 +160,6 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
     );
 }
 
-// TODO(ASG) Instead of a hardcoded constant, use one of ImGui's style settings (probably called PaddingXxx, check out the demo window the find it (ask me where all the style options are))
-
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
     const char* items[]    = {"Linear", "Constant"};
