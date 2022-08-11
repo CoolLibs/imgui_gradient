@@ -699,10 +699,12 @@ auto GradientWidget::widget(
 
     if (!(settings.flags & Flag::NoBorder))
     {
-        auto space_over_bar{8.f};
+        ImGuiContext& g{*GImGui};
+
+        auto space_over_bar{g.Style.ItemSpacing.y * 4.f};
         if (!(settings.flags & Flag::NoLabel))
         {
-            space_over_bar = ImGui::CalcTextSize(label).y * 2.3f;
+            space_over_bar += ImGui::CalcTextSize(label).y;
         }
         auto number_of_line_under_bar{0.f};
         if (!(settings.flags & Flag::NoRandomModeCheckBox) ||
