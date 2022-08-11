@@ -20,8 +20,8 @@ public:
     /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.
     auto get_gradient() const -> const Gradient&;
 
-    auto add_mark(float position) -> bool;
-    auto add_mark(float position, std::default_random_engine& generator) -> bool;
+    void add_mark(float position);
+    void add_mark(float position, std::default_random_engine& generator);
 
     void remove_mark(const Mark& mark);
 
