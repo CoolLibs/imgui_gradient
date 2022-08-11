@@ -4,7 +4,6 @@
 #include <imgui/imgui.h>
 #include "imgui_internal.hpp"
 
-
 namespace ImGuiGradient { namespace internal {
 
 inline auto line_height() -> float
@@ -29,17 +28,17 @@ inline auto border_color() -> ImU32
 
 inline auto mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_Button);
+    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
 }
 
 inline auto hovered_mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_ButtonHovered);
+    return ImGui::GetColorU32(ImGuiCol_DragDropTarget);
 }
 
 inline auto selected_mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
+    return ImGui::GetColorU32(ImGuiCol_DragDropTarget);
 }
 
 }} // namespace ImGuiGradient::internal
