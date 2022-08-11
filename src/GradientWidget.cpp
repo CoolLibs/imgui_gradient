@@ -63,7 +63,7 @@ static auto selector_with_tooltip(
     const char* greater_items, // Use the longuest word to choose the selector's size
     const char* tooltips[],
     const bool  should_show_tooltip
-)
+) -> bool
 {
     ImGuiContext& g{*GImGui};
     const auto    size{
@@ -97,7 +97,7 @@ static auto selector_with_tooltip(
         }
         ImGui::EndCombo();
     }
-    return true;
+    return modified;
 }
 
 static auto button_with_tooltip(
