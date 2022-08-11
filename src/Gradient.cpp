@@ -1,5 +1,5 @@
 #include "Gradient.hpp"
-#include <imgui/imgui_internal.h>
+#include "imgui_internal.hpp"
 
 // TODO(ASG) Fix builds on all platforms (see CI in GitHub Actions https://github.com/CoolLibs/imgui_gradient/actions)
 

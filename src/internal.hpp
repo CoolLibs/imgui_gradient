@@ -1,16 +1,9 @@
 #pragma once
 
-#if defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui/imgui_internal.h>
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
 #include <imgui/imgui.h>
+#include "imgui_internal.hpp"
+
 
 namespace ImGuiGradient { namespace internal {
 
