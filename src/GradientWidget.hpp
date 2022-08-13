@@ -29,6 +29,7 @@ public:
     void set_interpolation_mode(Interpolation new_interpolation_mode);
     void enable_random_color_mode(bool is_random_enable);
 
+    /// Reset the `state` to its default value
     void reset();
 
     auto widget(
