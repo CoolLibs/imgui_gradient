@@ -44,6 +44,7 @@ void draw_gradient(
     const ImVec2        size
 )
 {
+    assert(!gradient.is_empty());
     float current_starting_x = gradient_position.x;
     for (auto mark_iterator = gradient.get_marks().begin(); mark_iterator != gradient.get_marks().end(); ++mark_iterator)
     {

@@ -11,7 +11,7 @@ struct Settings {
     float gradient_height = 40.f;
     /// Distance under the gradient bar to delete a mark by dragging it down
     /// This behaviour can also be disabled with the Flag::NoDragDowntoDelete
-    float distance_to_delete_mark_by_dragging_down = 40.f;
+    float distance_to_delete_mark_by_dragging_down = 40.f; // TODO(ASG) Increase this default value a bit
     /// Offset between right beginning of the window and gradient bar beginning
     float horizontal_margin = 10.f;
     /// Disable or enable gradient widget options

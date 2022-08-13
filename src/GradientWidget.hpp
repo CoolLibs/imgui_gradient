@@ -27,16 +27,18 @@ public:
     void set_mark_color(const Mark& mark, ColorRGBA color);
     void set_wrap_mode(WrapMode new_wrap_mode);
     void set_interpolation_mode(Interpolation new_interpolation_mode);
-    void enable_random_color_mode(bool is_random_enable);
+    void enable_random_color_mode(bool should_use_a_random_color_for_the_new_marks); // Rename as set_random_color_mode()
 
-    /// Reset the `state` to its default value
+    /// Resets the gradient to having just two marks: a black one at the beginning and a white one at the end.
     void reset();
 
+    /// TODO(ASG) Documentation: explaine what the `generator` is for, and tell that there is an overload that doesn't need generator if users don't want to provide one.
     auto widget(
         const char*                 label,
         const Settings&             settings,
         std::default_random_engine& generator
     ) -> bool;
+
     auto widget(
         const char*     label,
         const Settings& settings

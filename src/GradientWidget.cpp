@@ -35,9 +35,9 @@ void GradientWidget::set_interpolation_mode(Interpolation new_interpolation_mode
     _interpolation_mode = new_interpolation_mode;
 }
 
-void GradientWidget::enable_random_color_mode(bool is_random_color_mode_enable)
+void GradientWidget::enable_random_color_mode(bool should_use_a_random_color_for_the_new_marks)
 {
-    _should_use_a_random_color_for_the_new_marks = is_random_color_mode_enable;
+    _should_use_a_random_color_for_the_new_marks = should_use_a_random_color_for_the_new_marks;
 }
 
 void GradientWidget::reset()
@@ -57,20 +57,20 @@ static void tooltip(const char* text)
 
 static auto selector_with_tooltip(
     const char* label,
-    int*        item_current_index,
-    const char* items[],
+    int*        item_current_index, // TODO(ASG) Pass a reference, not a pointer!
+    const char* items[],            // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
     const int   number_of_items,
     const char* greater_items, // Use the longuest word to choose the selector's size
-    const char* tooltips[],
+    const char* tooltips[],    // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
     const bool  should_show_tooltip
 ) -> bool
 {
     ImGuiContext& g{*GImGui};
-    const auto    size{
+    const auto    width{
         ImGui::CalcTextSize(greater_items).x +
         ImGui::GetFrameHeightWithSpacing() +
         g.Style.FramePadding.x * 2.f};
-    ImGui::SetNextItemWidth(size);
+    ImGui::SetNextItemWidth(width);
 
     auto        modified{false};                                 // Here we store our selection data as an index.
     const char* combo_preview_value{items[*item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
@@ -78,7 +78,7 @@ static auto selector_with_tooltip(
     {
         for (int n = 0; n < number_of_items; n++)
         {
-            const auto is_selected{(*item_current_index == n)};
+            const bool is_selected{(*item_current_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
             {
                 *item_current_index = n;
@@ -143,11 +143,11 @@ static void maybe_disabled(
 
 static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"};
-    const char* tooltips[] = {
-        "Clamp mark position in range [0.,1.]",
-        "Repeat mark position in range [0.,1.]",
-        "Repeat and mirror mark position in range [0.,1.]"};
+    const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"}; // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
+    const char* tooltips[] = {                                     // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
+                              "Clamp mark position in range [0.,1.]",
+                              "Repeat mark position in range [0.,1.]",
+                              "Repeat and mirror mark position in range [0.,1.]"};
 
     return selector_with_tooltip(
         "Position Mode",
@@ -162,10 +162,10 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    const char* items[]    = {"Linear", "Constant"};
-    const char* tooltips[] = {
-        "Linear interpolation between two marks",
-        "Constant color between two marks"};
+    const char* items[]    = {"Linear", "Constant"}; // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
+    const char* tooltips[] = {                       // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
+                              "Linear interpolation between two marks",
+                              "Constant color between two marks"};
 
     return selector_with_tooltip(
         "Interpolation Mode",
@@ -196,7 +196,7 @@ static auto delete_button(const bool disable, const char* reason_for_disabling, 
     {
         return button_with_tooltip(
             "-",
-            "Select a mark to remove it\nor middle click on it\nor drag it down",
+            "Removes the selected mark.\nYou can also middle click on it,\nor drag it down.",
             should_show_tooltip
         );
     }
@@ -268,9 +268,7 @@ static auto open_color_picker_popup(
         const bool modified = ImGui::ColorPicker4(
             "##colorpicker2",
             reinterpret_cast<float*>(&selected_mark.color),
-            !should_show_tooltip
-                ? flags
-                : ImGuiColorEditFlags_NoTooltip | flags
+            flags | (!should_show_tooltip ? ImGuiColorEditFlags_NoTooltip : 0)
         );
         ImGui::EndPopup();
         return modified;
@@ -329,8 +327,7 @@ static void handle_interactions_with_hovered_mark(
     }
     if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
     {
-        // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
-        mark_to_delete = &hovered_mark;
+        mark_to_delete = &hovered_mark; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
     }
 }
 
@@ -342,7 +339,7 @@ auto GradientWidget::draw_gradient_marks(
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (const Mark& mark_hovered : _state.gradient.get_marks())
+    for (const Mark& mark_hovered : _state.gradient.get_marks()) //  TODO(ASG) Why is it called mark_hovered?
     {
         if (_state.mark_to_hide != &mark_hovered)
         {
@@ -366,11 +363,11 @@ auto GradientWidget::draw_gradient_marks(
                 );
                 if (const_selected_mark)
                 {
-                    _state.selected_mark = const_cast<Mark*>(const_selected_mark);
+                    _state.selected_mark = const_cast<Mark*>(const_selected_mark); // TODO(ASG) Why a const_cast here ????
                 }
                 if (const_dragged_mark)
                 {
-                    _state.dragged_mark = const_cast<Mark*>(const_dragged_mark);
+                    _state.dragged_mark = const_cast<Mark*>(const_dragged_mark); // TODO(ASG) Why a const_cast here ????
                 }
             }
         }
@@ -393,13 +390,14 @@ static auto position_where_to_add_next_mark(Gradient& gradient) -> float
     }
     else if (gradient.get_marks().size() == 1)
     {
-        const auto first_position_mark = gradient.get_marks().begin()->position.get();
+        const auto first_position_mark = gradient.get_marks().front().position.get();
         return first_position_mark > 1.f - first_position_mark
                    ? 0.f
                    : 1.f;
     }
     else
     {
+        // TODO(ASG) This deserves a comment to exmplain what you are trying to do
         const auto first_mark_iterator{gradient.get_marks().begin()};
         const auto last_mark_iterator{std::prev(gradient.get_marks().end())};
         auto       max_value_mark_position{0.f};

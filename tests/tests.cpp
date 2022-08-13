@@ -80,9 +80,8 @@ auto main(int argc, char* argv[]) -> int
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
             ImGuiGradient::Settings settings{};
-            settings.horizontal_margin = 10.f;
-            settings.flags             = flags;
-            settings.color_flags       = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
+            settings.flags       = flags;
+            settings.color_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
             if (custom_generator)
             {
                 static auto generator = std::default_random_engine{std::random_device{}()};
