@@ -419,7 +419,6 @@ auto GradientWidget::mouse_dragging_interactions(
             // do not hide it anymore when mouse on gradient bar
             if (_state.mark_to_hide && diffY <= settings.distance_to_delete_mark_by_dragging_down)
             {
-                _state.dragged_mark = _state.mark_to_hide; // TODO(ASG) I don't think this line does anything
                 _state.mark_to_hide = nullptr;
             }
         }
