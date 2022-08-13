@@ -4,6 +4,7 @@
 #include <quick_imgui/quick_imgui.hpp>
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode fonctions
+#include "../src/widgets.hpp"
 
 auto main(int argc, char* argv[]) -> int
 {
@@ -27,10 +28,17 @@ auto main(int argc, char* argv[]) -> int
             ImGui::Checkbox("Use our custom generator", &custom_generator);
             ImGui::End();
             ImGui::Begin("Programmatic Actions");
-            if (ImGui::Button("Remove a mark"))
+            if (gradient.get_gradient().is_empty())
             {
-                gradient.remove_mark(gradient.get_gradient().get_marks().front());
-            };
+                ImGuiGradient::button_disabled("Remove a mark", "gradient is empty");
+            }
+            else
+            {
+                if (ImGui::Button("Remove a mark"))
+                {
+                    gradient.remove_mark(gradient.get_gradient().get_marks().front());
+                }
+            }
             if (ImGui::Button("Add a mark"))
             {
                 gradient.add_mark(0.5f);

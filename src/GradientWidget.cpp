@@ -1,7 +1,7 @@
 #include "GradientWidget.hpp"
-#include <functional>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
+#include "widgets.hpp"
 
 namespace ImGuiGradient {
 
@@ -114,33 +114,6 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static void maybe_disabled(
-    bool                  condition,
-    const char*           reason_to_disable,
-    std::function<void()> widgets
-)
-{
-    if (condition)
-    {
-        ImGui::BeginGroup();
-        ImGui::BeginDisabled(true);
-
-        widgets();
-
-        ImGui::EndDisabled();
-        ImGui::EndGroup();
-        tooltip(reason_to_disable);
-    }
-    else
-    {
-        ImGui::BeginGroup();
-
-        widgets();
-
-        ImGui::EndGroup();
-    }
-}
-
 static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
     const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"}; // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
@@ -178,18 +151,11 @@ static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mo
     );
 }
 
-static void button_disabled(const char* label, const char* reason_for_disabling)
-{
-    maybe_disabled(true, reason_for_disabling, [&]() {
-        ImGui::Button(label, internal::button_size());
-    });
-}
-
 static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip) -> bool
 {
     if (disable)
     {
-        button_disabled("-", reason_for_disabling);
+        button_disabled("-", reason_for_disabling, internal::button_size());
         return false;
     }
     else
