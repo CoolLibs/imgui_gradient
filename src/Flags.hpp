@@ -21,7 +21,7 @@ enum ImGuiGradientFlag {
     NoDragDownToDelete      = 1 << 11,                                      // Don't delete a mark by dragging it down
     NoBorder                = 1 << 12,                                      // No border around gradient widget
     NoAddAndRemoveButtons   = NoAddButton | NoRemoveButton,                 // No "+" and "-" buttons
-    NoMarkOptions           = NoColorEdit | NoPositionSlider,               // No new widgets appear when a brand is selected
+    NoMarkOptions           = NoColorEdit | NoPositionSlider,               // No new widgets appear when a mark is selected
     NoSelector              = NoInterpolationSelector | NoWrapModeSelector, // No selector to change wrap mode position and  how gradient colors are computed
 };
 
