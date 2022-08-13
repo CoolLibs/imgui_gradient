@@ -49,7 +49,7 @@ void draw_gradient(
     {
         const Mark& mark = *mark_iterator;
 
-        const auto color_right = ImU32{ImGui::ColorConvertFloat4ToU32(mark.color)};
+        const auto color_right = ImGui::ColorConvertFloat4ToU32(mark.color);
 
         const auto from{current_starting_x};
         const auto to{gradient_position.x + mark.position.get() * (size.x)};
