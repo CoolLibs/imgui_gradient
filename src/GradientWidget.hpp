@@ -54,10 +54,10 @@ private:
     ) -> bool;
 
 private:
-    internal::State state{}; // TODO(ASG) Prefix all private member variables with an underscore: `_state`
-    WrapMode        wrap_mode{WrapMode::Clamp};
-    Interpolation   interpolation_mode{Interpolation::Linear};
-    bool            should_use_a_random_color_for_the_new_marks{false};
+    internal::State _state{};
+    WrapMode        _wrap_mode{WrapMode::Clamp};
+    Interpolation   _interpolation_mode{Interpolation::Linear};
+    bool            _should_use_a_random_color_for_the_new_marks{false};
 };
 
 } // namespace ImGuiGradient

@@ -11,18 +11,18 @@ class RelativePosition {
 public:
     /// `position` must be between 0 and 1.
     explicit RelativePosition(float position)
-        : value{position}
+        : _value{position}
     {
         assert_invariants();
     }
 
     /// Returns a number between 0 and 1.
-    auto get() const -> float { return value; }
+    auto get() const -> float { return _value; }
 
     /// `position` must be between 0 and 1.
     void set(float position)
     {
-        value = position;
+        _value = position;
         assert_invariants();
     }
 
@@ -36,11 +36,11 @@ public:
 private:
     void assert_invariants() const
     {
-        assert(0.f <= value && value <= 1.f && "RelativePosition value should be between 0.f and 1.f");
+        assert(0.f <= _value && _value <= 1.f && "RelativePosition value should be between 0.f and 1.f");
     }
 
 private:
-    float value{0.f};
+    float _value{0.f};
 };
 
 auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition;
