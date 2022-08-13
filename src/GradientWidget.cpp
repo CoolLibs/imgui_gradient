@@ -590,11 +590,17 @@ auto GradientWidget::widget(
     const auto is_there_remove_button{!(settings.flags & Flag::NoRemoveButton)};
     if (!state.gradient.is_empty())
     {
+        auto window_is_hovered{ImGui::IsWindowHovered(
+            ImGuiHoveredFlags_ChildWindows |
+            ImGuiHoveredFlags_NoPopupHierarchy
+        )};
         if (((is_there_remove_button &&
               delete_button(!state.selected_mark, "There is no mark selected", is_there_no_tooltip)) ||
              ImGui::IsKeyPressed(ImGuiKey_Delete) ||
              ImGui::IsKeyPressed(ImGuiKey_Backspace)) &&
-            state.selected_mark)
+            state.selected_mark &&
+            window_is_hovered &&
+            !ImGui::GetIO().WantTextInput)
         {
             const Mark* new_selected_mark = next_mark_after_removing_it(state.gradient.get_marks(), *state.selected_mark);
             remove_mark(*state.selected_mark);
