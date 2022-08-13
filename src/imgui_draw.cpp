@@ -62,8 +62,8 @@ void draw_gradient(
                                              : color_right;
                 draw_gradient_between_two_colors(
                     draw_list,
-                    ImVec2(from, gradient_position.y),
-                    ImVec2(to, gradient_position.y + size.y),
+                    ImVec2{from, gradient_position.y},
+                    ImVec2{to, gradient_position.y + size.y},
                     color_left, color_right
                 );
             }
@@ -71,8 +71,8 @@ void draw_gradient(
             {
                 draw_uniform_square(
                     draw_list,
-                    ImVec2(from, gradient_position.y),
-                    ImVec2(to, gradient_position.y + size.y),
+                    ImVec2{from, gradient_position.y},
+                    ImVec2{to, gradient_position.y + size.y},
                     color_right
                 );
             }
@@ -84,8 +84,8 @@ void draw_gradient(
     {
         draw_uniform_square(
             draw_list,
-            ImVec2(current_starting_x, gradient_position.y),
-            ImVec2(gradient_position.x + size.x, gradient_position.y + size.y),
+            ImVec2{current_starting_x, gradient_position.y},
+            ImVec2{gradient_position.x + size.x, gradient_position.y + size.y},
             ImGui::ColorConvertFloat4ToU32(gradient.get_marks().back().color)
         );
     }
