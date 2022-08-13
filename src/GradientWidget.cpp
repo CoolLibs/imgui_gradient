@@ -196,7 +196,7 @@ static auto color_button(
            );
 }
 
-static auto precise_position(
+static auto position_widget(
     Mark&       selected_mark,
     const float width
 ) -> bool
@@ -614,7 +614,7 @@ auto GradientWidget::widget(
         }
 
         if (_state.selected_mark &&
-            precise_position(*_state.selected_mark, gradient_size.x * .25f)) // TODO(ASG) rename precise_position to make it clear that this creates an imgui widget, e.g. position_widget
+            position_widget(*_state.selected_mark, gradient_size.x * .25f))
         {
             set_mark_position(*_state.selected_mark, _state.selected_mark->position);
             modified = true;
