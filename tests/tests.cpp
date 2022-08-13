@@ -16,6 +16,9 @@ auto main(int argc, char* argv[]) -> int
     {
         auto gradient = ImGuiGradient::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
+            ImGui::Begin("Framerate");
+            ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
+            ImGui::End();
             ImGui::Begin("Flags");
             const auto flags = checkboxes_for_all_flags();
             ImGui::End();
