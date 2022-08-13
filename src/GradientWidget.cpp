@@ -305,16 +305,16 @@ auto GradientWidget::draw_gradient_marks(
 {
     ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
     bool        hitbox_is_hovered = false;
-    for (const Mark& mark_hovered : _state.gradient.get_marks()) //  TODO(ASG) Why is it called mark_hovered?
+    for (const Mark& mark : _state.gradient.get_marks())
     {
-        if (_state.mark_to_hide != &mark_hovered)
+        if (_state.mark_to_hide != &mark)
         {
             draw_mark(
                 draw_list,
-                gradient_bar_position + ImVec2{mark_hovered.position.get(), 1.f} * gradient_size,
-                ImGui::ColorConvertFloat4ToU32(mark_hovered.color),
+                gradient_bar_position + ImVec2{mark.position.get(), 1.f} * gradient_size,
+                ImGui::ColorConvertFloat4ToU32(mark.color),
                 gradient_size.y,
-                _state.selected_mark == &mark_hovered
+                _state.selected_mark == &mark
             );
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
@@ -325,7 +325,7 @@ auto GradientWidget::draw_gradient_marks(
                     const_dragged_mark,
                     const_selected_mark,
                     mark_to_delete,
-                    mark_hovered
+                    mark
                 );
                 if (const_selected_mark)
                 {
