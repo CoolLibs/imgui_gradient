@@ -419,7 +419,7 @@ auto GradientWidget::mouse_dragging_interactions(
             // do not hide it anymore when mouse on gradient bar
             if (_state.mark_to_hide && diffY <= settings.distance_to_delete_mark_by_dragging_down)
             {
-                _state.dragged_mark = _state.mark_to_hide;
+                _state.dragged_mark = _state.mark_to_hide; // TODO(ASG) I don't think this line does anything
                 _state.mark_to_hide = nullptr;
             }
         }
@@ -460,7 +460,7 @@ void GradientWidget::add_mark(
         );
 }
 
-static auto next_mark_after_removing_it(const std::list<Mark>& gradient, const Mark& mark) -> Mark*
+static auto next_mark_after_removing_it(const std::list<Mark>& gradient, const Mark& mark) -> Mark* // TODO(ASG) I don't understand the name of this function. It is not related to removing the mark at all.
 {
     if (gradient.empty() ||
         gradient.size() == 1)
@@ -469,11 +469,11 @@ static auto next_mark_after_removing_it(const std::list<Mark>& gradient, const M
     }
     else if (mark == gradient.front())
     {
-        return const_cast<Mark*>(&gradient.back());
+        return const_cast<Mark*>(&gradient.back()); // TODO(ASG) Why a const_cast here ???
     }
     else
     {
-        return const_cast<Mark*>(&gradient.front());
+        return const_cast<Mark*>(&gradient.front()); // TODO(ASG) Why a const_cast here ???
     }
 }
 
@@ -499,7 +499,7 @@ auto GradientWidget::widget(
     draw_gradient_bar(_state.gradient, _interpolation_mode, gradient_bar_position, gradient_size);
 
     Mark*      mark_to_delete{nullptr};
-    const auto add_mark_possible{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)};
+    const auto add_mark_possible{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)}; // TODO(ASG) Explain why it has to be declared a few lines before its firt use. Rename as can_add_mark
     const auto mark_hitbox_is_hovered{draw_gradient_marks(
         mark_to_delete,
         gradient_bar_position,
@@ -525,7 +525,7 @@ auto GradientWidget::widget(
     modified |= mouse_dragging_interactions(gradient_bar_position, gradient_size, settings);
     if (!(settings.flags & Flag::NoDragDownToDelete))
     {
-        // If mouse released and there is still a mark hidden, then it become a mark to delete
+        // If mouse released and there is still a mark hidden, then it becomes a mark to delete
         if (_state.mark_to_hide && !ImGui::IsMouseDown(ImGuiMouseButton_Left))
         {
             if (_state.dragged_mark &&
@@ -568,7 +568,7 @@ auto GradientWidget::widget(
         {
             const Mark* new_selected_mark = next_mark_after_removing_it(_state.gradient.get_marks(), *_state.selected_mark);
             remove_mark(*_state.selected_mark);
-            _state.selected_mark = const_cast<Mark*>(new_selected_mark);
+            _state.selected_mark = const_cast<Mark*>(new_selected_mark); // TODO(ASG) Why a const_cast here ???
             modified |= true;
         }
     }
@@ -584,14 +584,14 @@ auto GradientWidget::widget(
         {
             // Add a mark where there is the greater space in the gradient
             const auto position{position_where_to_add_next_mark(_state.gradient)};
-            if (_should_use_a_random_color_for_the_new_marks)
-            {
-                add_mark(position, generator);
-            }
-            else
-            {
-                add_mark(position);
-            }
+            if (_should_use_a_random_color_for_the_new_marks) // TODO(ASG) I have already seen that bit of logic
+            {                                                 // it
+                add_mark(position, generator);                // is
+            }                                                 // duplicated!
+            else                                              // !
+            {                                                 // !
+                add_mark(position);                           // !
+            }                                                 // !
             modified = true;
         }
     }
@@ -614,7 +614,7 @@ auto GradientWidget::widget(
         }
 
         if (_state.selected_mark &&
-            precise_position(*_state.selected_mark, gradient_size.x * .25f))
+            precise_position(*_state.selected_mark, gradient_size.x * .25f)) // TODO(ASG) rename precise_position to make it clear that this creates an imgui widget, e.g. position_widget
         {
             set_mark_position(*_state.selected_mark, _state.selected_mark->position);
             modified = true;
