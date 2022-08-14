@@ -475,6 +475,18 @@ static auto next_selected_mark(const std::list<Mark>& gradient, const Mark& mark
     }
 }
 
+void GradientWidget::add_mark_to_gradient(const float position, std::default_random_engine generator)
+{
+    if (_should_use_a_random_color_for_the_new_marks)
+    {
+        add_mark(position, generator);
+    }
+    else
+    {
+        add_mark(position);
+    }
+}
+
 auto GradientWidget::widget(
     const char*                 label,
     const Settings&             settings,
@@ -509,14 +521,7 @@ auto GradientWidget::widget(
     if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        if (_should_use_a_random_color_for_the_new_marks)
-        {
-            add_mark(position, generator);
-        }
-        else
-        {
-            add_mark(position);
-        }
+        add_mark_to_gradient(position, generator);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -583,14 +588,7 @@ auto GradientWidget::widget(
         {
             // Add a mark where there is the greater space in the gradient
             const auto position{position_where_to_add_next_mark(_state.gradient)};
-            if (_should_use_a_random_color_for_the_new_marks) // TODO(ASG) I have already seen that bit of logic
-            {                                                 // it
-                add_mark(position, generator);                // is
-            }                                                 // duplicated!
-            else                                              // !
-            {                                                 // !
-                add_mark(position);                           // !
-            }                                                 // !
+            add_mark_to_gradient(position, generator);
             modified = true;
         }
     }

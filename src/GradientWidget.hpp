@@ -47,6 +47,7 @@ public:
     ) -> bool;
 
 private:
+    void add_mark_to_gradient(float position, std::default_random_engine generator);
     auto draw_gradient_marks(
         const Mark*   mark_to_delete,
         const ImVec2& gradient_bar_pos,
