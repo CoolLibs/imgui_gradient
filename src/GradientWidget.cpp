@@ -57,8 +57,8 @@ static void tooltip(const char* text)
 
 static auto selector_with_tooltip(
     const char* label,
-    int*        item_current_index, // TODO(ASG) Pass a reference, not a pointer!
-    const char* items[],            // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
+    int&        item_current_index,
+    const char* items[], // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
     const int   number_of_items,
     const char* greater_items, // Use the longuest word to choose the selector's size
     const char* tooltips[],    // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
@@ -72,17 +72,17 @@ static auto selector_with_tooltip(
         g.Style.FramePadding.x * 2.f};
     ImGui::SetNextItemWidth(width);
 
-    auto        modified{false};                                 // Here we store our selection data as an index.
-    const char* combo_preview_value{items[*item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
+    auto        modified{false};                                // Here we store our selection data as an index.
+    const char* combo_preview_value{items[item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
         for (int n = 0; n < number_of_items; n++)
         {
-            const bool is_selected{(*item_current_index == n)};
+            const bool is_selected{(item_current_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
             {
-                *item_current_index = n;
-                modified            = true;
+                item_current_index = n;
+                modified           = true;
             }
 
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
@@ -124,7 +124,7 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
     return selector_with_tooltip(
         "Position Mode",
-        reinterpret_cast<int*>(&wrap_mode),
+        reinterpret_cast<int&>(wrap_mode),
         items,
         IM_ARRAYSIZE(items),
         "Mirror Repeat",
@@ -142,7 +142,7 @@ static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mo
 
     return selector_with_tooltip(
         "Interpolation Mode",
-        reinterpret_cast<int*>(&interpolation_mode),
+        reinterpret_cast<int&>(interpolation_mode),
         items,
         IM_ARRAYSIZE(items),
         "Constant",
