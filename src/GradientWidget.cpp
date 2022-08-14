@@ -405,8 +405,7 @@ auto GradientWidget::mouse_dragging_interactions(
         const auto map{ImClamp((ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x, 0.f, 1.f)};
         if (_state.dragged_mark->position.get() != map)
         {
-            _state.dragged_mark->position.set(map);
-            set_mark_position(*_state.dragged_mark, _state.dragged_mark->position);
+            set_mark_position(*_state.dragged_mark, RelativePosition{map});
             is_dragging = true;
         }
         if (!(settings.flags & Flag::NoDragDownToDelete))
