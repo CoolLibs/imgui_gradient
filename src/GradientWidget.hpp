@@ -18,8 +18,8 @@ public:
     /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.
     auto get_gradient() const -> const Gradient&;
 
-    void add_mark(float position);
-    void add_mark(float position, std::default_random_engine& generator);
+    void add_mark(float position);                                        // TODO(ASG) documentation to explain that this creates a mark with the color of the gradient at the `positions`
+    void add_mark(float position, std::default_random_engine& generator); // TODO(ASG) This shouldn't have a generator. Users should be able to chose the color
 
     void remove_mark(const Mark& mark);
 
