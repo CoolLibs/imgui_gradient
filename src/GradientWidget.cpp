@@ -458,7 +458,7 @@ void GradientWidget::add_mark(
         );
 }
 
-static auto next_mark_after_removing_it(const std::list<Mark>& gradient, const Mark& mark) -> Mark* // TODO(ASG) I don't understand the name of this function. It is not related to removing the mark at all.
+static auto next_selected_mark(const std::list<Mark>& gradient, const Mark& mark) -> Mark*
 {
     if (gradient.empty() ||
         gradient.size() == 1)
@@ -542,7 +542,7 @@ auto GradientWidget::widget(
         if (_state.selected_mark &&
             *_state.selected_mark == *mark_to_delete)
         {
-            _state.selected_mark = next_mark_after_removing_it(_state.gradient.get_marks(), *_state.selected_mark);
+            _state.selected_mark = next_selected_mark(_state.gradient.get_marks(), *_state.selected_mark);
         }
         remove_mark(*mark_to_delete);
         modified |= true;
@@ -564,7 +564,7 @@ auto GradientWidget::widget(
             window_is_hovered &&
             !ImGui::GetIO().WantTextInput)
         {
-            const Mark* new_selected_mark = next_mark_after_removing_it(_state.gradient.get_marks(), *_state.selected_mark);
+            const Mark* new_selected_mark = next_selected_mark(_state.gradient.get_marks(), *_state.selected_mark);
             remove_mark(*_state.selected_mark);
             _state.selected_mark = const_cast<Mark*>(new_selected_mark); // TODO(ASG) Why a const_cast here ???
             modified |= true;
