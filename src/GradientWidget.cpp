@@ -361,7 +361,8 @@ static auto position_where_to_add_next_mark(Gradient& gradient) -> float
     }
     else
     {
-        // TODO(ASG) This deserves a comment to exmplain what you are trying to do
+        // Find where is the bigger space between two marks
+        // to return the position between this two marks.
         const auto first_mark_iterator{gradient.get_marks().begin()};
         const auto last_mark_iterator{std::prev(gradient.get_marks().end())};
         auto       max_value_mark_position{0.f};
