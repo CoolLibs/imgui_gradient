@@ -1,5 +1,5 @@
 #include "GradientWidget.hpp"
-#include <vector>
+#include <array>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 #include "widgets.hpp"
@@ -56,13 +56,14 @@ static void tooltip(const char* text)
     }
 }
 
+template<size_t size>
 static auto selector_with_tooltip(
-    const char*              label,
-    int&                     item_current_index,
-    const std::vector<char*> items,
-    const char*              greater_items, // Use the longuest word to choose the selector's size
-    const std::vector<char*> tooltips,
-    const bool               should_show_tooltip
+    const char*                         label,
+    size_t&                             item_current_index,
+    const std::array<const char*, size> items,
+    const char*                         greater_items, // Use the longuest word to choose the selector's size
+    const std::array<const char*, size> tooltips,
+    const bool                          should_show_tooltip
 ) -> bool
 {
     ImGuiContext& g{*GImGui};
@@ -76,7 +77,7 @@ static auto selector_with_tooltip(
     const char* combo_preview_value{items[item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
-        for (int n = 0; n < items.size(); n++)
+        for (size_t n = 0; n < items.size(); n++)
         {
             const bool is_selected{(item_current_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
@@ -116,15 +117,15 @@ static auto button_with_tooltip(
 
 static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const std::vector<char*> items    = {"Clamp", "Repeat", "Mirror Repeat"};
-    const std::vector<char*> tooltips = {
+    const std::array<const char*, 3> items    = {"Clamp", "Repeat", "Mirror Repeat"};
+    const std::array<const char*, 3> tooltips = {
         "Clamp mark position in range [0.,1.]",
         "Repeat mark position in range [0.,1.]",
         "Repeat and mirror mark position in range [0.,1.]"};
 
     return selector_with_tooltip(
         "Position Mode",
-        reinterpret_cast<int&>(wrap_mode),
+        reinterpret_cast<size_t&>(wrap_mode),
         items,
         "Mirror Repeat",
         tooltips,
@@ -134,14 +135,14 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    const std::vector<char*> items    = {"Linear", "Constant"};
-    const std::vector<char*> tooltips = {
+    const std::array<const char*, 2> items    = {"Linear", "Constant"};
+    const std::array<const char*, 2> tooltips = {
         "Linear interpolation between two marks",
         "Constant color between two marks"};
 
     return selector_with_tooltip(
         "Interpolation Mode",
-        reinterpret_cast<int&>(interpolation_mode),
+        reinterpret_cast<size_t&>(interpolation_mode),
         items,
         "Constant",
         tooltips,
