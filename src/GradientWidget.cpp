@@ -36,7 +36,7 @@ void GradientWidget::set_interpolation_mode(Interpolation new_interpolation_mode
     _interpolation_mode = new_interpolation_mode;
 }
 
-void GradientWidget::enable_random_color_mode(bool should_use_a_random_color_for_the_new_marks)
+void GradientWidget::set_random_color_mode(bool should_use_a_random_color_for_the_new_marks)
 {
     _should_use_a_random_color_for_the_new_marks = should_use_a_random_color_for_the_new_marks;
 }

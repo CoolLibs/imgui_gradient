@@ -27,7 +27,7 @@ public:
     void set_mark_color(const Mark& mark, ColorRGBA color);
     void set_wrap_mode(WrapMode new_wrap_mode);
     void set_interpolation_mode(Interpolation new_interpolation_mode);
-    void enable_random_color_mode(bool should_use_a_random_color_for_the_new_marks); // Rename as set_random_color_mode()
+    void set_random_color_mode(bool should_use_a_random_color_for_the_new_marks);
 
     /// Resets the gradient to having just two marks: a black one at the beginning and a white one at the end.
     void reset();
