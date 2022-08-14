@@ -38,7 +38,7 @@ static void draw_gradient_between_two_colors(
 
 void draw_gradient(
     ImDrawList&         draw_list,
-    Gradient&           gradient,
+    const Gradient&     gradient,
     const Interpolation interpolation_mode,
     const ImVec2        gradient_position,
     const ImVec2        size
@@ -210,7 +210,7 @@ static void draw_mark_selected(
 void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
-    const ImU32& mark_color,
+    const ImU32  mark_color,
     const float  gradient_height,
     const bool   mark_is_selected
 )
