@@ -46,7 +46,7 @@ void draw_gradient(
 {
     assert(!gradient.is_empty());
     float current_starting_x = gradient_position.x;
-    for (auto mark_iterator = gradient.get_marks().begin(); mark_iterator != gradient.get_marks().end(); ++mark_iterator)
+    for (auto mark_iterator = gradient.get_marks().begin(); mark_iterator != gradient.get_marks().end(); ++mark_iterator) // We need to use iterators because we need to access the previous element from time to time
     {
         const Mark& mark = *mark_iterator;
 
@@ -68,7 +68,7 @@ void draw_gradient(
                     color_left, color_right
                 );
             }
-            else
+            else if (interpolation_mode == Interpolation::Constant)
             {
                 draw_uniform_square(
                     draw_list,
@@ -77,10 +77,14 @@ void draw_gradient(
                     color_right
                 );
             }
+            else
+            {
+                assert(false && "Unknown Interpolation enum value.");
+            }
         }
         current_starting_x = to;
     }
-    // If last element not at the end position extend its color to the end position
+    // If the last element is not at the end position, extend its color to the end position
     if (gradient.get_marks().back().position.get() != 1.f)
     {
         draw_uniform_square(
