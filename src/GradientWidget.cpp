@@ -561,7 +561,7 @@ auto GradientWidget::widget(
     {
         auto window_is_hovered{ImGui::IsWindowHovered(
             ImGuiHoveredFlags_ChildWindows |
-            ImGuiHoveredFlags_NoPopupHierarchy
+            ImGuiHoveredFlags_AllowWhenBlockedByActiveItem
         )};
         if (((is_there_remove_button &&
               delete_button(!_state.selected_mark, "There is no mark selected", is_there_no_tooltip)) ||
