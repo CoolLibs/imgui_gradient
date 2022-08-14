@@ -496,16 +496,17 @@ auto GradientWidget::widget(
     ImGui::InvisibleButton("gradient_editor", gradient_size);
     draw_gradient_bar(_state.gradient, _interpolation_mode, gradient_bar_position, gradient_size);
 
+    const auto can_add_mark{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)}; // We need to declare it before drawing the marks because we want to
+                                                                                                     // test if the mouse is hovering the gradient bar not the marks.
     Mark*      mark_to_delete{nullptr};
-    const auto add_mark_possible{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)}; // TODO(ASG) Explain why it has to be declared a few lines before its firt use. Rename as can_add_mark
     const auto mark_hitbox_is_hovered{draw_gradient_marks(
         mark_to_delete,
         gradient_bar_position,
         gradient_size
-    )};
+    )}; // We declare it here because even if we cannot add a mark we need to draw gradient marks.
 
     auto modified{false};
-    if (add_mark_possible && !mark_hitbox_is_hovered)
+    if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
         if (_should_use_a_random_color_for_the_new_marks)
