@@ -1,4 +1,5 @@
 #include "GradientWidget.hpp"
+#include <vector>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 #include "widgets.hpp"
@@ -56,13 +57,12 @@ static void tooltip(const char* text)
 }
 
 static auto selector_with_tooltip(
-    const char* label,
-    int&        item_current_index,
-    const char* items[], // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-    const int   number_of_items,
-    const char* greater_items, // Use the longuest word to choose the selector's size
-    const char* tooltips[],    // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-    const bool  should_show_tooltip
+    const char*              label,
+    int&                     item_current_index,
+    const std::vector<char*> items,
+    const char*              greater_items, // Use the longuest word to choose the selector's size
+    const std::vector<char*> tooltips,
+    const bool               should_show_tooltip
 ) -> bool
 {
     ImGuiContext& g{*GImGui};
@@ -76,7 +76,7 @@ static auto selector_with_tooltip(
     const char* combo_preview_value{items[item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
-        for (int n = 0; n < number_of_items; n++)
+        for (int n = 0; n < items.size(); n++)
         {
             const bool is_selected{(item_current_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
@@ -116,17 +116,16 @@ static auto button_with_tooltip(
 
 static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const char* items[]    = {"Clamp", "Repeat", "Mirror Repeat"}; // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-    const char* tooltips[] = {                                     // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-                              "Clamp mark position in range [0.,1.]",
-                              "Repeat mark position in range [0.,1.]",
-                              "Repeat and mirror mark position in range [0.,1.]"};
+    const std::vector<char*> items    = {"Clamp", "Repeat", "Mirror Repeat"};
+    const std::vector<char*> tooltips = {
+        "Clamp mark position in range [0.,1.]",
+        "Repeat mark position in range [0.,1.]",
+        "Repeat and mirror mark position in range [0.,1.]"};
 
     return selector_with_tooltip(
         "Position Mode",
         reinterpret_cast<int&>(wrap_mode),
         items,
-        IM_ARRAYSIZE(items),
         "Mirror Repeat",
         tooltips,
         should_show_tooltip
@@ -135,16 +134,15 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
 static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    const char* items[]    = {"Linear", "Constant"}; // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-    const char* tooltips[] = {                       // TODO(ASG) clang-tidy says "do not declare C-style arrays, use std::array<> instead"
-                              "Linear interpolation between two marks",
-                              "Constant color between two marks"};
+    const std::vector<char*> items    = {"Linear", "Constant"};
+    const std::vector<char*> tooltips = {
+        "Linear interpolation between two marks",
+        "Constant color between two marks"};
 
     return selector_with_tooltip(
         "Interpolation Mode",
         reinterpret_cast<int&>(interpolation_mode),
         items,
-        IM_ARRAYSIZE(items),
         "Constant",
         tooltips,
         should_show_tooltip
