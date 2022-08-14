@@ -565,9 +565,9 @@ auto GradientWidget::widget(
             window_is_hovered &&
             !ImGui::GetIO().WantTextInput)
         {
-            const Mark* new_selected_mark = next_selected_mark(_state.gradient.get_marks(), *_state.selected_mark);
+            Mark* new_selected_mark = next_selected_mark(_state.gradient.get_marks(), *_state.selected_mark);
             remove_mark(*_state.selected_mark);
-            _state.selected_mark = const_cast<Mark*>(new_selected_mark); // TODO(ASG) Why a const_cast here ???
+            _state.selected_mark = new_selected_mark;
             modified |= true;
         }
     }
