@@ -1,4 +1,7 @@
 #include "extras_widgets.hpp"
+#include <imgui/imgui.h>
+#include <array>
+#include "imgui_internal.hpp"
 #include "tooltip.hpp"
 
 namespace ImGuiGradient {
