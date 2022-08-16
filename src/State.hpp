@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Gradient.hpp"
+#include "MarkId.hpp"
 
 namespace ImGuiGradient { namespace internal {
 
 struct State {
     Gradient gradient{};
-    Mark*    dragged_mark{};
-    Mark*    selected_mark{};
-    Mark*    mark_to_hide{};
+    MarkId   dragged_mark{nullptr};
+    MarkId   selected_mark{nullptr};
+    MarkId   mark_to_hide{nullptr};
 };
 
 }} // namespace ImGuiGradient::internal

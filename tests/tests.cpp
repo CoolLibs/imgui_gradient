@@ -16,6 +16,7 @@ auto main(int argc, char* argv[]) -> int
     )
     {
         auto gradient = ImGuiGradient::GradientWidget{};
+        // auto gradient2 = ImGuiGradient::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
             ImGui::Begin("Framerate");
             ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
@@ -28,7 +29,7 @@ auto main(int argc, char* argv[]) -> int
             ImGui::Checkbox("Use our custom generator", &custom_generator);
             ImGui::End();
             ImGui::Begin("Programmatic Actions");
-            if (gradient.get_gradient().is_empty())
+            if (gradient.gradient().is_empty())
             {
                 ImGuiGradient::button_disabled("Remove a mark", "gradient is empty");
             }
@@ -36,7 +37,7 @@ auto main(int argc, char* argv[]) -> int
             {
                 if (ImGui::Button("Remove a mark"))
                 {
-                    gradient.remove_mark(gradient.get_gradient().get_marks().front());
+                    gradient.gradient().remove_mark(ImGuiGradient::MarkId{gradient.gradient().get_marks().front()});
                 }
             }
             if (ImGui::Button("Add a mark"))
@@ -44,10 +45,10 @@ auto main(int argc, char* argv[]) -> int
                 gradient.add_mark(0.5f);
             };
             static auto position{0.f};
-            if (ImGui::Button("Set mark position"))
+            if (ImGui::Button("Set mark position") && !gradient.gradient().is_empty())
             {
-                gradient.set_mark_position(
-                    gradient.get_gradient().get_marks().front(),
+                gradient.gradient().set_mark_position(
+                    ImGuiGradient::MarkId{gradient.gradient().get_marks().front()},
                     ImGuiGradient::RelativePosition{position}
                 );
             };
@@ -56,9 +57,9 @@ auto main(int argc, char* argv[]) -> int
                              0.f, 1.f,                                    /* min and max */
                              "%.4f" /* precision */);
             static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
-            if (ImGui::Button("Set mark color"))
+            if (ImGui::Button("Set mark color") && !gradient.gradient().is_empty())
             {
-                gradient.set_mark_color(gradient.get_gradient().get_marks().front(), color);
+                gradient.gradient().set_mark_color(ImGuiGradient::MarkId{gradient.gradient().get_marks().front()}, color);
             };
             ImGui::SameLine();
             ImGui::ColorEdit4(
@@ -105,6 +106,10 @@ auto main(int argc, char* argv[]) -> int
                     "Gradient",
                     settings
                 );
+                // gradient2.widget(
+                //     "Gradient2",
+                //     settings
+                // );
             }
             ImGui::End();
         });

@@ -7,6 +7,7 @@
 #include <random>
 #include "Flags.hpp"
 #include "Interpolation.hpp"
+#include "MarkId.hpp"
 #include "Settings.hpp"
 #include "State.hpp"
 #include "WrapMode.hpp"
@@ -15,19 +16,17 @@ namespace ImGuiGradient {
 
 class GradientWidget {
 public:
-    /// Only provides const access. Modifications should be done through this `GradientWidget` directly because we have invariants to maintain.
-    auto get_gradient() const -> const Gradient&;
+    auto gradient() const -> const Gradient& { return _state.gradient; }
+    auto gradient() -> Gradient& { return _state.gradient; }
 
     void add_mark(float position);                                        // TODO(ASG) documentation to explain that this creates a mark with the color of the gradient at the `positions`
     void add_mark(float position, std::default_random_engine& generator); // TODO(ASG) This shouldn't have a generator. Users should be able to chose the color
 
-    void remove_mark(const Mark& mark);
-
-    void set_mark_position(const Mark& mark, RelativePosition position);
-    void set_mark_color(const Mark& mark, ColorRGBA color);
     void set_wrap_mode(WrapMode new_wrap_mode);
     void set_interpolation_mode(Interpolation new_interpolation_mode);
     void set_random_color_mode(bool should_use_a_random_color_for_the_new_marks);
+
+    auto is_valid(MarkId id) -> bool { return _state.gradient.find_ptr(id); }
 
     /// Resets the gradient to having just two marks: a black one at the beginning and a white one at the end.
     void reset();
@@ -49,7 +48,7 @@ public:
 private:
     void add_mark_to_gradient(float position, std::default_random_engine generator);
     auto draw_gradient_marks(
-        const Mark*   mark_to_delete,
+        MarkId&       mark_to_delete,
         const ImVec2& gradient_bar_pos,
         ImVec2        size
     ) -> bool;

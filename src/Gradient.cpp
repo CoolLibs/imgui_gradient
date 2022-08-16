@@ -1,4 +1,5 @@
 #include "Gradient.hpp"
+#include <algorithm>
 #include "imgui_internal.hpp"
 
 namespace ImGuiGradient {
@@ -8,17 +9,31 @@ void Gradient::sort_marks()
     _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
 }
 
-auto Gradient::add_mark(const Mark& mark) -> Mark&
+auto Gradient::find_ptr(MarkId id) -> Mark*
+{
+    const auto it = std::find_if(_marks.begin(), _marks.end(), [&](const Mark& mark) {
+        return &mark == id.get_ptr();
+    });
+    return it != _marks.end()
+               ? &*it
+               : nullptr;
+}
+
+auto Gradient::add_mark(const Mark& mark) -> MarkId
 {
     _marks.push_back(mark);
-    Mark& reference = _marks.back();
+    auto reference = MarkId{_marks.back()};
     sort_marks();
     return reference;
 }
 
-void Gradient::remove_mark(const Mark& mark)
+void Gradient::remove_mark(MarkId mark)
 {
-    _marks.remove(mark);
+    const auto* const ptr = find_ptr(mark);
+    if (ptr)
+    {
+        _marks.remove(*ptr);
+    }
 }
 
 auto Gradient::get_marks() const -> const std::list<Mark>&
@@ -26,15 +41,23 @@ auto Gradient::get_marks() const -> const std::list<Mark>&
     return _marks;
 }
 
-void Gradient::set_mark_position(const Mark& mark, const RelativePosition position)
+void Gradient::set_mark_position(MarkId const mark, const RelativePosition position)
 {
-    const_cast<Mark&>(mark).position.set(position.get());
-    sort_marks();
+    auto* const ptr = find_ptr(mark);
+    if (ptr)
+    {
+        ptr->position = position;
+        sort_marks();
+    }
 }
 
-void Gradient::set_mark_color(const Mark& mark, const ColorRGBA color)
+void Gradient::set_mark_color(const MarkId mark, const ColorRGBA color)
 {
-    const_cast<Mark&>(mark).color = color;
+    auto* const ptr = find_ptr(mark);
+    if (ptr)
+    {
+        ptr->color = color;
+    }
 }
 
 auto Gradient::is_empty() const -> bool

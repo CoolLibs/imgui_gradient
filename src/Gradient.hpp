@@ -1,6 +1,9 @@
 #pragma once
 
+#include <algorithm>
+#include <iterator>
 #include <list>
+#include "MarkId.hpp"
 #include "SurroundingMarks.hpp"
 
 namespace ImGuiGradient {
@@ -9,10 +12,12 @@ class Gradient {
 public:
     auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
-    auto add_mark(const Mark& mark) -> Mark&;
-    void remove_mark(const Mark& mark);
-    void set_mark_position(const Mark& mark, RelativePosition position);
-    void set_mark_color(const Mark& mark, ColorRGBA color);
+    auto find_ptr(MarkId id) -> Mark*;
+
+    auto add_mark(const Mark& mark) -> MarkId;
+    void remove_mark(MarkId mark);
+    void set_mark_position(MarkId mark, RelativePosition position);
+    void set_mark_color(MarkId mark, ColorRGBA color);
 
     auto get_marks() const -> const std::list<Mark>&;
     auto is_empty() const -> bool;
