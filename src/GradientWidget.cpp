@@ -39,7 +39,7 @@ static void tooltip(const char* text)
 template<size_t size>
 static auto selector_with_tooltip(
     const char*                         label,
-    size_t&                             item_current_index,
+    int&                                item_current_index,
     const std::array<const char*, size> items,
     const char*                         greater_items, // Use the longuest word to choose the selector's size
     const std::array<const char*, size> tooltips,
@@ -53,8 +53,8 @@ static auto selector_with_tooltip(
         g.Style.FramePadding.x * 2.f};
     ImGui::SetNextItemWidth(width);
 
-    auto        modified{false};                                // Here we store our selection data as an index.
-    const char* combo_preview_value{items[item_current_index]}; // Pass in the preview value visible before opening the combo (it could be anything)
+    auto        modified{false};                                                     // Here we store our selection data as an index.
+    const char* combo_preview_value{items[static_cast<size_t>(item_current_index)]}; // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
         for (size_t n = 0; n < items.size(); n++)
@@ -62,7 +62,7 @@ static auto selector_with_tooltip(
             const bool is_selected{(item_current_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
             {
-                item_current_index = n;
+                item_current_index = static_cast<int>(n);
                 modified           = true;
             }
 
@@ -105,7 +105,7 @@ static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_toolt
 
     return selector_with_tooltip(
         "Position Mode",
-        reinterpret_cast<size_t&>(wrap_mode),
+        reinterpret_cast<int&>(wrap_mode),
         items,
         "Mirror Repeat",
         tooltips,
@@ -122,7 +122,7 @@ static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mo
 
     return selector_with_tooltip(
         "Interpolation Mode",
-        reinterpret_cast<size_t&>(interpolation_mode),
+        reinterpret_cast<int&>(interpolation_mode),
         items,
         "Constant",
         tooltips,
