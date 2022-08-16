@@ -23,13 +23,14 @@ static auto selector_with_tooltip(
         g.Style.FramePadding.x * 2.f};
     ImGui::SetNextItemWidth(width);
 
-    auto        modified{false};                                                     // Here we store our selection data as an index.
-    const char* combo_preview_value{items[static_cast<size_t>(item_current_index)]}; // Pass in the preview value visible before opening the combo (it could be anything)
+    auto        modified{false};
+    auto        item_current_index_size_t{static_cast<size_t>(item_current_index)}; // Here we store our selection data as an index.
+    const char* combo_preview_value{items[item_current_index_size_t]};              // Pass in the preview value visible before opening the combo (it could be anything)
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
         for (size_t n = 0; n < items.size(); n++)
         {
-            const bool is_selected{(item_current_index == n)};
+            const bool is_selected{(item_current_index_size_t == n)};
             if (ImGui::Selectable(items[n], is_selected))
             {
                 item_current_index = static_cast<int>(n);
