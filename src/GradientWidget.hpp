@@ -19,8 +19,6 @@ public:
     auto gradient() const -> const Gradient& { return _state.gradient; }
     auto gradient() -> Gradient& { return _state.gradient; }
 
-    void add_mark(float position);                                        // TODO(ASG) documentation to explain that this creates a mark with the color of the gradient at the `positions`
-    void add_mark(float position, std::default_random_engine& generator); // TODO(ASG) This shouldn't have a generator. Users should be able to chose the color
 
     void set_wrap_mode(WrapMode new_wrap_mode);
     void set_interpolation_mode(Interpolation new_interpolation_mode);
@@ -46,7 +44,10 @@ public:
     ) -> bool;
 
 private:
-    void add_mark_to_gradient(float position, std::default_random_engine generator);
+    void add_mark_with_current_color_at(float position);
+    void add_mark_with_random_color(float position, std::default_random_engine& generator);
+    void add_mark_with_chosen_mode(float position, std::default_random_engine& generator, bool add_a_random_color);
+
     auto draw_gradient_marks(
         MarkId&       mark_to_delete,
         const ImVec2& gradient_bar_pos,

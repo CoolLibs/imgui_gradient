@@ -42,7 +42,7 @@ auto main(int argc, char* argv[]) -> int
             }
             if (ImGui::Button("Add a mark"))
             {
-                gradient.add_mark(0.5f);
+                gradient.gradient().add_mark(ImGuiGradient::Mark{ImGuiGradient::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});
             };
             static auto position{0.f};
             if (ImGui::Button("Set mark position") && !gradient.gradient().is_empty())

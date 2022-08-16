@@ -397,7 +397,7 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
     return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
 }
 
-void GradientWidget::add_mark(float position)
+void GradientWidget::add_mark_with_current_color_at(float position)
 {
     const auto relative_pos = make_relative_position(position, _wrap_mode);
     const auto mark         = Mark{
@@ -406,7 +406,7 @@ void GradientWidget::add_mark(float position)
     _state.selected_mark = _state.gradient.add_mark(mark);
 }
 
-void GradientWidget::add_mark(
+void GradientWidget::add_mark_with_random_color(
     const float                 position,
     std::default_random_engine& generator
 )
@@ -435,15 +435,15 @@ static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> 
     };
 }
 
-void GradientWidget::add_mark_to_gradient(const float position, std::default_random_engine generator)
+void GradientWidget::add_mark_with_chosen_mode(float position, std::default_random_engine& generator, bool add_a_random_color)
 {
-    if (_should_use_a_random_color_for_the_new_marks)
+    if (add_a_random_color)
     {
-        add_mark(position, generator);
+        add_mark_with_random_color(position, generator);
     }
     else
     {
-        add_mark(position);
+        add_mark_with_current_color_at(position);
     }
 }
 
@@ -482,7 +482,7 @@ auto GradientWidget::widget(
     if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        add_mark_to_gradient(position, generator);
+        add_mark_with_chosen_mode(position, generator, _should_use_a_random_color_for_the_new_marks);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -549,7 +549,7 @@ auto GradientWidget::widget(
         {
             // Add a mark where there is the greater space in the gradient
             const auto position{position_where_to_add_next_mark(_state.gradient)};
-            add_mark_to_gradient(position, generator);
+            add_mark_with_chosen_mode(position, generator, _should_use_a_random_color_for_the_new_marks);
             modified = true;
         }
     }
