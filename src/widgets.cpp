@@ -1,17 +1,8 @@
 #include "widgets.hpp"
 #include <functional>
+#include "tooltip.hpp"
 
 namespace ImGuiGradient {
-
-static void tooltip(const char* text)
-{
-    if (ImGui::IsItemHovered())
-    {
-        ImGui::BeginTooltip();
-        ImGui::Text("%s", text);
-        ImGui::EndTooltip();
-    }
-}
 
 static void maybe_disabled(
     bool                  condition,

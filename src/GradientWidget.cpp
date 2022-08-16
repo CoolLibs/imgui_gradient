@@ -2,83 +2,58 @@
 #include <array>
 #include "imgui_draw.hpp"
 #include "internal.hpp"
+#include "tooltip.hpp"
 #include "widgets.hpp"
 
 namespace ImGuiGradient {
-
-void GradientWidget::set_wrap_mode(WrapMode new_wrap_mode)
-{
-    _wrap_mode = new_wrap_mode;
-}
-
-void GradientWidget::set_interpolation_mode(Interpolation new_interpolation_mode)
-{
-    _interpolation_mode = new_interpolation_mode;
-}
-
-void GradientWidget::set_random_color_mode(bool should_use_a_random_color_for_the_new_marks)
-{
-    _should_use_a_random_color_for_the_new_marks = should_use_a_random_color_for_the_new_marks;
-}
 
 void GradientWidget::reset()
 {
     _state = internal::State{};
 }
 
-static void tooltip(const char* text)
+static auto random(std::default_random_engine& generator) -> float
 {
-    if (ImGui::IsItemHovered())
-    {
-        ImGui::BeginTooltip();
-        ImGui::Text("%s", text);
-        ImGui::EndTooltip();
-    }
+    return std::uniform_real_distribution<float>{0.f, 1.f}(generator);
 }
 
-template<size_t size>
-static auto selector_with_tooltip(
-    const char*                         label,
-    int&                                item_current_index,
-    const std::array<const char*, size> items,
-    const char*                         greater_items, // Use the longuest word to choose the selector's size
-    const std::array<const char*, size> tooltips,
-    const bool                          should_show_tooltip
-) -> bool
+static auto random_color(std::default_random_engine& generator) -> ColorRGBA
 {
-    ImGuiContext& g{*GImGui};
-    const auto    width{
-        ImGui::CalcTextSize(greater_items).x +
-        ImGui::GetFrameHeightWithSpacing() +
-        g.Style.FramePadding.x * 2.f};
-    ImGui::SetNextItemWidth(width);
+    return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
+}
 
-    auto        modified{false};                                                     // Here we store our selection data as an index.
-    const char* combo_preview_value{items[static_cast<size_t>(item_current_index)]}; // Pass in the preview value visible before opening the combo (it could be anything)
-    if (ImGui::BeginCombo(label, combo_preview_value))
+void GradientWidget::add_mark_with_current_color_at(float position, const WrapMode& wrap_mode)
+{
+    const auto relative_pos = make_relative_position(position, wrap_mode);
+    const auto mark         = Mark{
+        RelativePosition{relative_pos},
+        _state.gradient.compute_color_at(relative_pos)};
+    _state.selected_mark = _state.gradient.add_mark(mark);
+}
+
+void GradientWidget::add_mark_with_random_color(
+    const float                 position,
+    const WrapMode&             wrap_mode,
+    std::default_random_engine& generator
+)
+{
+    const auto relative_pos = make_relative_position(position, wrap_mode);
+    const auto mark         = Mark{
+        RelativePosition{relative_pos},
+        random_color(generator)};
+    _state.selected_mark = _state.gradient.add_mark(mark);
+}
+
+void GradientWidget::add_mark_with_chosen_mode(float position, const WrapMode& wrap_mode, std::default_random_engine& generator, bool add_a_random_color)
+{
+    if (add_a_random_color)
     {
-        for (size_t n = 0; n < items.size(); n++)
-        {
-            const bool is_selected{(item_current_index == n)};
-            if (ImGui::Selectable(items[n], is_selected))
-            {
-                item_current_index = static_cast<int>(n);
-                modified           = true;
-            }
-
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-            if (is_selected)
-            {
-                ImGui::SetItemDefaultFocus();
-            }
-            if (should_show_tooltip)
-            {
-                tooltip(tooltips[n]);
-            }
-        }
-        ImGui::EndCombo();
+        add_mark_with_random_color(position, wrap_mode, generator);
     }
-    return modified;
+    else
+    {
+        add_mark_with_current_color_at(position, wrap_mode);
+    }
 }
 
 static auto button_with_tooltip(
@@ -93,41 +68,6 @@ static auto button_with_tooltip(
         tooltip(tooltip_message);
     }
     return clicked;
-}
-
-static auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
-{
-    const std::array<const char*, 3> items    = {"Clamp", "Repeat", "Mirror Repeat"};
-    const std::array<const char*, 3> tooltips = {
-        "Clamp mark position in range [0.,1.]",
-        "Repeat mark position in range [0.,1.]",
-        "Repeat and mirror mark position in range [0.,1.]"};
-
-    return selector_with_tooltip(
-        "Position Mode",
-        reinterpret_cast<int&>(wrap_mode),
-        items,
-        "Mirror Repeat",
-        tooltips,
-        should_show_tooltip
-    );
-}
-
-static auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
-{
-    const std::array<const char*, 2> items    = {"Linear", "Constant"};
-    const std::array<const char*, 2> tooltips = {
-        "Linear interpolation between two marks",
-        "Constant color between two marks"};
-
-    return selector_with_tooltip(
-        "Interpolation Mode",
-        reinterpret_cast<int&>(interpolation_mode),
-        items,
-        "Constant",
-        tooltips,
-        should_show_tooltip
-    );
 }
 
 static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip) -> bool
@@ -172,22 +112,6 @@ static auto color_button(
                   ImGuiColorEditFlags_NoInputs |
                   flags
     );
-}
-
-static auto random_mode_box(
-    bool&      should_use_a_random_color_for_the_new_marks,
-    const bool should_show_tooltip
-) -> bool
-{
-    const bool modified = ImGui::Checkbox(
-        "Random Mode",
-        &should_use_a_random_color_for_the_new_marks
-    );
-    if (should_show_tooltip)
-    {
-        tooltip("Add mark with random color");
-    }
-    return modified;
 }
 
 static auto open_color_picker_popup(
@@ -387,37 +311,6 @@ auto GradientWidget::mouse_dragging_interactions(
     return is_dragging;
 }
 
-static auto random(std::default_random_engine& generator) -> float
-{
-    return std::uniform_real_distribution<float>{0.f, 1.f}(generator);
-}
-
-static auto random_color(std::default_random_engine& generator) -> ColorRGBA
-{
-    return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
-}
-
-void GradientWidget::add_mark_with_current_color_at(float position)
-{
-    const auto relative_pos = make_relative_position(position, _wrap_mode);
-    const auto mark         = Mark{
-        RelativePosition{relative_pos},
-        _state.gradient.compute_color_at(relative_pos)};
-    _state.selected_mark = _state.gradient.add_mark(mark);
-}
-
-void GradientWidget::add_mark_with_random_color(
-    const float                 position,
-    std::default_random_engine& generator
-)
-{
-    const auto relative_pos = make_relative_position(position, _wrap_mode);
-    const auto mark         = Mark{
-        RelativePosition{relative_pos},
-        random_color(generator)};
-    _state.selected_mark = _state.gradient.add_mark(mark);
-}
-
 static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> MarkId
 {
     assert(!gradient.empty());
@@ -433,18 +326,6 @@ static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> 
     {
         return MarkId{gradient.front()};
     };
-}
-
-void GradientWidget::add_mark_with_chosen_mode(float position, std::default_random_engine& generator, bool add_a_random_color)
-{
-    if (add_a_random_color)
-    {
-        add_mark_with_random_color(position, generator);
-    }
-    else
-    {
-        add_mark_with_current_color_at(position);
-    }
 }
 
 auto GradientWidget::widget(
@@ -467,7 +348,7 @@ auto GradientWidget::widget(
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);
-    draw_gradient_bar(_state.gradient, _interpolation_mode, gradient_bar_position, gradient_size);
+    draw_gradient_bar(_state.gradient, settings.interpolation_mode, gradient_bar_position, gradient_size);
 
     const auto can_add_mark{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)}; // We need to declare it before drawing the marks because we want to
                                                                                                      // test if the mouse is hovering the gradient bar not the marks.
@@ -482,7 +363,7 @@ auto GradientWidget::widget(
     if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        add_mark_with_chosen_mode(position, generator, _should_use_a_random_color_for_the_new_marks);
+        add_mark_with_chosen_mode(position, settings.wrap_mode, generator, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -549,7 +430,7 @@ auto GradientWidget::widget(
         {
             // Add a mark where there is the greater space in the gradient
             const auto position{position_where_to_add_next_mark(_state.gradient)};
-            add_mark_with_chosen_mode(position, generator, _should_use_a_random_color_for_the_new_marks);
+            add_mark_with_chosen_mode(position, settings.wrap_mode, generator, settings.should_use_a_random_color_for_the_new_marks);
             modified = true;
         }
     }
@@ -579,30 +460,6 @@ auto GradientWidget::widget(
                 modified = true;
             }
         }
-    }
-
-    const auto is_there_interpolation_selector{!(settings.flags & Flag::NoInterpolationSelector)};
-    if (is_there_interpolation_selector)
-    {
-        modified |= gradient_interpolation_mode_selector(_interpolation_mode, is_there_no_tooltip);
-    }
-    const auto is_there_position_mode_selector{!(settings.flags & Flag::NoWrapModeSelector)};
-    if (is_there_position_mode_selector)
-    {
-        if (is_there_interpolation_selector)
-        {
-            ImGui::SameLine();
-        }
-        modified |= wrap_mode_selector(_wrap_mode, is_there_no_tooltip);
-    }
-
-    if (!(settings.flags & Flag::NoRandomModeCheckBox))
-    {
-        if (is_there_position_mode_selector || is_there_interpolation_selector)
-        {
-            ImGui::SameLine();
-        }
-        modified |= random_mode_box(_should_use_a_random_color_for_the_new_marks, is_there_no_tooltip);
     }
 
     if (!(settings.flags & Flag::NoResetButton))

@@ -68,27 +68,19 @@ auto main(int argc, char* argv[]) -> int
                 ImGuiColorEditFlags_NoTooltip |
                     ImGuiColorEditFlags_NoInputs
             );
-            static auto wrap_mode = ImGuiGradient::WrapMode::Clamp;
-            if (ImGui::Combo(
-                    "Position Mode",
-                    reinterpret_cast<int*>(&wrap_mode),
-                    " Clamp\0 Repeat\0 Mirror Repeat\0\0"
-                ))
-            {
-                gradient.set_wrap_mode(wrap_mode);
-            }
-            static auto interpolation_mode = ImGuiGradient::Interpolation::Linear;
-            if (ImGui::Combo(
-                    "Interpolation Mode",
-                    reinterpret_cast<int*>(&interpolation_mode),
-                    " Linear\0 Constant\0\0"
-                ))
-            {
-                gradient.set_interpolation_mode(interpolation_mode);
-            }
+            static ImGuiGradient::Settings settings{};
+            ImGui::Combo(
+                "Position Mode",
+                reinterpret_cast<int*>(&settings.wrap_mode),
+                " Clamp\0 Repeat\0 Mirror Repeat\0\0"
+            );
+            ImGui::Combo(
+                "Interpolation Mode",
+                reinterpret_cast<int*>(&settings.interpolation_mode),
+                " Linear\0 Constant\0\0"
+            );
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
-            ImGuiGradient::Settings settings{};
             settings.flags       = flags;
             settings.color_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
             if (custom_generator)

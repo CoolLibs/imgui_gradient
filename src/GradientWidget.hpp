@@ -19,11 +19,6 @@ public:
     auto gradient() const -> const Gradient& { return _state.gradient; }
     auto gradient() -> Gradient& { return _state.gradient; }
 
-
-    void set_wrap_mode(WrapMode new_wrap_mode);
-    void set_interpolation_mode(Interpolation new_interpolation_mode);
-    void set_random_color_mode(bool should_use_a_random_color_for_the_new_marks);
-
     auto is_valid(MarkId id) -> bool { return _state.gradient.find_ptr(id); }
 
     /// Resets the gradient to having just two marks: a black one at the beginning and a white one at the end.
@@ -44,9 +39,9 @@ public:
     ) -> bool;
 
 private:
-    void add_mark_with_current_color_at(float position);
-    void add_mark_with_random_color(float position, std::default_random_engine& generator);
-    void add_mark_with_chosen_mode(float position, std::default_random_engine& generator, bool add_a_random_color);
+    void add_mark_with_current_color_at(float position, const WrapMode& wrap_mode);
+    void add_mark_with_random_color(float position, const WrapMode& wrap_mode, std::default_random_engine& generator);
+    void add_mark_with_chosen_mode(float position, const WrapMode& wrap_mode, std::default_random_engine& generator, bool add_a_random_color);
 
     auto draw_gradient_marks(
         MarkId&       mark_to_delete,
@@ -60,10 +55,7 @@ private:
     ) -> bool;
 
 private:
-    internal::State _state{};
-    WrapMode        _wrap_mode{WrapMode::Clamp};                         // TODO(ASG) Move in the paarms, don't store in the class
-    Interpolation   _interpolation_mode{Interpolation::Linear};          // TODO(ASG) Move in the paarms, don't store in the class
-    bool            _should_use_a_random_color_for_the_new_marks{false}; // TODO(ASG) Move in the paarms, don't store in the class
+    internal::State _state{}; // TODO(ASG) suppr
 };
 
 } // namespace ImGuiGradient

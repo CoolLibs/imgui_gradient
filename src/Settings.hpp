@@ -18,6 +18,10 @@ struct Settings {
     ImGuiGradient::Flags flags = ImGuiGradient::Flag::None;
     /// Change color picker behaviour
     ImGuiColorEditFlags color_flags = ImGuiColorEditFlags_None;
+
+    WrapMode      wrap_mode{WrapMode::Clamp};                         // TODO(ASG) Move in the paarms, don't store in the class
+    Interpolation interpolation_mode{Interpolation::Linear};          // TODO(ASG) Move in the paarms, don't store in the class
+    bool          should_use_a_random_color_for_the_new_marks{false}; // TODO(ASG) Move in the paarms, don't store in the class
 };
 
 } // namespace ImGuiGradient
