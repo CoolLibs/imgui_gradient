@@ -6,20 +6,21 @@
 
 #include <random>
 #include "Flags.hpp"
+#include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "MarkId.hpp"
 #include "Settings.hpp"
-#include "State.hpp"
 #include "WrapMode.hpp"
+
 
 namespace ImGuiGradient {
 
 class GradientWidget {
 public:
-    auto gradient() const -> const Gradient& { return _state.gradient; }
-    auto gradient() -> Gradient& { return _state.gradient; }
+    auto gradient() const -> const Gradient& { return _gradient; }
+    auto gradient() -> Gradient& { return _gradient; }
 
-    auto is_valid(MarkId id) -> bool { return _state.gradient.find_ptr(id); }
+    auto is_valid(MarkId id) -> bool { return _gradient.find_ptr(id); }
 
     /// Resets the gradient to having just two marks: a black one at the beginning and a white one at the end.
     void reset();
@@ -55,7 +56,10 @@ private:
     ) -> bool;
 
 private:
-    internal::State _state{}; // TODO(ASG) suppr
+    Gradient _gradient{};
+    MarkId   _dragged_mark{nullptr};
+    MarkId   _selected_mark{nullptr};
+    MarkId   _mark_to_hide{nullptr};
 };
 
 } // namespace ImGuiGradient
