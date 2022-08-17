@@ -53,12 +53,13 @@ static auto selector_with_tooltip(
 }
 
 auto random_mode_box(
-    bool&      should_use_a_random_color_for_the_new_marks,
-    const bool should_show_tooltip
+    const char* label,
+    bool&       should_use_a_random_color_for_the_new_marks,
+    const bool  should_show_tooltip
 ) -> bool
 {
     const bool modified = ImGui::Checkbox(
-        "Random Mode",
+        label,
         &should_use_a_random_color_for_the_new_marks
     );
     if (should_show_tooltip)
@@ -68,7 +69,7 @@ auto random_mode_box(
     return modified;
 }
 
-auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
+auto wrap_mode_selector(const char* label, WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
     const std::array<const char*, 3> items    = {"Clamp", "Repeat", "Mirror Repeat"};
     const std::array<const char*, 3> tooltips = {
@@ -77,7 +78,7 @@ auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> 
         "Repeat and mirror mark position in range [0.,1.]"};
 
     return selector_with_tooltip(
-        "Position Mode",
+        label,
         reinterpret_cast<int&>(wrap_mode),
         items,
         "Mirror Repeat",
@@ -86,7 +87,7 @@ auto wrap_mode_selector(WrapMode& wrap_mode, const bool should_show_tooltip) -> 
     );
 }
 
-auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
+auto gradient_interpolation_mode_selector(const char* label, Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
     const std::array<const char*, 2> items    = {"Linear", "Constant"};
     const std::array<const char*, 2> tooltips = {
@@ -94,7 +95,7 @@ auto gradient_interpolation_mode_selector(Interpolation& interpolation_mode, con
         "Constant color between two marks"};
 
     return selector_with_tooltip(
-        "Interpolation Mode",
+        label,
         reinterpret_cast<int&>(interpolation_mode),
         items,
         "Constant",
