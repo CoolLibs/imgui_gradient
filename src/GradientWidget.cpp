@@ -486,15 +486,17 @@ auto GradientWidget::widget(
         );
     }
 
+    ImGuiContext& g{*GImGui};
+    const auto    space_over_bar =
+        !(settings.flags & Flag::NoLabel)
+               ? ImGui::CalcTextSize(label).y
+               : 0.f;
+    const auto next_y_position_to_set_cursor =
+        !(settings.flags & Flag::NoLabel)
+            ? ImGui::CalcTextSize(label).y
+            : ImGui::CalcTextSize(label).y + g.Style.ItemSpacing.y * 2.f;
     if (!(settings.flags & Flag::NoBorder))
     {
-        ImGuiContext& g{*GImGui};
-
-        auto space_over_bar{g.Style.ItemSpacing.y * 4.f};
-        if (!(settings.flags & Flag::NoLabel))
-        {
-            space_over_bar += ImGui::CalcTextSize(label).y;
-        }
         auto number_of_line_under_bar{1.f};
         if (!(settings.flags & Flag::NoResetButton))
         {
@@ -507,15 +509,13 @@ auto GradientWidget::widget(
         {
             number_of_line_under_bar += 1.f;
         }
-        ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
-
         const auto space_under_bar{
-            (internal::line_height() + g.Style.ItemSpacing.y) * number_of_line_under_bar +
-            g.Style.ItemSpacing.y * 2.f};
+            (internal::line_height() + g.Style.ItemInnerSpacing.y) * number_of_line_under_bar + g.Style.ItemSpacing.y * 2.f};
+        ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
         draw_border(
             draw_list,
             gradient_bar_position -
-                ImVec2{settings.horizontal_margin + 4.f, space_over_bar},
+                ImVec2{settings.horizontal_margin + 4.f, g.Style.ItemInnerSpacing.y * 4.f + space_over_bar},
             gradient_bar_position +
                 gradient_size +
                 ImVec2{
@@ -524,6 +524,9 @@ auto GradientWidget::widget(
         );
     }
     ImGui::PopID();
+    ImGui::SetCursorScreenPos(
+        internal::gradient_position(0.f) + ImVec2{0.f, next_y_position_to_set_cursor}
+    );
     return modified;
 }
 
