@@ -37,6 +37,9 @@ struct Settings {
     float horizontal_margin = 10.f;
     ImGuiGradient::Flags flags = ImGuiGradient::Flag::None;
     ImGuiColorEditFlags color_flags = ImGuiColorEditFlags_None;
+    WrapMode wrap_mode{WrapMode::Clamp};
+    Interpolation interpolation_mode{Interpolation::Linear};
+    bool should_use_a_random_color_for_the_new_marks{false};
 };
 ```
 `gradient_height` is the gradient bar height.
@@ -49,6 +52,13 @@ struct Settings {
 
 `color_flags` are ImGui flags to control the behaviour to display colors.
 
+`wrap_mode` controls how a mark position that is outside of the [0, 1] range is mapped back into that range.
+
+`interpolation_mode` controls how the colors are interpolated between two marks.
+
+`should_use_a_random_color_for_the_new_marks` controls how the new mark color is chosen.
+If it is enable the new mark color will be a random color,else it will be the one wich is computed at the mark position.
+
 
 ## ImGuiGradient::Flags
 
@@ -60,8 +70,6 @@ struct Settings {
 
 `Flag::NoLabel` : No name for gradient widget.
 
-`Flag::NoRandomModeCheckBox` : No checkbox to enable or disable the random mode when adding a new color.
-
 `Flag::NoAddButton` : No "+" button to add a mark.
 
 `Flag::NoRemoveButton` : No "-" button to remove a mark.
@@ -70,9 +78,6 @@ struct Settings {
 
 `Flag::NoColorEdit` : No color edit widget when selecting a mark.
 
-`Flag::NoWrapModeSelector` : No widget to change wrap mode position.
-
-`Flag::NoInterpolationSelector` : No widget to change how gradient colors are computed.
 
 `Flag::NoDragDownToDelete` : Don't delete a mark by dragging it down.
 
@@ -82,20 +87,19 @@ struct Settings {
 
 `Flag::NoMarkOptions` : No new widgets appear when a mark is selected.
 
-`Flag::None` : No selector to change wrap mode position and  how gradient colors are computed.
-
 
 ## GradientWidget class attributes
 
 ```cpp
-internal::State state{};
-WrapMode        wrap_mode{WrapMode::Clamp};
-Interpolation   interpolation_mode{Interpolation::Linear};
-bool            should_use_a_random_color_for_the_new_marks{false};
+Gradient _gradient{};
+MarkId   _dragged_mark{nullptr};
+MarkId   _selected_mark{nullptr};
+MarkId   _mark_to_hide{nullptr};
 ```
-In `state` there is the gradient and other attributes to make the widget work.
-The Gradient is composed of a list of Marks.
+`_gradient` is composed of a list of Marks.
 A Mark is composed of a color and a RelativePosition between 0.f and 1.f.
+MarkId are pointer on a Mark. 
+`_dragged_mark`, `_selected_mark`, `_mark_to_hide` are MarkId used to manage widget state.
 
 
 ## Wrap Mode
@@ -108,15 +112,41 @@ It controls how the position of a mark that is outside of the [0, 1] range is ma
 
 `WrapMode::MirrorRepeat` : Like `WrapMode::Repeat` except that every other range is flipped.
 
-You could disable its selector widget with `Flag::NoWrapModeSelector`.
+To create a widget to change the wrap mode, use:
+```cpp
+auto ImGuiGradient::wrap_mode_selector(
+    const char* label,
+    WrapMode&   wrap_mode,
+    const bool  should_show_tooltip
+) -> bool;
+```
+
+For example :
+```cpp
+ImGuiGradient::Settings settings{};
+ImGuiGradient::wrap_mode_selector(
+    wrap_mode_widget_name,
+    settings.wrap_mode,
+    should_show_tooltip);
+gradient_widget.widget (widget_name,settings);
+```
 
 ## Interpolation
 
 It Controls how the colors are interpolated between two marks.
+
 `Interpolation::Linear` : interpolation between two marks.
+
 `Interpolation::Constant` : Constant color between two marks: it uses the color of the mark on the right.
 
-You could disable its selector widget with `Flag::NoInterpolationSelector`.
+To create a widget to change the interpolation mode, use:
+```cpp
+auto ImGuiGradient::gradient_interpolation_mode_selector(
+    const char*    label,
+    Interpolation& interpolation_mode,
+    const bool     should_show_tooltip
+) -> bool;
+```
 
 
 ## Color random generator
@@ -136,7 +166,15 @@ gradient.widget(
     generator
 );
 ```
-You could disable the random color checkbox widget with `Flag::NoRandomModeCheckBox`.
+
+To create a widget to change enable or disable the behaviour, use:
+```cpp
+auto random_mode_box(
+    const char* label,
+    bool&       should_use_a_random_color_for_the_new_marks,
+    const bool  should_show_tooltip
+) -> bool;
+```
 
 
 ## Gradient Widget methods
@@ -144,18 +182,11 @@ You could disable the random color checkbox widget with `Flag::NoRandomModeCheck
 ```cpp
 
 auto get_gradient() const -> const Gradient&;
- 
-void set_mark_position(const Mark& mark, RelativePosition position);
-void set_mark_color(const Mark& mark, ColorRGBA color);
-void set_wrap_mode(WrapMode new_wrap_mode);
-void set_interpolation_mode(Interpolation new_interpolation_mode);
-void enable_random_color_mode(bool is_random_enable);
+auto gradient() -> Gradient&;
+   
+auto is_valid(MarkId id) -> bool;
 
-void add_mark(float position);
-void add_mark(float position, std::default_random_engine&generator);
-void remove_mark(const Mark& mark);
-
-void reset(); // reset state to its default value.
+void reset(); // reset widget to its default value.
 
 auto widget(
     const char*                 label,
