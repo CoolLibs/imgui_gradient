@@ -4,7 +4,7 @@
 #include <quick_imgui/quick_imgui.hpp>
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode fonctions
-#include "../src/extras_widgets.hpp"
+#include "../src/extra_widgets.hpp"
 #include "../src/widgets.hpp"
 
 auto main(int argc, char* argv[]) -> int
