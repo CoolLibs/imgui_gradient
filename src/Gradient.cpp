@@ -4,6 +4,12 @@
 
 namespace ImGuiGradient {
 
+Gradient::Gradient(const std::list<ImGuiGradient::Mark>& marks_list)
+{
+    _marks.clear();
+    _marks = marks_list;
+}
+
 void Gradient::sort_marks()
 {
     _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });

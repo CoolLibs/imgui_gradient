@@ -10,6 +10,9 @@ namespace ImGuiGradient {
 
 class Gradient {
 public:
+    Gradient() = default;
+    explicit Gradient(const std::list<ImGuiGradient::Mark>& mark_list);
+
     auto compute_color_at(RelativePosition position) const -> ColorRGBA;
 
     auto find_ptr(MarkId id) -> Mark*;
