@@ -496,11 +496,6 @@ auto GradientWidget::widget(
             space_over_bar += ImGui::CalcTextSize(label).y;
         }
         auto number_of_line_under_bar{1.f};
-        if (!(settings.flags & Flag::NoRandomModeCheckBox) ||
-            !(settings.flags & Flag::NoSelector))
-        {
-            number_of_line_under_bar += 1.f;
-        }
         if (!(settings.flags & Flag::NoResetButton))
         {
             number_of_line_under_bar += 1.f;

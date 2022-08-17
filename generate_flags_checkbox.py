@@ -9,18 +9,14 @@ def all_flags():
         "ImGuiGradient::Flag::NoTooltip":                  ["isNoTooltip"],
         "ImGuiGradient::Flag::NoResetButton":              ["isNoResetButton"],
         "ImGuiGradient::Flag::NoLabel":                    ["isNoLabel"],
-        "ImGuiGradient::Flag::NoRandomModeCheckBox":       ["isNoRandomModeCheckBox"],
         "ImGuiGradient::Flag::NoAddButton":                ["isNoAddButton"],
         "ImGuiGradient::Flag::NoRemoveButton":             ["isNoRemoveButton"],
         "ImGuiGradient::Flag::NoPositionSlider":           ["isNoPositionSlider"],
         "ImGuiGradient::Flag::NoColorEdit":                ["isNoColorEdit"],
-        "ImGuiGradient::Flag::NoWrapModeSelector":         ["isNoWrapModeSelector"],
-        "ImGuiGradient::Flag::NoInterpolationSelector":    ["isNoInterpolationSelector"],
         "ImGuiGradient::Flag::NoDragDownToDelete":         ["isNoDragDownToDelete"],
         "ImGuiGradient::Flag::NoBorder":                   ["isNoBorder"],
         "ImGuiGradient::Flag::NoAddAndRemoveButtons":      ["isNoAddAndRemoveButtons"],
         "ImGuiGradient::Flag::NoMarkOptions":              ["isNoMarkOptions"],
-        "ImGuiGradient::Flag::NoSelector":                 ["isNoSelector"],
     }
 
 def checkboxes_for_all_flags():

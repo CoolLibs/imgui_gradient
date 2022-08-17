@@ -10,120 +10,91 @@
 
 auto checkboxes_for_all_flags() -> ImGuiGradient::Flags
 {
-ImGuiGradient::Flags options = ImGuiGradient::Flag::None;
+    ImGuiGradient::Flags options = ImGuiGradient::Flag::None;
 
+    static auto isNone = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::None", &isNone);
+    if (isNone)
+    {
+        options |= ImGuiGradient::Flag::None;
+    }
 
-static auto isNone = false;
-ImGui::Checkbox("ImGuiGradient::Flag::None", &isNone);
-if (isNone)
-{
-    options|=ImGuiGradient::Flag::None;
-}
+    static auto isNoTooltip = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoTooltip", &isNoTooltip);
+    if (isNoTooltip)
+    {
+        options |= ImGuiGradient::Flag::NoTooltip;
+    }
 
-static auto isNoTooltip = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoTooltip", &isNoTooltip);
-if (isNoTooltip)
-{
-    options|=ImGuiGradient::Flag::NoTooltip;
-}
+    static auto isNoResetButton = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoResetButton", &isNoResetButton);
+    if (isNoResetButton)
+    {
+        options |= ImGuiGradient::Flag::NoResetButton;
+    }
 
-static auto isNoResetButton = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoResetButton", &isNoResetButton);
-if (isNoResetButton)
-{
-    options|=ImGuiGradient::Flag::NoResetButton;
-}
+    static auto isNoLabel = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoLabel", &isNoLabel);
+    if (isNoLabel)
+    {
+        options |= ImGuiGradient::Flag::NoLabel;
+    }
 
-static auto isNoLabel = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoLabel", &isNoLabel);
-if (isNoLabel)
-{
-    options|=ImGuiGradient::Flag::NoLabel;
-}
+    static auto isNoAddButton = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoAddButton", &isNoAddButton);
+    if (isNoAddButton)
+    {
+        options |= ImGuiGradient::Flag::NoAddButton;
+    }
 
-static auto isNoRandomModeCheckBox = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoRandomModeCheckBox", &isNoRandomModeCheckBox);
-if (isNoRandomModeCheckBox)
-{
-    options|=ImGuiGradient::Flag::NoRandomModeCheckBox;
-}
+    static auto isNoRemoveButton = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoRemoveButton", &isNoRemoveButton);
+    if (isNoRemoveButton)
+    {
+        options |= ImGuiGradient::Flag::NoRemoveButton;
+    }
 
-static auto isNoAddButton = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoAddButton", &isNoAddButton);
-if (isNoAddButton)
-{
-    options|=ImGuiGradient::Flag::NoAddButton;
-}
+    static auto isNoPositionSlider = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoPositionSlider", &isNoPositionSlider);
+    if (isNoPositionSlider)
+    {
+        options |= ImGuiGradient::Flag::NoPositionSlider;
+    }
 
-static auto isNoRemoveButton = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoRemoveButton", &isNoRemoveButton);
-if (isNoRemoveButton)
-{
-    options|=ImGuiGradient::Flag::NoRemoveButton;
-}
+    static auto isNoColorEdit = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoColorEdit", &isNoColorEdit);
+    if (isNoColorEdit)
+    {
+        options |= ImGuiGradient::Flag::NoColorEdit;
+    }
 
-static auto isNoPositionSlider = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoPositionSlider", &isNoPositionSlider);
-if (isNoPositionSlider)
-{
-    options|=ImGuiGradient::Flag::NoPositionSlider;
-}
+    static auto isNoDragDownToDelete = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoDragDownToDelete", &isNoDragDownToDelete);
+    if (isNoDragDownToDelete)
+    {
+        options |= ImGuiGradient::Flag::NoDragDownToDelete;
+    }
 
-static auto isNoColorEdit = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoColorEdit", &isNoColorEdit);
-if (isNoColorEdit)
-{
-    options|=ImGuiGradient::Flag::NoColorEdit;
-}
+    static auto isNoBorder = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoBorder", &isNoBorder);
+    if (isNoBorder)
+    {
+        options |= ImGuiGradient::Flag::NoBorder;
+    }
 
-static auto isNoWrapModeSelector = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoWrapModeSelector", &isNoWrapModeSelector);
-if (isNoWrapModeSelector)
-{
-    options|=ImGuiGradient::Flag::NoWrapModeSelector;
-}
+    static auto isNoAddAndRemoveButtons = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoAddAndRemoveButtons", &isNoAddAndRemoveButtons);
+    if (isNoAddAndRemoveButtons)
+    {
+        options |= ImGuiGradient::Flag::NoAddAndRemoveButtons;
+    }
 
-static auto isNoInterpolationSelector = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoInterpolationSelector", &isNoInterpolationSelector);
-if (isNoInterpolationSelector)
-{
-    options|=ImGuiGradient::Flag::NoInterpolationSelector;
-}
-
-static auto isNoDragDownToDelete = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoDragDownToDelete", &isNoDragDownToDelete);
-if (isNoDragDownToDelete)
-{
-    options|=ImGuiGradient::Flag::NoDragDownToDelete;
-}
-
-static auto isNoBorder = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoBorder", &isNoBorder);
-if (isNoBorder)
-{
-    options|=ImGuiGradient::Flag::NoBorder;
-}
-
-static auto isNoAddAndRemoveButtons = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoAddAndRemoveButtons", &isNoAddAndRemoveButtons);
-if (isNoAddAndRemoveButtons)
-{
-    options|=ImGuiGradient::Flag::NoAddAndRemoveButtons;
-}
-
-static auto isNoMarkOptions = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoMarkOptions", &isNoMarkOptions);
-if (isNoMarkOptions)
-{
-    options|=ImGuiGradient::Flag::NoMarkOptions;
-}
-
-static auto isNoSelector = false;
-ImGui::Checkbox("ImGuiGradient::Flag::NoSelector", &isNoSelector);
-if (isNoSelector)
-{
-    options|=ImGuiGradient::Flag::NoSelector;
-}
+    static auto isNoMarkOptions = false;
+    ImGui::Checkbox("ImGuiGradient::Flag::NoMarkOptions", &isNoMarkOptions);
+    if (isNoMarkOptions)
+    {
+        options |= ImGuiGradient::Flag::NoMarkOptions;
+    }
 
     return options;
 }
