@@ -86,6 +86,11 @@ auto main(int argc, char* argv[]) -> int
                     settings,
                     generator
                 );
+                gradient2.widget(
+                    "Gradient2",
+                    settings,
+                    generator
+                );
             }
             else
             {
