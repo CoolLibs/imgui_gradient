@@ -338,6 +338,7 @@ auto GradientWidget::widget(
 )
     -> bool
 {
+    ImGui::PushID(label);
     if (!(settings.flags & Flag::NoLabel))
     {
         ImGui::Text("%s", label);
@@ -527,7 +528,7 @@ auto GradientWidget::widget(
                     space_under_bar}
         );
     }
-
+    ImGui::PopID();
     return modified;
 }
 

@@ -16,8 +16,8 @@ auto main(int argc, char* argv[]) -> int
         exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )
     {
-        auto gradient = ImGuiGradient::GradientWidget{};
-        // auto gradient2 = ImGuiGradient::GradientWidget{};
+        auto gradient  = ImGuiGradient::GradientWidget{};
+        auto gradient2 = ImGuiGradient::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
             ImGui::Begin("Framerate");
             ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
@@ -93,11 +93,10 @@ auto main(int argc, char* argv[]) -> int
                     "Gradient",
                     settings
                 );
-                // TODO(ASG) Fix when two gradients
-                // gradient2.widget(
-                //     "Gradient2",
-                //     settings
-                // );
+                gradient2.widget(
+                    "Gradient2",
+                    settings
+                );
             }
             ImGui::End();
         });
