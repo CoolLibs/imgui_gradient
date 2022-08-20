@@ -114,15 +114,15 @@ auto main(int argc, char* argv[]) -> int
 TEST_CASE("Interpolation modes")
 {
     // Gradient from black to white
-    ImGuiGradient::GradientWidget widget{{
+    ImGuiGradient::Gradient gradient{{
         ImGuiGradient::Mark{ImGuiGradient::RelativePosition{0.f}, ImGuiGradient::ColorRGBA{0.f, 0.f, 0.f, 1.f}},
         ImGuiGradient::Mark{ImGuiGradient::RelativePosition{1.f}, ImGuiGradient::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     }};
 
-    CHECK(doctest::Approx(widget.gradient().at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Linear).x) == 0.25f);
-    CHECK(doctest::Approx(widget.gradient().at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Linear).x) == 0.75f);
-    CHECK(doctest::Approx(widget.gradient().at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
-    CHECK(doctest::Approx(widget.gradient().at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Linear).x) == 0.25f);
+    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Linear).x) == 0.75f);
+    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
 }
 
 TEST_CASE("Wrap modes")

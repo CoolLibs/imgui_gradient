@@ -120,6 +120,7 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
     }
 }
 
+// TODO(ASG) interpolation_mode should be a member of gradient (add getters and setters etc.) and remove it from Settings
 auto Gradient::at(const RelativePosition position, Interpolation interpolation_mode) const -> ColorRGBA
 {
     const auto        surrounding_marks = get_marks_surrounding(position, _marks);

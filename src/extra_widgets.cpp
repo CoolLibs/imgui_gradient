@@ -16,11 +16,10 @@ static auto selector_with_tooltip(
     const bool                           should_show_tooltip
 ) -> bool
 {
-    ImGuiContext& g{*GImGui};
-    const auto    width{
+    const auto width{
         ImGui::CalcTextSize(longuest_item_name).x +
         ImGui::GetFrameHeightWithSpacing() +
-        g.Style.FramePadding.x * 2.f};
+        ImGui::GetStyle().FramePadding.x * 2.f};
     ImGui::SetNextItemWidth(width);
 
     auto modified{false};
