@@ -13,9 +13,11 @@ public:
     Gradient() = default;
     explicit Gradient(const std::list<ImGuiGradient::Mark>& mark_list);
 
-    auto compute_color_at(RelativePosition position) const -> ColorRGBA;
+    auto at(RelativePosition position) const -> ColorRGBA;
 
-    auto find_ptr(MarkId id) -> Mark*;
+    auto find(MarkId id) const -> const Mark*;
+    auto find(MarkId id) -> Mark*;
+    auto contains(MarkId id) const -> bool { return find(id); }
 
     auto add_mark(const Mark& mark) -> MarkId;
     void remove_mark(MarkId mark);
@@ -32,6 +34,16 @@ public:
 
 private:
     void sort_marks();
+    template<typename GradientT>
+    friend auto find_impl(GradientT&& gradient, MarkId id)
+    {
+        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
+            return &mark == id.get_ptr();
+        });
+        return it != gradient._marks.end()
+                   ? &*it
+                   : nullptr;
+    }
 
 private:
     std::list<Mark> _marks{

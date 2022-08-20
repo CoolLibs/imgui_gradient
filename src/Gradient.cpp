@@ -15,14 +15,13 @@ void Gradient::sort_marks()
     _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
 }
 
-auto Gradient::find_ptr(MarkId id) -> Mark*
+auto Gradient::find(MarkId id) const -> const Mark*
 {
-    const auto it = std::find_if(_marks.begin(), _marks.end(), [&](const Mark& mark) {
-        return &mark == id.get_ptr();
-    });
-    return it != _marks.end()
-               ? &*it
-               : nullptr;
+    return find_impl(*this, id);
+}
+auto Gradient::find(MarkId id) -> Mark*
+{
+    return find_impl(*this, id);
 }
 
 auto Gradient::add_mark(const Mark& mark) -> MarkId
@@ -35,7 +34,7 @@ auto Gradient::add_mark(const Mark& mark) -> MarkId
 
 void Gradient::remove_mark(MarkId mark)
 {
-    const auto* const ptr = find_ptr(mark);
+    const auto* const ptr = find(mark);
     if (ptr)
     {
         _marks.remove(*ptr);
@@ -49,7 +48,7 @@ auto Gradient::get_marks() const -> const std::list<Mark>&
 
 void Gradient::set_mark_position(MarkId const mark, const RelativePosition position)
 {
-    auto* const ptr = find_ptr(mark);
+    auto* const ptr = find(mark);
     if (ptr)
     {
         ptr->position = position;
@@ -59,7 +58,7 @@ void Gradient::set_mark_position(MarkId const mark, const RelativePosition posit
 
 void Gradient::set_mark_color(const MarkId mark, const ColorRGBA color)
 {
-    auto* const ptr = find_ptr(mark);
+    auto* const ptr = find(mark);
     if (ptr)
     {
         ptr->color = color;
@@ -91,7 +90,7 @@ auto Gradient::get_marks_surrounding(const RelativePosition position) const -> i
     return internal::SurroundingMarks{lower, upper};
 }
 
-auto Gradient::compute_color_at(const RelativePosition position) const -> ColorRGBA
+auto Gradient::at(const RelativePosition position) const -> ColorRGBA
 {
     const auto        surrounding_marks = get_marks_surrounding(position);
     const Mark* const lower{surrounding_marks.lower};
