@@ -335,7 +335,7 @@ auto GradientWidget::widget(
     if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        add_mark_with_chosen_mode(make_relative_position(position, WrapMode::Clamp), generator, settings.should_use_a_random_color_for_the_new_marks);
+        add_mark_with_chosen_mode({position, WrapMode::Clamp}, generator, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -401,7 +401,7 @@ auto GradientWidget::widget(
         if (add_button(is_there_no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
-            const auto position{make_relative_position(position_where_to_add_next_mark(_gradient), WrapMode::Clamp)};
+            const auto position = RelativePosition{position_where_to_add_next_mark(_gradient), WrapMode::Clamp};
             add_mark_with_chosen_mode(position, generator, settings.should_use_a_random_color_for_the_new_marks);
             modified = true;
         }

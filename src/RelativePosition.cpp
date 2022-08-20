@@ -3,7 +3,7 @@
 
 namespace ImGuiGradient {
 
-auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
+static auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
 {
     return [&] {
         switch (wrap_mode)
@@ -26,6 +26,10 @@ auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosit
         }
     }();
 }
+
+RelativePosition::RelativePosition(float position, WrapMode wrap_mode)
+    : RelativePosition{make_relative_position(position, wrap_mode).get()}
+{}
 
 auto RelativePosition::imgui_widget(const char* label, const float width) -> bool
 {

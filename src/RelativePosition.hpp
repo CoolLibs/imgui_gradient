@@ -16,6 +16,8 @@ public:
         assert_invariants();
     }
 
+    RelativePosition(float position, WrapMode wrap_mode);
+
     /// Returns a number between 0 and 1.
     auto get() const -> float { return _value; }
 
@@ -42,7 +44,5 @@ private:
 private:
     float _value{0.f};
 };
-
-auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition;
 
 } // namespace ImGuiGradient
