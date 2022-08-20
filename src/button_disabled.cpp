@@ -1,4 +1,4 @@
-#include "widgets.hpp"
+#include "button_disabled.hpp"
 #include <functional>
 #include "tooltip.hpp"
 
@@ -35,13 +35,6 @@ void button_disabled(const char* label, const char* reason_for_disabling, const 
 {
     maybe_disabled(true, reason_for_disabling, [&]() {
         ImGui::Button(label, size);
-    });
-}
-
-void button_disabled(const char* label, const char* reason_for_disabling)
-{
-    maybe_disabled(true, reason_for_disabling, [&]() {
-        ImGui::Button(label);
     });
 }
 

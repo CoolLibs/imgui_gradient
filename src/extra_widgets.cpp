@@ -24,9 +24,7 @@ static auto selector_with_tooltip(
     ImGui::SetNextItemWidth(width);
 
     auto modified{false};
-    auto combo_preview_value{items[current_item_index]};
-
-    if (ImGui::BeginCombo(label, combo_preview_value))
+    if (ImGui::BeginCombo(label, items[current_item_index]))
     {
         for (size_t n = 0; n < items.size(); n++)
         {
@@ -37,7 +35,6 @@ static auto selector_with_tooltip(
                 modified           = true;
             }
 
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected)
             {
                 ImGui::SetItemDefaultFocus();
@@ -64,18 +61,23 @@ auto random_mode_checkbox(
     );
     if (should_show_tooltip)
     {
-        tooltip("Add mark with random color");
+        tooltip("When checked, the new marks will use a random color instead of keeping the one the gradient had at that position.");
     }
     return modified;
 }
 
 auto wrap_mode_selector(const char* label, WrapMode& wrap_mode, const bool should_show_tooltip) -> bool
 {
-    const std::array<const char*, 3> items    = {"Clamp", "Repeat", "Mirror Repeat"};
-    const std::array<const char*, 3> tooltips = {
-        "Clamp mark position in range [0.,1.]",
-        "Repeat mark position in range [0.,1.]",
-        "Repeat and mirror mark position in range [0.,1.]"};
+    static constexpr std::array<const char*, 3> items = {
+        "Clamp",
+        "Repeat",
+        "Mirror Repeat",
+    };
+    static constexpr std::array<const char*, 3> tooltips = {
+        "If the position gets bigger than 1, maps it to 1. If it gets smaller than 0, maps it to 0.",
+        "Maps the number line to a bunch of copies of [0, 1] stuck together.",
+        "Like `Repeat` except that every other range is flipped.",
+    };
 
     return selector_with_tooltip(
         label,
@@ -89,10 +91,14 @@ auto wrap_mode_selector(const char* label, WrapMode& wrap_mode, const bool shoul
 
 auto gradient_interpolation_mode_selector(const char* label, Interpolation& interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    const std::array<const char*, 2> items    = {"Linear", "Constant"};
-    const std::array<const char*, 2> tooltips = {
+    static constexpr std::array<const char*, 2> items = {
+        "Linear",
+        "Constant",
+    };
+    static constexpr std::array<const char*, 2> tooltips = {
         "Linear interpolation between two marks",
-        "Constant color between two marks"};
+        "Constant color between two marks",
+    };
 
     return selector_with_tooltip(
         label,

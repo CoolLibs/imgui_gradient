@@ -4,7 +4,7 @@
 #include <quick_imgui/quick_imgui.hpp>
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode functions
-#include "../src/widgets.hpp"
+#include "../src/button_disabled.hpp"
 
 auto main(int argc, char* argv[]) -> int
 {
@@ -69,9 +69,9 @@ auto main(int argc, char* argv[]) -> int
                     ImGuiColorEditFlags_NoInputs
             );
             static ImGuiGradient::Settings settings{};
-            ImGuiGradient::wrap_mode_selector("Position Mode", settings.wrap_mode, true);
-            ImGuiGradient::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode, true);
-            ImGuiGradient::random_mode_checkbox("Random Mode", settings.should_use_a_random_color_for_the_new_marks, true);
+            ImGuiGradient::wrap_mode_selector("Position Mode", settings.wrap_mode);
+            ImGuiGradient::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode);
+            ImGuiGradient::random_mode_checkbox("Randomize new marks' color", settings.should_use_a_random_color_for_the_new_marks);
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
