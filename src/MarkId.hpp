@@ -5,6 +5,18 @@
 
 namespace ImGuiGradient {
 
+namespace internal {
+// Thanks to https://stackoverflow.com/a/34143224
+template<class T, class U>
+struct transfer_const {
+    using type = typename std::remove_const<U>::type*;
+};
+template<class T, class U>
+struct transfer_const<const T&, U> {
+    using type = const U*;
+};
+} // namespace internal
+
 /// Used to identify a Mark.
 class MarkId {
 public:
@@ -26,7 +38,7 @@ public:
 private:
     friend class Gradient;
     template<typename GradientT>
-    auto find(GradientT&& gradient) const
+    auto find(GradientT&& gradient) const -> typename internal::transfer_const<GradientT, Mark>::type // Returns a `const Mark*` if GradientT is const and a mutable `Mark*` otherwise.
     {
         const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
             return &mark == _ptr;
