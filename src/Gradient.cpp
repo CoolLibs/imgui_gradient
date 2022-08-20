@@ -17,11 +17,11 @@ void Gradient::sort_marks()
 
 auto Gradient::find(MarkId id) const -> const Mark*
 {
-    return find_impl(*this, id);
+    return id.find(*this);
 }
 auto Gradient::find(MarkId id) -> Mark*
 {
-    return find_impl(*this, id);
+    return id.find(*this);
 }
 
 auto Gradient::add_mark(const Mark& mark) -> MarkId

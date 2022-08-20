@@ -25,7 +25,16 @@ public:
 
 private:
     friend class Gradient;
-    auto get_ptr() const -> const Mark* { return _ptr; }
+    template<typename GradientT>
+    auto find(GradientT&& gradient) const
+    {
+        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
+            return &mark == _ptr;
+        });
+        return it != gradient._marks.end()
+                   ? &*it
+                   : nullptr;
+    }
 
 private:
     const Mark* _ptr{};

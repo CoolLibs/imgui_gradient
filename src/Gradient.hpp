@@ -34,16 +34,6 @@ public:
 
 private:
     void sort_marks();
-    template<typename GradientT>
-    friend auto find_impl(GradientT&& gradient, MarkId id)
-    {
-        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
-            return &mark == id.get_ptr();
-        });
-        return it != gradient._marks.end()
-                   ? &*it
-                   : nullptr;
-    }
 
 private:
     std::list<Mark> _marks{
@@ -51,6 +41,8 @@ private:
         Mark{RelativePosition{0.f}, ImVec4{0.f, 0.f, 0.f, 1.f}},
         Mark{RelativePosition{1.f}, ImVec4{1.f, 1.f, 1.f, 1.f}},
     };
+
+    friend class MarkId;
 };
 
 } // namespace ImGuiGradient
