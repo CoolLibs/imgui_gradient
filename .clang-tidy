@@ -1,6 +1,7 @@
 ---
 Checks: '
   *,
+  -readability-identifier-length,
   -cppcoreguidelines-avoid-magic-numbers,
   -readability-redundant-access-specifiers,
   -readability-else-after-return,
