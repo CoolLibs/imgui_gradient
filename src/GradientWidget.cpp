@@ -134,6 +134,7 @@ static void draw_gradient_bar(
 }
 
 // TODO(ASG) Fix border
+// TODO(ASG) Fix SameLine() after a gradient
 
 static void handle_interactions_with_hovered_mark(
     MarkId& dragged_mark,
@@ -190,12 +191,11 @@ auto GradientWidget::draw_gradient_marks(
             }
         }
     }
-    static constexpr float space_between_gradient_bar_and_options = 20.f;
     ImGui::SetCursorScreenPos(
         gradient_bar_position +
         ImVec2{
             0.f,
-            gradient_size.y + space_between_gradient_bar_and_options}
+            gradient_size.y + ImGui::GetStyle().ItemSpacing.y * 2.f}
     );
     return hitbox_is_hovered;
 }
@@ -303,6 +303,7 @@ auto GradientWidget::widget(
 ) -> bool
 {
     ImGui::PushID(label);
+    ImGui::BeginGroup();
     if (!(settings.flags & Flag::NoLabel))
     {
         ImGui::Text("%s", label);
@@ -450,18 +451,16 @@ auto GradientWidget::widget(
         );
     }
 
-    ImGuiContext& g{*GImGui};
-    const auto    space_over_bar =
-        !(settings.flags & Flag::NoLabel)
-               ? ImGui::CalcTextSize(label).y
-               : 0.f;
-    const auto next_y_position_to_set_cursor =
-        !(settings.flags & Flag::NoLabel)
-            ? ImGui::CalcTextSize(label).y
-            : ImGui::CalcTextSize(label).y + g.Style.ItemSpacing.y * 2.f;
+    const auto space_over_bar = !(settings.flags & Flag::NoLabel)
+                                    ? ImGui::CalcTextSize(label).y + ImGui::GetStyle().ItemSpacing.y * 4.f
+                                    : ImGui::GetStyle().ItemSpacing.y * 2.f;
+    // ImGui::SetCursorScreenPos(
+    //     internal::gradient_position(0.f) + ImVec2{0.f, space_over_bar}
+    // );
+    auto space_under_bar{0.f};
     if (!(settings.flags & Flag::NoBorder))
     {
-        auto number_of_line_under_bar{1.f};
+        auto number_of_line_under_bar{0.f};
         if (!(settings.flags & Flag::NoResetButton))
         {
             number_of_line_under_bar += 1.f;
@@ -473,13 +472,13 @@ auto GradientWidget::widget(
         {
             number_of_line_under_bar += 1.f;
         }
-        const auto space_under_bar{
-            (internal::line_height() + g.Style.ItemInnerSpacing.y) * number_of_line_under_bar + g.Style.ItemSpacing.y * 2.f};
+        space_under_bar =
+            (internal::line_height() + ImGui::GetStyle().ItemSpacing.y * 2.f) * number_of_line_under_bar + ImGui::GetStyle().ItemSpacing.y * 4.f;
         ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
         draw_border(
             draw_list,
             gradient_bar_position -
-                ImVec2{settings.horizontal_margin + 4.f, g.Style.ItemInnerSpacing.y * 4.f + space_over_bar},
+                ImVec2{settings.horizontal_margin + 4.f, space_over_bar},
             gradient_bar_position +
                 gradient_size +
                 ImVec2{
@@ -487,13 +486,13 @@ auto GradientWidget::widget(
                     space_under_bar}
         );
     }
-    ImGui::PopID();
-    ImGui::SetCursorScreenPos(
-        internal::gradient_position(0.f) + ImVec2{0.f, next_y_position_to_set_cursor}
+    ImGui::SetCursorScreenPos(ImVec2{0.f, space_under_bar + space_over_bar + ImGui::GetStyle().ItemSpacing.y * 22.f}
     );
+    ImGui::EndGroup();
+    ImGui::PopID();
     return modified;
 }
-
+// TODO(ASG) Make a nice rendering of the arks, make sure the triangle doesn't go outside of the square
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
     static std::default_random_engine generator{std::random_device{}()};
