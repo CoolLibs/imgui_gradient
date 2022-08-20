@@ -33,7 +33,7 @@ auto RelativePosition::imgui_widget(const char* label, const float width) -> boo
     return ImGui::DragFloat(
         label,
         &_value,
-        .0001f,   /* speed */
+        0.0001f,  /* speed */
         0.f, 1.f, /* min and max */
         "%.4f",   /* precision */
         ImGuiSliderFlags_AlwaysClamp

@@ -9,8 +9,13 @@ struct Mark {
     RelativePosition position;
     ColorRGBA        color;
 
-    Mark(RelativePosition position = RelativePosition{0.f}, ColorRGBA color = {0.f, 0.f, 0.f, 1.f}) // We need to explicitly define the constructor in order to compile with MacOS Clang in C++ 11
-        : position{position}, color{color} {};
+    Mark( // We need to explicitly define the constructor in order to compile with MacOS Clang in C++ 11
+        RelativePosition position = RelativePosition{0.f},
+        ColorRGBA        color    = {0.f, 0.f, 0.f, 1.f}
+    )
+        : position{position}
+        , color{color}
+    {}
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {

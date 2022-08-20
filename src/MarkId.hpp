@@ -5,6 +5,7 @@
 
 namespace ImGuiGradient {
 
+/// Used to identify a Mark.
 class MarkId {
 public:
     explicit MarkId(const Mark* ptr)
@@ -20,7 +21,7 @@ public:
     void reset() { _ptr = nullptr; }
 
     friend auto operator==(const MarkId& a, const MarkId& b) -> bool { return a._ptr == b._ptr; };
-    friend auto operator!=(const MarkId& a, const MarkId& b) -> bool { return !(a._ptr == b._ptr); };
+    friend auto operator!=(const MarkId& a, const MarkId& b) -> bool { return !(a == b); };
 
 private:
     friend class Gradient;
