@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef> // Includes size_t
+
 namespace ImGuiGradient {
 
 /// Controls how a position that is outside of the [0, 1] range is mapped back into that range.

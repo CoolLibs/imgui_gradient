@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef> // Includes size_t
+
 namespace ImGuiGradient {
 
 /// Controls how the colors are interpolated between two marks.
