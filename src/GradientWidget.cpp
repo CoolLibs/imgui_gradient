@@ -25,35 +25,14 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
     return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
 }
 
-void GradientWidget::add_mark_with_current_color_at(const RelativePosition relative_pos)
-{
-    const auto mark = Mark{
-        relative_pos,
-        _gradient.compute_color_at(relative_pos)}; // TODO(ASG) Duplicated code
-    _selected_mark = _gradient.add_mark(mark);
-}
-
-void GradientWidget::add_mark_with_random_color(
-    const RelativePosition      relative_pos,
-    std::default_random_engine& generator
-)
-{
-    const auto mark = Mark{
-        relative_pos,
-        random_color(generator)};
-    _selected_mark = _gradient.add_mark(mark);
-}
-
 void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color)
 {
-    if (add_a_random_color)
-    {
-        add_mark_with_random_color(relative_pos, generator);
-    }
-    else
-    {
-        add_mark_with_current_color_at(relative_pos);
-    }
+    const auto mark = Mark{
+        relative_pos,
+        add_a_random_color
+            ? random_color(generator)
+            : _gradient.compute_color_at(relative_pos)};
+    _selected_mark = _gradient.add_mark(mark);
 }
 
 static auto button_with_tooltip(

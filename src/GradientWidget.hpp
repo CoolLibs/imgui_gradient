@@ -39,8 +39,6 @@ public:
     ) -> bool;
 
 private:
-    void add_mark_with_current_color_at(RelativePosition relative_pos);
-    void add_mark_with_random_color(RelativePosition relative_pos, std::default_random_engine& generator);
     void add_mark_with_chosen_mode(RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color);
 
     auto draw_gradient_marks(
