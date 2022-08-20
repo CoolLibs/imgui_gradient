@@ -20,6 +20,7 @@ struct transfer_const<const T&, U> {
 /// Used to identify a Mark.
 class MarkId {
 public:
+    MarkId() = default;
     explicit MarkId(const Mark* ptr)
         : _ptr{ptr}
     {}

@@ -21,7 +21,7 @@ static auto make_relative_position(float position, WrapMode wrap_mode) -> Relati
             return internal::mirror_repeat_position(position);
         }
         default:
-            assert(false && "[RelativePosition::make_relative_position] Invalid enum value");
+            assert(false && "[ImGuiGradient::make_relative_position] Invalid enum value");
             return RelativePosition{0.f};
         }
     }();

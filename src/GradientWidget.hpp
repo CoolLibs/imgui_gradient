@@ -16,6 +16,11 @@ namespace ImGuiGradient {
 
 class GradientWidget {
 public:
+    GradientWidget() = default;
+    explicit GradientWidget(const std::list<Mark>& marks)
+        : _gradient{marks}
+    {}
+
     auto gradient() const -> const Gradient& { return _gradient; }
     auto gradient() -> Gradient& { return _gradient; }
 
@@ -49,9 +54,9 @@ private:
 
 private:
     Gradient _gradient{};
-    MarkId   _dragged_mark{nullptr};
-    MarkId   _selected_mark{nullptr};
-    MarkId   _mark_to_hide{nullptr};
+    MarkId   _dragged_mark{};
+    MarkId   _selected_mark{};
+    MarkId   _mark_to_hide{};
 };
 
 } // namespace ImGuiGradient

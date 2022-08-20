@@ -4,12 +4,6 @@
 
 namespace ImGuiGradient {
 
-Gradient::Gradient(const std::list<ImGuiGradient::Mark>& marks_list)
-{
-    _marks.clear();
-    _marks = marks_list;
-}
-
 void Gradient::sort_marks()
 {
     _marks.sort([](const Mark& a, const Mark& b) { return a.position < b.position; });
@@ -27,9 +21,9 @@ auto Gradient::find(MarkId id) -> Mark*
 auto Gradient::add_mark(const Mark& mark) -> MarkId
 {
     _marks.push_back(mark);
-    auto reference = MarkId{_marks.back()};
+    const auto id = MarkId{_marks.back()};
     sort_marks();
-    return reference;
+    return id;
 }
 
 void Gradient::remove_mark(MarkId mark)
@@ -46,7 +40,7 @@ auto Gradient::get_marks() const -> const std::list<Mark>&
     return _marks;
 }
 
-void Gradient::set_mark_position(MarkId const mark, const RelativePosition position)
+void Gradient::set_mark_position(const MarkId mark, const RelativePosition position)
 {
     auto* const ptr = find(mark);
     if (ptr)
@@ -70,11 +64,21 @@ auto Gradient::is_empty() const -> bool
     return _marks.empty();
 }
 
-auto Gradient::get_marks_surrounding(const RelativePosition position) const -> internal::SurroundingMarks
+struct SurroundingMarks {
+    SurroundingMarks(const Mark* lower, const Mark* upper) // We need to explicitly define the constructor in order to compile with MacOS Clang in C++ 11
+        : lower{lower}
+        , upper{upper}
+    {}
+    const Mark* lower{nullptr};
+    const Mark* upper{nullptr};
+};
+
+/// Returns the marks positionned just before and after `position`, or nullptr if there is none.
+static auto get_marks_surrounding(const RelativePosition position, const std::list<Mark>& marks) -> SurroundingMarks
 {
     const Mark* lower{nullptr};
     const Mark* upper{nullptr};
-    for (const Mark& mark : _marks)
+    for (const Mark& mark : marks)
     {
         if (mark.position > position &&
             (!upper || mark.position < upper->position))
@@ -87,12 +91,38 @@ auto Gradient::get_marks_surrounding(const RelativePosition position) const -> i
             lower = &mark;
         }
     }
-    return internal::SurroundingMarks{lower, upper};
+    return SurroundingMarks{lower, upper};
 }
 
-auto Gradient::at(const RelativePosition position) const -> ColorRGBA
+static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosition position, Interpolation interpolation_mode) -> ColorRGBA
 {
-    const auto        surrounding_marks = get_marks_surrounding(position);
+    switch (interpolation_mode)
+    {
+    case Interpolation::Linear:
+    {
+        const float mix_factor = (position.get() - lower.position.get()) /
+                                 (upper.position.get() - lower.position.get());
+        return ImLerp(
+            lower.color,
+            upper.color,
+            mix_factor
+        );
+    }
+
+    case Interpolation::Constant:
+    {
+        return upper.color;
+    }
+
+    default:
+        assert(false && "[ImGuiGradient::interpolate] Invalid enum value");
+        return {-1.f, -1.f, -1.f, -1.f};
+    }
+}
+
+auto Gradient::at(const RelativePosition position, Interpolation interpolation_mode) const -> ColorRGBA
+{
+    const auto        surrounding_marks = get_marks_surrounding(position, _marks);
     const Mark* const lower{surrounding_marks.lower};
     const Mark* const upper{surrounding_marks.upper};
 
@@ -114,13 +144,7 @@ auto Gradient::at(const RelativePosition position) const -> ColorRGBA
     }
     else
     {
-        const float mix_factor = (position.get() - lower->position.get()) /
-                                 (upper->position.get() - lower->position.get());
-        return ImLerp(
-            lower->color,
-            upper->color,
-            mix_factor
-        );
+        return interpolate(*lower, *upper, position, interpolation_mode);
     }
 };
 
