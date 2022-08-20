@@ -9,6 +9,7 @@ struct SurroundingMarks {
         : lower{lower}
         , upper{upper}
     {}
+
     const Mark* lower{nullptr};
     const Mark* upper{nullptr};
 };

@@ -12,7 +12,6 @@
 #include "Settings.hpp"
 #include "WrapMode.hpp"
 
-
 namespace ImGuiGradient {
 
 class GradientWidget {
@@ -30,19 +29,19 @@ public:
     /// There is an overload that doesn't need `generator` and use the default generator of the library if users don't want to provide one.
     auto widget(
         const char*                 label,
-        const Settings&             settings,
-        std::default_random_engine& generator
+        std::default_random_engine& generator,
+        const Settings&             settings = {}
     ) -> bool;
 
     auto widget(
         const char*     label,
-        const Settings& settings
+        const Settings& settings = {}
     ) -> bool;
 
 private:
-    void add_mark_with_current_color_at(float position, const WrapMode& wrap_mode);
-    void add_mark_with_random_color(float position, const WrapMode& wrap_mode, std::default_random_engine& generator);
-    void add_mark_with_chosen_mode(float position, const WrapMode& wrap_mode, std::default_random_engine& generator, bool add_a_random_color);
+    void add_mark_with_current_color_at(RelativePosition relative_pos);
+    void add_mark_with_random_color(RelativePosition relative_pos, std::default_random_engine& generator);
+    void add_mark_with_chosen_mode(RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color);
 
     auto draw_gradient_marks(
         MarkId&       mark_to_delete,

@@ -25,37 +25,34 @@ static auto random_color(std::default_random_engine& generator) -> ColorRGBA
     return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
 }
 
-void GradientWidget::add_mark_with_current_color_at(float position, const WrapMode& wrap_mode)
+void GradientWidget::add_mark_with_current_color_at(const RelativePosition relative_pos)
 {
-    const auto relative_pos = make_relative_position(position, wrap_mode);
-    const auto mark         = Mark{
-        RelativePosition{relative_pos},
-        _gradient.compute_color_at(relative_pos)};
+    const auto mark = Mark{
+        relative_pos,
+        _gradient.compute_color_at(relative_pos)}; // TODO(ASG) Duplicated code
     _selected_mark = _gradient.add_mark(mark);
 }
 
 void GradientWidget::add_mark_with_random_color(
-    const float                 position,
-    const WrapMode&             wrap_mode,
+    const RelativePosition      relative_pos,
     std::default_random_engine& generator
 )
 {
-    const auto relative_pos = make_relative_position(position, wrap_mode);
-    const auto mark         = Mark{
-        RelativePosition{relative_pos},
+    const auto mark = Mark{
+        relative_pos,
         random_color(generator)};
     _selected_mark = _gradient.add_mark(mark);
 }
 
-void GradientWidget::add_mark_with_chosen_mode(float position, const WrapMode& wrap_mode, std::default_random_engine& generator, bool add_a_random_color)
+void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color)
 {
     if (add_a_random_color)
     {
-        add_mark_with_random_color(position, wrap_mode, generator);
+        add_mark_with_random_color(relative_pos, generator);
     }
     else
     {
-        add_mark_with_current_color_at(position, wrap_mode);
+        add_mark_with_current_color_at(relative_pos);
     }
 }
 
@@ -333,8 +330,8 @@ static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> 
 
 auto GradientWidget::widget(
     const char*                 label,
-    const Settings&             settings,
-    std::default_random_engine& generator
+    std::default_random_engine& generator,
+    const Settings&             settings
 )
     -> bool
 {
@@ -367,7 +364,7 @@ auto GradientWidget::widget(
     if (can_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        add_mark_with_chosen_mode(position, settings.wrap_mode, generator, settings.should_use_a_random_color_for_the_new_marks);
+        add_mark_with_chosen_mode(make_relative_position(position, WrapMode::Clamp), generator, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -433,8 +430,8 @@ auto GradientWidget::widget(
         if (add_button(is_there_no_tooltip))
         {
             // Add a mark where there is the greater space in the gradient
-            const auto position{position_where_to_add_next_mark(_gradient)};
-            add_mark_with_chosen_mode(position, settings.wrap_mode, generator, settings.should_use_a_random_color_for_the_new_marks);
+            const auto position{make_relative_position(position_where_to_add_next_mark(_gradient), WrapMode::Clamp)};
+            add_mark_with_chosen_mode(position, generator, settings.should_use_a_random_color_for_the_new_marks);
             modified = true;
         }
     }
@@ -445,7 +442,7 @@ auto GradientWidget::widget(
             is_valid(_selected_mark))
         {
             ImGui::SameLine();
-            modified |= color_button(*gradient().find_ptr(_selected_mark), is_there_no_tooltip, settings.color_flags);
+            modified |= color_button(*gradient().find_ptr(_selected_mark), is_there_no_tooltip, settings.color_edit_flags);
         }
     }
     if (!(settings.flags & Flag::NoPositionSlider))
@@ -533,6 +530,6 @@ auto GradientWidget::widget(
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
     static std::default_random_engine generator{std::random_device{}()};
-    return widget(label, settings, generator);
+    return widget(label, generator, settings);
 }
 }; // namespace ImGuiGradient

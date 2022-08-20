@@ -69,26 +69,27 @@ auto main(int argc, char* argv[]) -> int
                     ImGuiColorEditFlags_NoInputs
             );
             static ImGuiGradient::Settings settings{};
-            ImGuiGradient::wrap_mode_selector("Position Mode", settings.wrap_mode);
+            static ImGuiGradient::WrapMode wrap_mode{};
+            ImGuiGradient::wrap_mode_selector("Position Mode", wrap_mode);
             ImGuiGradient::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode);
             ImGuiGradient::random_mode_checkbox("Randomize new marks' color", settings.should_use_a_random_color_for_the_new_marks);
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
-            settings.flags       = flags;
-            settings.color_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
+            settings.flags            = flags;
+            settings.color_edit_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
             if (custom_generator)
             {
                 static auto generator = std::default_random_engine{std::random_device{}()};
                 gradient.widget(
                     "Gradient",
-                    settings,
-                    generator
+                    generator,
+                    settings
                 );
                 gradient2.widget(
                     "Gradient2",
-                    settings,
-                    generator
+                    generator,
+                    settings
                 );
             }
             else
