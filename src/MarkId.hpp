@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <list>
 #include "Mark.hpp"
 
