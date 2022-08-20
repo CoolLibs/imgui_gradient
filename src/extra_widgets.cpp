@@ -8,32 +8,32 @@ namespace ImGuiGradient {
 
 template<size_t size>
 static auto selector_with_tooltip(
-    const char*                         label,
-    int&                                item_current_index,
-    const std::array<const char*, size> items,
-    const char*                         greater_items, // Use the longuest word to choose the selector's size
-    const std::array<const char*, size> tooltips,
-    const bool                          should_show_tooltip
+    const char*                          label,
+    size_t&                              current_item_index,
+    const std::array<const char*, size>& items,
+    const char*                          longuest_item_name, // Use the longuest word to choose the selector's size
+    const std::array<const char*, size>& tooltips,
+    const bool                           should_show_tooltip
 ) -> bool
 {
     ImGuiContext& g{*GImGui};
     const auto    width{
-        ImGui::CalcTextSize(greater_items).x +
+        ImGui::CalcTextSize(longuest_item_name).x +
         ImGui::GetFrameHeightWithSpacing() +
         g.Style.FramePadding.x * 2.f};
     ImGui::SetNextItemWidth(width);
 
-    auto        modified{false};
-    auto        item_current_index_size_t{static_cast<size_t>(item_current_index)}; // Here we store our selection data as an index.
-    const char* combo_preview_value{items[item_current_index_size_t]};              // Pass in the preview value visible before opening the combo (it could be anything)
+    auto modified{false};
+    auto combo_preview_value{items[current_item_index]};
+
     if (ImGui::BeginCombo(label, combo_preview_value))
     {
         for (size_t n = 0; n < items.size(); n++)
         {
-            const bool is_selected{(item_current_index_size_t == n)};
+            const bool is_selected{(current_item_index == n)};
             if (ImGui::Selectable(items[n], is_selected))
             {
-                item_current_index = static_cast<int>(n);
+                current_item_index = n;
                 modified           = true;
             }
 
@@ -52,7 +52,7 @@ static auto selector_with_tooltip(
     return modified;
 }
 
-auto random_mode_box(
+auto random_mode_checkbox(
     const char* label,
     bool&       should_use_a_random_color_for_the_new_marks,
     const bool  should_show_tooltip
@@ -79,7 +79,7 @@ auto wrap_mode_selector(const char* label, WrapMode& wrap_mode, const bool shoul
 
     return selector_with_tooltip(
         label,
-        reinterpret_cast<int&>(wrap_mode),
+        reinterpret_cast<size_t&>(wrap_mode),
         items,
         "Mirror Repeat",
         tooltips,
@@ -96,7 +96,7 @@ auto gradient_interpolation_mode_selector(const char* label, Interpolation& inte
 
     return selector_with_tooltip(
         label,
-        reinterpret_cast<int&>(interpolation_mode),
+        reinterpret_cast<size_t&>(interpolation_mode),
         items,
         "Constant",
         tooltips,

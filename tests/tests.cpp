@@ -3,8 +3,7 @@
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <quick_imgui/quick_imgui.hpp>
 #include "../generated/checkboxes_for_all_flags.inl"
-#include "../src/Utils.hpp" // to test wrap mode fonctions
-#include "../src/extra_widgets.hpp"
+#include "../src/Utils.hpp" // to test wrap mode functions
 #include "../src/widgets.hpp"
 
 auto main(int argc, char* argv[]) -> int
@@ -72,7 +71,7 @@ auto main(int argc, char* argv[]) -> int
             static ImGuiGradient::Settings settings{};
             ImGuiGradient::wrap_mode_selector("Position Mode", settings.wrap_mode, true);
             ImGuiGradient::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode, true);
-            ImGuiGradient::random_mode_box("Random Mode", settings.should_use_a_random_color_for_the_new_marks, true);
+            ImGuiGradient::random_mode_checkbox("Random Mode", settings.should_use_a_random_color_for_the_new_marks, true);
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");

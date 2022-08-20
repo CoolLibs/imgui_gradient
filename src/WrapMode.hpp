@@ -4,7 +4,7 @@ namespace ImGuiGradient {
 
 /// Controls how a position that is outside of the [0, 1] range is mapped back into that range.
 /// This is like the OpenGL texture wrap modes; see https://learnopengl.com/Getting-started/Textures section "Texture Wrapping".
-enum class WrapMode {
+enum class WrapMode : size_t { // We use size_t so that we can use the WrapMode to index into an array
     /// If it is bigger than 1, maps to 1. If it smaller than 0, maps to 0.
     Clamp,
     /// Maps the number line to a bunch of copies of [0, 1] stuck together.
