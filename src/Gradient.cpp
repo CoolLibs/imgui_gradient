@@ -1,5 +1,4 @@
 #include "Gradient.hpp"
-#include <algorithm>
 #include "imgui_internal.hpp"
 
 namespace ImGuiGradient {
