@@ -189,11 +189,12 @@ auto GradientWidget::draw_gradient_marks(
             }
         }
     }
+    static constexpr float space_between_gradient_bar_and_options = 20.f;
     ImGui::SetCursorScreenPos(
         gradient_bar_position +
         ImVec2{
             0.f,
-            gradient_size.y + ImGui::GetStyle().ItemSpacing.y * 2.f}
+            gradient_size.y + space_between_gradient_bar_and_options}
     );
     return hitbox_is_hovered;
 }
@@ -456,11 +457,9 @@ auto GradientWidget::widget(
     }
 
     const auto space_over_bar = !(settings.flags & Flag::NoLabel)
-                                    ? ImGui::CalcTextSize(label).y + ImGui::GetStyle().ItemSpacing.y * 4.f
+                                    ? ImGui::CalcTextSize(label).y + ImGui::GetStyle().ItemSpacing.y * 3.f
                                     : ImGui::GetStyle().ItemSpacing.y * 2.f;
-    // ImGui::SetCursorScreenPos(
-    //     internal::gradient_position(0.f) + ImVec2{0.f, space_over_bar}
-    // );
+
     auto space_under_bar{0.f};
     if (!(settings.flags & Flag::NoBorder))
     {
@@ -476,8 +475,9 @@ auto GradientWidget::widget(
         {
             number_of_line_under_bar += 1.f;
         }
+        static constexpr float space_between_gradient_bar_and_options = 20.f;
         space_under_bar =
-            (internal::line_height() + ImGui::GetStyle().ItemSpacing.y * 2.f) * number_of_line_under_bar + ImGui::GetStyle().ItemSpacing.y * 4.f;
+            (internal::line_height() + ImGui::GetStyle().ItemSpacing.y * 2.f) * number_of_line_under_bar + space_between_gradient_bar_and_options;
         ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
         draw_border(
             draw_list,
@@ -490,9 +490,15 @@ auto GradientWidget::widget(
                     space_under_bar}
         );
     }
-    ImGui::SetCursorScreenPos(ImVec2{0.f, space_under_bar + space_over_bar + ImGui::GetStyle().ItemSpacing.y * 22.f}
-    );
     ImGui::EndGroup();
+    ImGui::SetCursorScreenPos(
+        internal::gradient_position(0.f) +
+        ImVec2{
+            0.f,
+            !(settings.flags & Flag::NoLabel)
+                ? ImGui::GetStyle().ItemSpacing.y * 2.f
+                : ImGui::GetStyle().ItemSpacing.y * 3.f}
+    );
     ImGui::PopID();
     return modified;
 }
