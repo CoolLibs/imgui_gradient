@@ -1,5 +1,6 @@
 #include "GradientWidget.hpp"
 #include <array>
+#include <random>
 #include "button_disabled.hpp"
 #include "imgui_draw.hpp"
 #include "internal.hpp"
@@ -7,22 +8,17 @@
 
 namespace ImGG {
 
-static auto random(std::default_random_engine& generator) -> float
+static auto random_color(RandomNumberGenerator rng) -> ColorRGBA
 {
-    return std::uniform_real_distribution<float>{0.f, 1.f}(generator);
+    return ColorRGBA{rng(), rng(), rng(), 1.f};
 }
 
-static auto random_color(std::default_random_engine& generator) -> ColorRGBA
-{
-    return ColorRGBA{random(generator), random(generator), random(generator), 1.f};
-}
-
-void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color)
+void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_pos, RandomNumberGenerator rng, bool add_a_random_color)
 {
     const auto mark = Mark{
         relative_pos,
         add_a_random_color
-            ? random_color(generator)
+            ? random_color(rng)
             : _gradient.at(relative_pos)};
     _selected_mark = _gradient.add_mark(mark);
 }
@@ -293,9 +289,9 @@ static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> 
 }
 
 auto GradientWidget::widget(
-    const char*                 label,
-    std::default_random_engine& generator,
-    const Settings&             settings
+    const char*           label,
+    RandomNumberGenerator rng,
+    const Settings&       settings
 ) -> bool
 {
     ImGui::PushID(label);
@@ -336,7 +332,7 @@ auto GradientWidget::widget(
     if (wants_to_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
-        add_mark_with_chosen_mode({position, WrapMode::Clamp}, generator, settings.should_use_a_random_color_for_the_new_marks);
+        add_mark_with_chosen_mode({position, WrapMode::Clamp}, rng, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
         ImGui::OpenPopup("SelectedMarkColorPicker");
     }
@@ -400,7 +396,7 @@ auto GradientWidget::widget(
         if (add_button(is_there_a_tooltip))
         {
             const auto position = RelativePosition{position_where_to_add_next_mark(_gradient), WrapMode::Clamp};
-            add_mark_with_chosen_mode(position, generator, settings.should_use_a_random_color_for_the_new_marks);
+            add_mark_with_chosen_mode(position, rng, settings.should_use_a_random_color_for_the_new_marks);
             modified = true;
         }
     }
@@ -500,9 +496,15 @@ auto GradientWidget::widget(
     return modified;
 }
 
+static auto default_rng() -> float
+{
+    static auto rng          = std::default_random_engine{std::random_device{}()};
+    static auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
+    return distribution(rng);
+}
+
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
-    static std::default_random_engine generator{std::random_device{}()};
-    return widget(label, generator, settings);
+    return widget(label, &default_rng, settings);
 }
 }; // namespace ImGG

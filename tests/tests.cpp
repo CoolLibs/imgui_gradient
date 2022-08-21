@@ -2,6 +2,7 @@
 #include <doctest/doctest.h>
 #include <imgui_gradient/imgui_gradient.hpp>
 #include <quick_imgui/quick_imgui.hpp>
+#include <random>
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode functions
 #include "../src/button_disabled.hpp"
@@ -93,15 +94,19 @@ auto main(int argc, char* argv[]) -> int
             settings.color_edit_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
             if (custom_generator)
             {
-                static auto generator = std::default_random_engine{std::random_device{}()};
+                const auto custom_rng = []() {
+                    static auto rng          = std::default_random_engine{std::random_device{}()};
+                    static auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
+                    return distribution(rng);
+                };
                 gradient.widget(
                     "Gradient",
-                    generator,
+                    custom_rng,
                     settings
                 );
                 gradient2.widget(
                     "Gradient2",
-                    generator,
+                    custom_rng,
                     settings
                 );
             }

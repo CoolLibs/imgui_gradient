@@ -2,12 +2,15 @@
 
 #pragma once
 
-#include <random>
+#include <functional>
 #include "Gradient.hpp"
 #include "MarkId.hpp"
 #include "Settings.hpp"
 
 namespace ImGG {
+
+/// A function that returns a random number between 0.f and 1.f whenever it is called.
+using RandomNumberGenerator = std::function<float()>;
 
 class GradientWidget {
 public:
@@ -25,16 +28,16 @@ public:
     ) -> bool;
 
     /// If `_should_use_a_random_color_for_the_new_marks` is true when adding a new mark,
-    /// `generator` is used to generate the random color of the new mark.
-    /// There is an overload that doesn't need `generator` and use the default generator of this library if users don't want to provide one.
+    /// `rng` is used to generate the random color of the new mark. It can be any function that returns a number between 0.f and 1.f.
+    /// There is an overload that doesn't need `rng` and uses a `std::default_random_engine` internally.
     auto widget(
-        const char*                 label,
-        std::default_random_engine& generator,
-        const Settings&             settings = {}
+        const char*           label,
+        RandomNumberGenerator rng,
+        const Settings&       settings = {}
     ) -> bool;
 
 private:
-    void add_mark_with_chosen_mode(RelativePosition relative_pos, std::default_random_engine& generator, bool add_a_random_color);
+    void add_mark_with_chosen_mode(RelativePosition relative_pos, RandomNumberGenerator rng, bool add_a_random_color);
 
     auto draw_gradient_marks(
         MarkId& mark_to_delete,
