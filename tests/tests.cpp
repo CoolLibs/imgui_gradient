@@ -18,6 +18,7 @@ auto main(int argc, char* argv[]) -> int
         auto gradient  = ImGG::GradientWidget{};
         auto gradient2 = ImGG::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
+            ImGui::ShowDemoWindow();
             ImGui::Begin("Framerate");
             ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
             ImGui::End();
