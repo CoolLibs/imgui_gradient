@@ -40,6 +40,51 @@ gradient_widget.widget("My Gradient");
 
 In order to access the gradient data (without the GUI state), you can get the `ImGuiGradient::Gradient` with `gradient_widget.gradient()`.
 
+## Sampling the gradient
+
+Use `widget.gradient().at({0.5f, WrapMode::Clamp});` to sample the gradient.
+Gradient mark position uses `ImGuiGradient::RelativePosition`, a value in the range [0, 1].
+When rendering the widget we clamp position between [0, 1].
+If you need to you could use other `WrapMode` options.
+
+### Wrap Mode 
+
+It controls how the position of a mark that is outside of the [0, 1] range is mapped back into that range. This is like the OpenGL texture wrap modes.
+
+`ImGuiGradient::WrapMode::Clamp` : If it is bigger than 1, maps to 1. If it smaller than 0, maps to 0.
+
+`ImGuiGradient::WrapMode::Repeat` : Maps the number line to a bunch of copies of [0, 1] stuck together. Basically adds or substracts 1 to the position until it is in the [0, 1] range.
+
+`ImGuiGradient::WrapMode::MirrorRepeat` : Like `ImGuiGradient::WrapMode::Repeat` except that every other range is flipped.
+
+To create a widget to change the wrap mode, you can use:
+```cpp
+auto ImGuiGradient::wrap_mode_selector(
+    const char* label,
+    WrapMode&   wrap_mode,
+    const bool  should_show_tooltip
+) -> bool;
+```
+
+## Interpolation
+
+It controls how the colors are interpolated between two marks. 
+
+It is a gradient member. You could get it with `get_interpolation()` and chenge its value with `set_interpolation()`
+
+`ImGuiGradient::Interpolation::Linear`: Linear interpolation.
+
+`ImGuiGradient::Interpolation::Constant`: Constant color between two marks: it uses the color of the mark on the right.
+
+To create a widget that changes the interpolation mode, use:
+```cpp
+auto ImGuiGradient::gradient_interpolation_mode_selector(
+    const char*    label,
+    Interpolation& interpolation_mode,
+    const bool     should_show_tooltip
+) -> bool;
+```
+
 ## Settings
 
 The `widget()` method can also take settings that control its behaviour:
@@ -58,9 +103,6 @@ settings.flags = ImGuiGradient::Flag::None;
 
 settings.color_edit_flags = ImGuiColorEditFlags_None;
 
-/// Controls how the colors are interpolated between two marks.
-settings.interpolation_mode = Interpolation::Linear;
-
 /// Controls how the new mark color is chosen.
 /// If true, the new mark color will be a random color,
 /// otherwise it will be the one that the gradient already has before at the mark position.
@@ -71,7 +113,7 @@ gradient_widget.widget("My Gradient", settings);
 
 ### ImGuiGradient::Flags
 
-`ImGuiGradient::Flag::None`: All Options are enabled. // TODO(ASG) Make sure this matches the doc in Flags.hpp
+`ImGuiGradient::Flag::None`: All Options are enabled.
 
 `ImGuiGradient::Flag::NoTooltip`: No tooltip when hovering a widget.
 
@@ -95,24 +137,6 @@ gradient_widget.widget("My Gradient", settings);
 
 `ImGuiGradient::Flag::NoMarkOptions`: No new widgets appear when a mark is selected.
 
-
-### Interpolation
-
-It controls how the colors are interpolated between two marks.
-
-`ImGuiGradient::Interpolation::Linear`: Linear interpolation.
-
-`ImGuiGradient::Interpolation::Constant`: Constant color between two marks: it uses the color of the mark on the right.
-
-To create a widget that changes the interpolation mode, use:
-```cpp
-auto ImGuiGradient::gradient_interpolation_mode_selector(
-    const char*    label,
-    Interpolation& interpolation_mode,
-    const bool     should_show_tooltip
-) -> bool;
-```
-
 ## Color randomization
 
 `should_use_a_random_color_for_the_new_marks` allows you to randomize the colors of the marks.
@@ -135,35 +159,6 @@ gradient.widget("My Gradient", generator, settings);
 ```
 
 *NB:* If all calls to `gradient.widget(...)` provide a random engine, we will not create one on our own.
-
-## Wrap Mode // TODO(ASG) Talk about RelativePosition and how we can sample the gradient, talk about make_relative_position
-
-It controls how the position of a mark that is outside of the [0, 1] range is mapped back into that range. This is like the OpenGL texture wrap modes.
-
-`WrapMode::Clamp` : If it is bigger than 1, maps to 1. If it smaller than 0, maps to 0.
-
-`WrapMode::Repeat` : Maps the number line to a bunch of copies of [0, 1] stuck together. Basically adds or substracts 1 to the position until it is in the [0, 1] range.
-
-`WrapMode::MirrorRepeat` : Like `WrapMode::Repeat` except that every other range is flipped.
-
-To create a widget to change the wrap mode, use:
-```cpp
-auto ImGuiGradient::wrap_mode_selector(
-    const char* label,
-    WrapMode&   wrap_mode,
-    const bool  should_show_tooltip
-) -> bool;
-```
-
-For example:
-```cpp
-ImGuiGradient::Settings settings{};
-ImGuiGradient::wrap_mode_selector(
-    wrap_mode_widget_name,
-    settings.wrap_mode,
-    should_show_tooltip);
-gradient_widget.widget (widget_name,settings);
-```
 
 ## Running the tests
 
