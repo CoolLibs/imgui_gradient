@@ -4,6 +4,9 @@ ImGui extension to make a gradient widget.
 // TODO(ASG) Small description of the library
 // TODO(ASG) Image of the gradient widget (and/or gif!)
 
+![Animation](https://user-images.githubusercontent.com/77100260/185783220-4fc5d84e-88e8-4f58-8976-f42bce1f5335.gif)
+
+
 ## Compatibility
 
 This library is tested and compiles with C++11 on:
