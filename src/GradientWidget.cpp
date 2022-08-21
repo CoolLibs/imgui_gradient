@@ -366,7 +366,6 @@ auto GradientWidget::widget(
             ImGuiHoveredFlags_AllowWhenBlockedByActiveItem
         )};
 
-        // TODO(ASG) Test that this still works
         const auto delete_button_pressed = is_there_remove_button
                                                ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip)
                                                : false;
