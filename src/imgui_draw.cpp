@@ -37,11 +37,10 @@ static void draw_gradient_between_two_colors(
 }
 
 void draw_gradient(
-    ImDrawList&         draw_list,
-    const Gradient&     gradient,
-    const Interpolation interpolation_mode,
-    const ImVec2        gradient_position,
-    const ImVec2        size
+    ImDrawList&     draw_list,
+    const Gradient& gradient,
+    const ImVec2    gradient_position,
+    const ImVec2    size
 )
 {
     assert(!gradient.is_empty());
@@ -56,7 +55,7 @@ void draw_gradient(
         const auto to{gradient_position.x + mark.position.get() * (size.x)};
         if (mark.position.get() != 0.f)
         {
-            if (interpolation_mode == Interpolation::Linear)
+            if (gradient.get_interpolation() == Interpolation::Linear)
             {
                 const ImU32 color_left = (mark_iterator != gradient.get_marks().begin())
                                              ? ImGui::ColorConvertFloat4ToU32(std::prev(mark_iterator)->color)
@@ -68,7 +67,7 @@ void draw_gradient(
                     color_left, color_right
                 );
             }
-            else if (interpolation_mode == Interpolation::Constant)
+            else if (gradient.get_interpolation() == Interpolation::Constant)
             {
                 draw_uniform_square(
                     draw_list,

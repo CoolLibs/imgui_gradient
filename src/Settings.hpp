@@ -18,9 +18,6 @@ struct Settings {
 
     ImGuiColorEditFlags color_edit_flags{ImGuiColorEditFlags_None};
 
-    /// Controls how the colors are interpolated between two marks.
-    Interpolation interpolation_mode{Interpolation::Linear};
-
     /// Controls how the new mark color is chosen.
     /// If true, the new mark color will be a random color,
     /// otherwise it will be the one that the gradient already has before at the mark position.

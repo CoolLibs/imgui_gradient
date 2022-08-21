@@ -15,7 +15,7 @@ public:
 
     /// Returns the color at the given position in the gradient.
     /// 0.f corresponds to the beginning of the gradient and 1.f to the end.
-    auto at(RelativePosition, Interpolation = Interpolation::Linear) const -> ColorRGBA;
+    auto at(RelativePosition) const -> ColorRGBA;
 
     auto find(MarkId) const -> const Mark*;
     auto find(MarkId) -> Mark*;
@@ -26,8 +26,10 @@ public:
     void remove_mark(MarkId);
     void set_mark_position(MarkId, RelativePosition);
     void set_mark_color(MarkId, ColorRGBA);
+    void set_interpolation(Interpolation);
 
     auto get_marks() const -> const std::list<Mark>&;
+    auto get_interpolation() const -> Interpolation;
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
 
@@ -40,6 +42,8 @@ private:
         Mark{RelativePosition{0.f}, ColorRGBA{0.f, 0.f, 0.f, 1.f}},
         Mark{RelativePosition{1.f}, ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     };
+    /// Controls how the colors are interpolated between two marks.
+    Interpolation _interpolation_mode{Interpolation::Linear};
 
     friend class MarkId;
 };

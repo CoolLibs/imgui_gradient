@@ -17,6 +17,11 @@ auto Gradient::find(MarkId id) -> Mark*
     return id.find(*this);
 }
 
+auto Gradient::is_empty() const -> bool
+{
+    return _marks.empty();
+}
+
 auto Gradient::add_mark(const Mark& mark) -> MarkId
 {
     _marks.push_back(mark);
@@ -32,11 +37,6 @@ void Gradient::remove_mark(MarkId mark)
     {
         _marks.remove(*ptr);
     }
-}
-
-auto Gradient::get_marks() const -> const std::list<Mark>&
-{
-    return _marks;
 }
 
 void Gradient::set_mark_position(const MarkId mark, const RelativePosition position)
@@ -58,9 +58,19 @@ void Gradient::set_mark_color(const MarkId mark, const ColorRGBA color)
     }
 }
 
-auto Gradient::is_empty() const -> bool
+void Gradient::set_interpolation(Interpolation interpolation)
 {
-    return _marks.empty();
+    _interpolation_mode = interpolation;
+}
+
+auto Gradient::get_marks() const -> const std::list<Mark>&
+{
+    return _marks;
+}
+
+auto Gradient::get_interpolation() const -> Interpolation
+{
+    return _interpolation_mode;
 }
 
 struct SurroundingMarks {
@@ -119,8 +129,7 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
     }
 }
 
-// TODO(ASG) interpolation_mode should be a member of gradient (add getters and setters etc.) and remove it from Settings
-auto Gradient::at(const RelativePosition position, Interpolation interpolation_mode) const -> ColorRGBA
+auto Gradient::at(const RelativePosition position) const -> ColorRGBA
 {
     const auto        surrounding_marks = get_marks_surrounding(position, _marks);
     const Mark* const lower{surrounding_marks.lower};
@@ -144,8 +153,8 @@ auto Gradient::at(const RelativePosition position, Interpolation interpolation_m
     }
     else
     {
-        return interpolate(*lower, *upper, position, interpolation_mode);
+        return interpolate(*lower, *upper, position, _interpolation_mode);
     }
-};
+}
 
 } // namespace ImGG
