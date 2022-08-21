@@ -58,19 +58,19 @@ void Gradient::set_mark_color(const MarkId mark, const ColorRGBA color)
     }
 }
 
-void Gradient::set_interpolation(Interpolation interpolation)
+auto Gradient::interpolation_mode() const -> Interpolation
 {
-    _interpolation_mode = interpolation;
+    return _interpolation_mode;
+}
+
+auto Gradient::interpolation_mode() -> Interpolation&
+{
+    return _interpolation_mode;
 }
 
 auto Gradient::get_marks() const -> const std::list<Mark>&
 {
     return _marks;
-}
-
-auto Gradient::get_interpolation() const -> Interpolation
-{
-    return _interpolation_mode;
 }
 
 struct SurroundingMarks {

@@ -1,8 +1,15 @@
 # imgui_gradient
 
-ImGui extension to make a gradient widget.
+[Dear ImGui](https://github.com/ocornut/imgui) extension that adds a *gradient* widget.
 
 ![Animation](https://user-images.githubusercontent.com/77100260/185783220-4fc5d84e-88e8-4f58-8976-f42bce1f5335.gif)
+
+## Table of Contents
+
+- [Compatibility](#compatibility)
+- [Basic usage](#basic-usage)
+- [Tutorial](#tutorial)
+- [For maintainers](#for-maintainers)
 
 
 ## Compatibility
@@ -17,7 +24,19 @@ This library is tested and compiles with C++11 on:
 - [x] MacOS
     - [x] Clang
 
-## Including
+## Basic usage
+
+The whole state of the widget is stored in a `ImGG::GradientWidget` variable. You need to create and store one in order to have access to a gradient. You can then use the `widget()` method to render the ImGui widget:
+```cpp
+ImGG::GradientWidget gradient_widget{};
+gradient_widget.widget("My Gradient");
+```
+
+In order to access the gradient data (without the GUI state), you can get the `ImGG::Gradient` with `gradient_widget.gradient()`.
+
+## Tutorial
+
+### Including
 
 To add this library to your project, simply add these three lines to your *CMakeLists.txt* and replace `folder/containing/imgui` with the path to the parent folder containing *imgui*:
 ```cmake
@@ -31,137 +50,106 @@ Then include it as:
 #include <imgui_gradient/imgui_gradient.hpp>
 ```
 
-## Using the library
+### Sampling the gradient
 
-The whole state of the widget is stored in a `ImGuiGradient::GradientWidget` variable. You need to create and store one in order to have access to a gradient. You can then use the `widget()` method to render the ImGui widget:
 ```cpp
-InGuiGradient::GradientWidget gradient_widget{};
-gradient_widget.widget("My Gradient");
+const ColorRGBA color = widget.gradient().at({0.5f});
 ```
 
-In order to access the gradient data (without the GUI state), you can get the `ImGuiGradient::Gradient` with `gradient_widget.gradient()`.
+Note that you should use values between `0.f` and `1.f` when sampling the gradient. If you know you are gonna use values outside that range, specify a `WrapMode` to indicate how the values should be mapped back to the [0, 1] range:
 
-## Sampling the gradient
-
-Use `widget.gradient().at({0.5f, WrapMode::Clamp});` to sample the gradient.
-Gradient mark position uses `ImGuiGradient::RelativePosition`, a value in the range [0, 1].
-When rendering the widget we clamp position between [0, 1].
-If you need to you could use other `WrapMode` options.
-
-### Wrap Mode 
-
-It controls how the position of a mark that is outside of the [0, 1] range is mapped back into that range. This is like the OpenGL texture wrap modes.
-
-`ImGuiGradient::WrapMode::Clamp` : If it is bigger than 1, maps to 1. If it smaller than 0, maps to 0.
-
-`ImGuiGradient::WrapMode::Repeat` : Maps the number line to a bunch of copies of [0, 1] stuck together. Basically adds or substracts 1 to the position until it is in the [0, 1] range.
-
-`ImGuiGradient::WrapMode::MirrorRepeat` : Like `ImGuiGradient::WrapMode::Repeat` except that every other range is flipped.
-
-To create a widget to change the wrap mode, you can use:
 ```cpp
-auto ImGuiGradient::wrap_mode_selector(
-    const char* label,
-    WrapMode&   wrap_mode,
-    const bool  should_show_tooltip
-) -> bool;
+const ColorRGBA color = widget.gradient().at({0.5f, WrapMode::Clamp});
 ```
 
-## Interpolation
+Our wrap modes mimic the OpenGL ones:
 
-It controls how the colors are interpolated between two marks. 
+- `ImGG::WrapMode::Clamp`: If the value is bigger than 1, maps it to 1. If it smaller than 0, maps it to 0.
+- `ImGG::WrapMode::Repeat`: Maps the number line to a bunch of copies of [0, 1] stuck together. Conceptually equivalent to adding or subtracting 1 to the position until it is in the [0, 1] range.
+- `ImGG::WrapMode::MirrorRepeat`: Like `ImGG::WrapMode::Repeat` except that every other range is flipped.
 
-It is a gradient member. You could get it with `get_interpolation()` and chenge its value with `set_interpolation()`
+To create a widget for the wrap mode, you can use:
+```cpp
+ImGG::wrap_mode_widget("Wrap Mode", &wrap_mode);
+```
 
-`ImGuiGradient::Interpolation::Linear`: Linear interpolation.
+### Interpolation
 
-`ImGuiGradient::Interpolation::Constant`: Constant color between two marks: it uses the color of the mark on the right.
+Controls how the colors are interpolated between two marks.
+
+- `ImGG::Interpolation::Linear`: Linear interpolation.
+- `ImGG::Interpolation::Constant`: Constant color between two marks (uses the color of the mark on the right).
 
 To create a widget that changes the interpolation mode, use:
 ```cpp
-auto ImGuiGradient::gradient_interpolation_mode_selector(
-    const char*    label,
-    Interpolation& interpolation_mode,
-    const bool     should_show_tooltip
-) -> bool;
+ImGG::interpolation_mode_widget("Interpolation Mode", &widget.gradient().interpolation_mode());
 ```
 
-## Settings
+### Settings
 
-The `widget()` method can also take settings that control its behaviour:
+The `ImGG::GradientWidget::widget()` method can also take settings that control its behaviour:
 ```cpp
-InGuiGradient::Settings settings{};
+ImGG::Settings settings{};
 
+settings.gradient_width = 500.f;
 settings.gradient_height = 40.f;
+settings.horizontal_margin = 10.f;
 
 /// Distance under the gradient bar to delete a mark by dragging it down.
 /// This behaviour can also be disabled with the Flag::NoDragDowntoDelete.
 settings.distance_to_delete_mark_by_dragging_down = 80.f;
 
-settings.horizontal_margin = 10.f;
-
-settings.flags = ImGuiGradient::Flag::None;
+settings.flags = ImGG::Flag::None;
 
 settings.color_edit_flags = ImGuiColorEditFlags_None;
 
 /// Controls how the new mark color is chosen.
 /// If true, the new mark color will be a random color,
-/// otherwise it will be the one that the gradient already has before at the mark position.
+/// otherwise it will be the one that the gradient already has at the new mark position.
 settings.should_use_a_random_color_for_the_new_marks = false;
 
 gradient_widget.widget("My Gradient", settings);
 ```
 
-### ImGuiGradient::Flags
+Here are all the available flags:
 
-`ImGuiGradient::Flag::None`: All Options are enabled.
+- `ImGG::Flag::None`: All options are enabled.
+- `ImGG::Flag::NoTooltip`: No tooltip when hovering a widget.
+- `ImGG::Flag::NoResetButton`: No button to reset the gradient to its default value.
+- `ImGG::Flag::NoLabel`: No name for the widget.
+- `ImGG::Flag::NoAddButton`: No "+" button to add a mark.
+- `ImGG::Flag::NoRemoveButton`: No "-" button to remove a mark.
+- `ImGG::Flag::NoPositionSlider`: No slider widget to chose a precise position for the selected mark.
+- `ImGG::Flag::NoColorEdit`: No color edit widget for the selected mark.
+- `ImGG::Flag::NoDragDownToDelete`: Don't delete a mark when dragging it down.
+- `ImGG::Flag::NoBorder`: No border around the gradient widget.
+- `ImGG::Flag::NoAddAndRemoveButtons`: No "+" and "-" buttons.
+- `ImGG::Flag::NoMarkOptions`: No widgets for the selected mark.
 
-`ImGuiGradient::Flag::NoTooltip`: No tooltip when hovering a widget.
+### Color randomization
 
-`ImGuiGradient::Flag::NoResetButton`: No button to reset to the default value.
-
-`ImGuiGradient::Flag::NoLabel`: No name for gradient widget.
-
-`ImGuiGradient::Flag::NoAddButton`: No "+" button to add a mark.
-
-`ImGuiGradient::Flag::NoRemoveButton`: No "-" button to remove a mark.
-
-`ImGuiGradient::Flag::NoPositionSlider`: No slider widget to chose a precise position when selecting a mark.
-
-`ImGuiGradient::Flag::NoColorEdit`: No color edit widget when selecting a mark.
-
-`ImGuiGradient::Flag::NoDragDownToDelete`: Don't delete a mark by dragging it down.
-
-`ImGuiGradient::Flag::NoBorder`: No border around gradient widget.
-
-`ImGuiGradient::Flag::NoAddAndRemoveButtons`: No "+" and "-" buttons.
-
-`ImGuiGradient::Flag::NoMarkOptions`: No new widgets appear when a mark is selected.
-
-## Color randomization
-
-`should_use_a_random_color_for_the_new_marks` allows you to randomize the colors of the marks.
+`Settings::should_use_a_random_color_for_the_new_marks` allows you to randomize the colors of the marks.
 To create a widget for that setting you can use:
 ```cpp
-auto random_mode_checkbox(
-    const char* label,
-    bool&       should_use_a_random_color_for_the_new_marks,
-    const bool  should_show_tooltip
-) -> bool;
+ImGG::random_mode_widget("Use a random color for the new marks", &settings.should_use_a_random_color_for_the_new_marks);
 ```
 
-### Random Number Generation
-
-By default we use our own internal `std::default_random_engine`, but you can provide your own that we will use instead:
+By default we use our own internal `std::default_random_engine`, but you can provide your own rng function that we will use instead. It can be any function that returns a number between `0.f` and `1.f`.
 
 ```cpp
-static auto generator = std::default_random_engine{std::random_device{}()};
-gradient.widget("My Gradient", generator, settings);
+const auto your_custom_rng = []() {
+    static auto rng          = std::default_random_engine{std::random_device{}()};
+    static auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
+    return distribution(rng);
+};
+gradient_widget.widget("My Gradient", your_custom_rng, settings);
 ```
 
-*NB:* If all calls to `gradient.widget(...)` provide a random engine, we will not create one on our own.
+> *NB:* If all calls to `gradient_widget.widget(...)` provide a rng function, we will not create our `std::default_random_engine` at all.
 
-## Running the tests
+## For maintainers
+
+### Running the tests
 
 Simply use "tests/CMakeLists.txt" to generate a project, then run it.<br/>
 If you are using VSCode and the CMake extension, this project already contains a *.vscode/settings.json* that will use the right CMakeLists.txt automatically.

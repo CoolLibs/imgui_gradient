@@ -26,10 +26,10 @@ public:
     void remove_mark(MarkId);
     void set_mark_position(MarkId, RelativePosition);
     void set_mark_color(MarkId, ColorRGBA);
-    void set_interpolation(Interpolation);
+    auto interpolation_mode() const -> Interpolation;
+    auto interpolation_mode() -> Interpolation&;
 
     auto get_marks() const -> const std::list<Mark>&;
-    auto get_interpolation() const -> Interpolation;
 
     friend auto operator==(const Gradient& a, const Gradient& b) -> bool { return a._marks == b._marks; }
 

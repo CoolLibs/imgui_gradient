@@ -55,7 +55,7 @@ void draw_gradient(
         const auto to{gradient_position.x + mark.position.get() * (size.x)};
         if (mark.position.get() != 0.f)
         {
-            if (gradient.get_interpolation() == Interpolation::Linear)
+            if (gradient.interpolation_mode() == Interpolation::Linear)
             {
                 const ImU32 color_left = (mark_iterator != gradient.get_marks().begin())
                                              ? ImGui::ColorConvertFloat4ToU32(std::prev(mark_iterator)->color)
@@ -67,7 +67,7 @@ void draw_gradient(
                     color_left, color_right
                 );
             }
-            else if (gradient.get_interpolation() == Interpolation::Constant)
+            else if (gradient.interpolation_mode() == Interpolation::Constant)
             {
                 draw_uniform_square(
                     draw_list,

@@ -79,14 +79,14 @@ auto main(int argc, char* argv[]) -> int
                     ImGuiColorEditFlags_NoInputs
             );
             static ImGG::WrapMode wrap_mode{};
-            ImGG::wrap_mode_selector("Position Mode", wrap_mode);
+            ImGG::wrap_mode_widget("Position Mode", &wrap_mode);
             static ImGG::Interpolation interpolation_mode{};
-            if (ImGG::gradient_interpolation_mode_selector("Interpolation Mode", interpolation_mode))
+            if (ImGG::interpolation_mode_widget("Interpolation Mode", &interpolation_mode))
             {
-                gradient.gradient().set_interpolation(interpolation_mode);
-                gradient2.gradient().set_interpolation(interpolation_mode);
+                gradient.gradient().interpolation_mode()  = interpolation_mode;
+                gradient2.gradient().interpolation_mode() = interpolation_mode;
             }
-            ImGG::random_mode_checkbox("Randomize new marks' color", settings.should_use_a_random_color_for_the_new_marks);
+            ImGG::random_mode_widget("Randomize new marks' color", &settings.should_use_a_random_color_for_the_new_marks);
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
@@ -137,10 +137,10 @@ TEST_CASE("Interpolation modes")
         ImGG::Mark{ImGG::RelativePosition{1.f}, ImGG::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     }};
 
-    gradient.set_interpolation(ImGG::Interpolation::Linear);
+    gradient.interpolation_mode() = ImGG::Interpolation::Linear;
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 0.25f);
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 0.75f);
-    gradient.set_interpolation(ImGG::Interpolation::Constant);
+    gradient.interpolation_mode() = ImGG::Interpolation::Constant;
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 1.f);
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 1.f);
 }
