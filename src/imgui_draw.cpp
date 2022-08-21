@@ -139,10 +139,10 @@ static void draw_background_mark(
     );
 
     const auto mark_top_left_corner =
-        ImVec2{-mark_square_size, 0.f};
+        ImVec2{-mark_square_size - 1.f, 0.f};
     const auto mark_bottom_right_corner =
         ImVec2{
-            mark_square_size,
+            mark_square_size + 1.f,
             2.f * mark_square_size};
     draw_uniform_square(
         draw_list,
