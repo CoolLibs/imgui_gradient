@@ -131,9 +131,6 @@ static void draw_gradient_bar(
     );
 }
 
-// TODO(ASG) Fix border
-// TODO(ASG) Fix SameLine() after a gradient
-
 static void handle_interactions_with_hovered_mark(
     MarkId& dragged_mark,
     MarkId& selected_mark,

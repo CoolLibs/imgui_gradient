@@ -1,7 +1,5 @@
 // Inspired by https://gist.github.com/galloscript/8a5d179e432e062550972afcd1ecf112
 
-// TODO(ASG) Documentation
-
 #pragma once
 
 #include <random>
