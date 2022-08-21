@@ -310,9 +310,16 @@ auto GradientWidget::widget(
 
     const auto gradient_bar_position = ImVec2{internal::gradient_position(settings.horizontal_margin)};
     const auto gradient_size         = ImVec2{
-        std::max(1.f, ImGui::GetContentRegionAvail().x - 2.f * settings.horizontal_margin),
-        settings.gradient_height,
-    };
+        // When the window is smaller than gradient width we compute a relative width
+        // To avoid a width equal to zero and library crash the minimum width value is 1.f
+        std::max(
+                    1.f,
+                    std::min(
+                        ImGui::GetContentRegionAvail().x - settings.horizontal_margin * 2.f,
+                        settings.gradient_width
+                    )
+                ),
+        settings.gradient_height};
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);

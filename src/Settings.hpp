@@ -6,6 +6,7 @@
 namespace ImGG {
 
 struct Settings {
+    float gradient_width{500.f};
     float gradient_height{40.f};
 
     /// Distance under the gradient bar to delete a mark by dragging it down.
