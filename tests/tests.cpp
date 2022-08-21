@@ -29,6 +29,14 @@ auto main(int argc, char* argv[]) -> int
             static auto custom_generator = false;
             ImGui::Checkbox("Use our custom generator", &custom_generator);
             ImGui::End();
+            ImGui::Begin("Settings");
+            static ImGG::Settings settings{};
+            ImGui::PushItemWidth(100.f);
+            ImGui::DragFloat("Gradient width", &settings.gradient_width);
+            ImGui::DragFloat("Gradient height", &settings.gradient_height);
+            ImGui::DragFloat("Horizontal margin", &settings.horizontal_margin);
+            ImGui::DragFloat("Distance to delete mark by dragging down", &settings.distance_to_delete_mark_by_dragging_down);
+            ImGui::End();
             ImGui::Begin("Programmatic Actions");
             if (gradient.gradient().is_empty())
             {
@@ -69,7 +77,6 @@ auto main(int argc, char* argv[]) -> int
                 ImGuiColorEditFlags_NoTooltip |
                     ImGuiColorEditFlags_NoInputs
             );
-            static ImGG::Settings settings{};
             static ImGG::WrapMode wrap_mode{};
             ImGG::wrap_mode_selector("Position Mode", wrap_mode);
             static ImGG::Interpolation interpolation_mode{};
