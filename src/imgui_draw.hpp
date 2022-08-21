@@ -25,7 +25,7 @@ void draw_gradient(
     ImVec2          size // {width, height}
 );
 
-void draw_mark(
+void draw_marks(
     ImDrawList& draw_list,
     ImVec2      mark_position,
     ImU32       mark_color,

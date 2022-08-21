@@ -120,15 +120,13 @@ static auto mark_drawing_color(
                : internal::mark_color();
 }
 
-static void draw_background_mark(
+static void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
     const float  mark_square_size,
-    const float  gradient_height
+    ImU32        mark_color
 )
 {
-    const auto mark_color = mark_drawing_color(position_to_draw_mark, mark_square_size, gradient_height);
-
     const auto mark_top_triangle    = ImVec2{0.f, -mark_square_size};
     const auto mark_bottom_triangle = ImVec2{mark_square_size, 0.f};
     draw_list.AddTriangleFilled(
@@ -160,57 +158,7 @@ static void draw_background_mark(
     );
 }
 
-static void draw_mark_selected(
-    ImDrawList&  draw_list,
-    const ImVec2 position_to_draw_mark,
-    const float  mark_square_size
-)
-{
-    const auto            selected_mark_color = internal::selected_mark_color();
-    static constexpr auto offset_between_mark_and_selected_mark{1.f};
-
-    static constexpr auto mark_selected_triangle_size{4.f};
-    static constexpr auto mark_top_triangle =
-        ImVec2{
-            0.f,
-            -mark_selected_triangle_size - offset_between_mark_and_selected_mark};
-    static constexpr auto mark_bottom_right_triangle =
-        ImVec2{
-            -mark_selected_triangle_size,
-            offset_between_mark_and_selected_mark};
-    static constexpr auto mark_bottom_left_triangle =
-        ImVec2{
-            mark_selected_triangle_size,
-            offset_between_mark_and_selected_mark};
-
-    draw_list.AddTriangleFilled(
-        position_to_draw_mark + mark_top_triangle,
-        position_to_draw_mark + mark_bottom_right_triangle,
-        position_to_draw_mark + mark_bottom_left_triangle,
-        selected_mark_color
-    );
-
-    const auto mark_selected_square_size{mark_square_size - offset_between_mark_and_selected_mark};
-    const auto mark_top_left_corner =
-        ImVec2{
-            -mark_selected_square_size,
-            offset_between_mark_and_selected_mark};
-    const auto mark_bottom_right_corner =
-        ImVec2{
-            mark_selected_square_size,
-            2.f * mark_selected_square_size + offset_between_mark_and_selected_mark};
-
-    static constexpr auto rounding = 1.f;
-    draw_list.AddRect(
-        position_to_draw_mark + mark_top_left_corner,
-        position_to_draw_mark + mark_bottom_right_corner,
-        selected_mark_color,
-        rounding,
-        ImDrawFlags_Closed
-    );
-}
-
-void draw_mark(
+void draw_marks(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
     const ImU32  mark_color,
@@ -219,18 +167,20 @@ void draw_mark(
 )
 {
     static constexpr auto mark_square_size{6.f};
-    draw_background_mark(
+
+    draw_mark(
         draw_list,
         position_to_draw_mark,
         mark_square_size,
-        gradient_height
+        mark_drawing_color(position_to_draw_mark, mark_square_size, gradient_height)
     );
     if (mark_is_selected)
     {
-        draw_mark_selected(
+        draw_mark(
             draw_list,
             position_to_draw_mark,
-            mark_square_size
+            mark_square_size,
+            internal::selected_mark_color()
         );
     }
 

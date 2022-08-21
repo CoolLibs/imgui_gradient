@@ -170,7 +170,7 @@ auto GradientWidget::draw_gradient_marks(
         MarkId current_mark_id{mark};
         if (_mark_to_hide != current_mark_id)
         {
-            draw_mark(
+            draw_marks(
                 draw_list,
                 gradient_bar_position + ImVec2{mark.position.get(), 1.f} * gradient_size,
                 ImGui::ColorConvertFloat4ToU32(mark.color),
@@ -489,7 +489,7 @@ auto GradientWidget::widget(
     ImGui::PopID();
     return modified;
 }
-// TODO(ASG) Make a nice rendering of the arks, make sure the triangle doesn't go outside of the square
+
 auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
 {
     static std::default_random_engine generator{std::random_device{}()};
