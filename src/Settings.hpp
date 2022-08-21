@@ -7,7 +7,7 @@ namespace ImGG {
 
 struct Settings {
     float gradient_width{500.f};
-    float gradient_height{40.f};
+    float gradient_height{40.f}; // Do not remplace this value by 0.f
 
     /// Distance under the gradient bar to delete a mark by dragging it down.
     /// This behaviour can also be disabled with the Flag::NoDragDowntoDelete.
