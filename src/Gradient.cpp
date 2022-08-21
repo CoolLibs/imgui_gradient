@@ -1,7 +1,7 @@
 #include "Gradient.hpp"
 #include "imgui_internal.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 void Gradient::sort_marks()
 {
@@ -148,4 +148,4 @@ auto Gradient::at(const RelativePosition position, Interpolation interpolation_m
     }
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

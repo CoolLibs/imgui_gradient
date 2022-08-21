@@ -3,7 +3,7 @@
 #include "ColorRGBA.hpp"
 #include "RelativePosition.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 struct Mark {
     RelativePosition position;
@@ -24,4 +24,4 @@ struct Mark {
     };
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

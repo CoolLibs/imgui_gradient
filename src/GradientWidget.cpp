@@ -5,7 +5,7 @@
 #include "internal.hpp"
 #include "tooltip.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 static auto random(std::default_random_engine& generator) -> float
 {
@@ -498,4 +498,4 @@ auto GradientWidget::widget(const char* label, const Settings& settings) -> bool
     static std::default_random_engine generator{std::random_device{}()};
     return widget(label, generator, settings);
 }
-}; // namespace ImGuiGradient
+}; // namespace ImGG

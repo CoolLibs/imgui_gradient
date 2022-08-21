@@ -5,18 +5,18 @@
 
 def all_flags():
     return {
-        "ImGuiGradient::Flag::None":                       ["isNone"],
-        "ImGuiGradient::Flag::NoTooltip":                  ["isNoTooltip"],
-        "ImGuiGradient::Flag::NoResetButton":              ["isNoResetButton"],
-        "ImGuiGradient::Flag::NoLabel":                    ["isNoLabel"],
-        "ImGuiGradient::Flag::NoAddButton":                ["isNoAddButton"],
-        "ImGuiGradient::Flag::NoRemoveButton":             ["isNoRemoveButton"],
-        "ImGuiGradient::Flag::NoPositionSlider":           ["isNoPositionSlider"],
-        "ImGuiGradient::Flag::NoColorEdit":                ["isNoColorEdit"],
-        "ImGuiGradient::Flag::NoDragDownToDelete":         ["isNoDragDownToDelete"],
-        "ImGuiGradient::Flag::NoBorder":                   ["isNoBorder"],
-        "ImGuiGradient::Flag::NoAddAndRemoveButtons":      ["isNoAddAndRemoveButtons"],
-        "ImGuiGradient::Flag::NoMarkOptions":              ["isNoMarkOptions"],
+        "ImGG::Flag::None":                       ["isNone"],
+        "ImGG::Flag::NoTooltip":                  ["isNoTooltip"],
+        "ImGG::Flag::NoResetButton":              ["isNoResetButton"],
+        "ImGG::Flag::NoLabel":                    ["isNoLabel"],
+        "ImGG::Flag::NoAddButton":                ["isNoAddButton"],
+        "ImGG::Flag::NoRemoveButton":             ["isNoRemoveButton"],
+        "ImGG::Flag::NoPositionSlider":           ["isNoPositionSlider"],
+        "ImGG::Flag::NoColorEdit":                ["isNoColorEdit"],
+        "ImGG::Flag::NoDragDownToDelete":         ["isNoDragDownToDelete"],
+        "ImGG::Flag::NoBorder":                   ["isNoBorder"],
+        "ImGG::Flag::NoAddAndRemoveButtons":      ["isNoAddAndRemoveButtons"],
+        "ImGG::Flag::NoMarkOptions":              ["isNoMarkOptions"],
     }
 
 def checkboxes_for_all_flags():
@@ -24,9 +24,9 @@ def checkboxes_for_all_flags():
 #include <imgui/imgui.h>
 #include "../src/Flags.hpp"
 
-auto checkboxes_for_all_flags() -> ImGuiGradient::Flags
+auto checkboxes_for_all_flags() -> ImGG::Flags
 {{
-ImGuiGradient::Flags options = ImGuiGradient::Flag::None;
+ImGG::Flags options = ImGG::Flag::None;
 
 """
     for key, values in all_flags().items():

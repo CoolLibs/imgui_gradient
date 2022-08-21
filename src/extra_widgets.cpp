@@ -4,7 +4,7 @@
 #include "imgui_internal.hpp"
 #include "tooltip.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 template<size_t size>
 static auto selector_with_tooltip(
@@ -108,4 +108,4 @@ auto gradient_interpolation_mode_selector(const char* label, Interpolation& inte
         should_show_tooltip
     );
 }
-} // namespace ImGuiGradient
+} // namespace ImGG

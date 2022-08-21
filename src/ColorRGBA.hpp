@@ -2,7 +2,7 @@
 
 #include <imgui/imgui.h> // Include ImVec4
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 using ColorRGBA = ImVec4;
 
@@ -14,4 +14,4 @@ inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool
            (a.w == b.w);
 }
 
-} // namespace ImGuiGradient
+} // namespace ImGG

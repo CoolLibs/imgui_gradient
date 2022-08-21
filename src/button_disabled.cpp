@@ -2,7 +2,7 @@
 #include <functional>
 #include "tooltip.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 static void maybe_disabled(
     bool                  condition,
@@ -38,4 +38,4 @@ void button_disabled(const char* label, const char* reason_for_disabling, const 
     });
 }
 
-} // namespace ImGuiGradient
+} // namespace ImGG

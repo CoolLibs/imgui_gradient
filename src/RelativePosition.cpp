@@ -1,7 +1,7 @@
 #include "RelativePosition.hpp"
 #include "Utils.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 static auto make_relative_position(float position, WrapMode wrap_mode) -> RelativePosition
 {
@@ -44,4 +44,4 @@ auto RelativePosition::imgui_widget(const char* label, const float width) -> boo
     );
 }
 
-} // namespace ImGuiGradient
+} // namespace ImGG

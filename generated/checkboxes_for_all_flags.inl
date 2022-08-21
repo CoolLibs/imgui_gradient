@@ -8,92 +8,92 @@
 #include <imgui/imgui.h>
 #include "../src/Flags.hpp"
 
-auto checkboxes_for_all_flags() -> ImGuiGradient::Flags
+auto checkboxes_for_all_flags() -> ImGG::Flags
 {
-    ImGuiGradient::Flags options = ImGuiGradient::Flag::None;
+    ImGG::Flags options = ImGG::Flag::None;
 
     static auto isNone = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::None", &isNone);
+    ImGui::Checkbox("ImGG::Flag::None", &isNone);
     if (isNone)
     {
-        options |= ImGuiGradient::Flag::None;
+        options |= ImGG::Flag::None;
     }
 
     static auto isNoTooltip = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoTooltip", &isNoTooltip);
+    ImGui::Checkbox("ImGG::Flag::NoTooltip", &isNoTooltip);
     if (isNoTooltip)
     {
-        options |= ImGuiGradient::Flag::NoTooltip;
+        options |= ImGG::Flag::NoTooltip;
     }
 
     static auto isNoResetButton = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoResetButton", &isNoResetButton);
+    ImGui::Checkbox("ImGG::Flag::NoResetButton", &isNoResetButton);
     if (isNoResetButton)
     {
-        options |= ImGuiGradient::Flag::NoResetButton;
+        options |= ImGG::Flag::NoResetButton;
     }
 
     static auto isNoLabel = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoLabel", &isNoLabel);
+    ImGui::Checkbox("ImGG::Flag::NoLabel", &isNoLabel);
     if (isNoLabel)
     {
-        options |= ImGuiGradient::Flag::NoLabel;
+        options |= ImGG::Flag::NoLabel;
     }
 
     static auto isNoAddButton = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoAddButton", &isNoAddButton);
+    ImGui::Checkbox("ImGG::Flag::NoAddButton", &isNoAddButton);
     if (isNoAddButton)
     {
-        options |= ImGuiGradient::Flag::NoAddButton;
+        options |= ImGG::Flag::NoAddButton;
     }
 
     static auto isNoRemoveButton = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoRemoveButton", &isNoRemoveButton);
+    ImGui::Checkbox("ImGG::Flag::NoRemoveButton", &isNoRemoveButton);
     if (isNoRemoveButton)
     {
-        options |= ImGuiGradient::Flag::NoRemoveButton;
+        options |= ImGG::Flag::NoRemoveButton;
     }
 
     static auto isNoPositionSlider = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoPositionSlider", &isNoPositionSlider);
+    ImGui::Checkbox("ImGG::Flag::NoPositionSlider", &isNoPositionSlider);
     if (isNoPositionSlider)
     {
-        options |= ImGuiGradient::Flag::NoPositionSlider;
+        options |= ImGG::Flag::NoPositionSlider;
     }
 
     static auto isNoColorEdit = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoColorEdit", &isNoColorEdit);
+    ImGui::Checkbox("ImGG::Flag::NoColorEdit", &isNoColorEdit);
     if (isNoColorEdit)
     {
-        options |= ImGuiGradient::Flag::NoColorEdit;
+        options |= ImGG::Flag::NoColorEdit;
     }
 
     static auto isNoDragDownToDelete = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoDragDownToDelete", &isNoDragDownToDelete);
+    ImGui::Checkbox("ImGG::Flag::NoDragDownToDelete", &isNoDragDownToDelete);
     if (isNoDragDownToDelete)
     {
-        options |= ImGuiGradient::Flag::NoDragDownToDelete;
+        options |= ImGG::Flag::NoDragDownToDelete;
     }
 
     static auto isNoBorder = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoBorder", &isNoBorder);
+    ImGui::Checkbox("ImGG::Flag::NoBorder", &isNoBorder);
     if (isNoBorder)
     {
-        options |= ImGuiGradient::Flag::NoBorder;
+        options |= ImGG::Flag::NoBorder;
     }
 
     static auto isNoAddAndRemoveButtons = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoAddAndRemoveButtons", &isNoAddAndRemoveButtons);
+    ImGui::Checkbox("ImGG::Flag::NoAddAndRemoveButtons", &isNoAddAndRemoveButtons);
     if (isNoAddAndRemoveButtons)
     {
-        options |= ImGuiGradient::Flag::NoAddAndRemoveButtons;
+        options |= ImGG::Flag::NoAddAndRemoveButtons;
     }
 
     static auto isNoMarkOptions = false;
-    ImGui::Checkbox("ImGuiGradient::Flag::NoMarkOptions", &isNoMarkOptions);
+    ImGui::Checkbox("ImGG::Flag::NoMarkOptions", &isNoMarkOptions);
     if (isNoMarkOptions)
     {
-        options |= ImGuiGradient::Flag::NoMarkOptions;
+        options |= ImGG::Flag::NoMarkOptions;
     }
 
     return options;

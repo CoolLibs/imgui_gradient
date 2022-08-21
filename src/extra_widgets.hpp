@@ -3,7 +3,7 @@
 #include "Interpolation.hpp"
 #include "WrapMode.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 auto random_mode_checkbox(
     const char* label,
@@ -23,4 +23,4 @@ auto gradient_interpolation_mode_selector(
     bool           should_show_tooltip = true
 ) -> bool;
 
-} // namespace ImGuiGradient
+} // namespace ImGG

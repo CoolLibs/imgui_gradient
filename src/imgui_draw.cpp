@@ -3,7 +3,7 @@
 #include "Settings.hpp"
 #include "internal.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 static void draw_uniform_square(
     ImDrawList&  draw_list,
@@ -248,4 +248,4 @@ void draw_mark(
     );
 }
 
-} // namespace ImGuiGradient
+} // namespace ImGG

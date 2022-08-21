@@ -4,7 +4,7 @@
 #include <cassert>
 #include "WrapMode.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 /// Represents a number between 0 and 1.
 class RelativePosition {
@@ -45,4 +45,4 @@ private:
     float _value{0.f};
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

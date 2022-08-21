@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 using Flags = int;
 
@@ -22,4 +22,4 @@ enum ImGuiGradientFlag {
 };
 
 } // namespace Flag
-} // namespace ImGuiGradient
+} // namespace ImGG

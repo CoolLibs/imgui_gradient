@@ -2,7 +2,7 @@
 
 #include <cstddef> // Includes size_t
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 /// Controls how the colors are interpolated between two marks.
 enum class Interpolation : size_t { // We use size_t so that we can use the WrapMode to index into an array
@@ -12,4 +12,4 @@ enum class Interpolation : size_t { // We use size_t so that we can use the Wrap
     Constant,
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

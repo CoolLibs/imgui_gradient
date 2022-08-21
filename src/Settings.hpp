@@ -3,7 +3,7 @@
 #include <imgui/imgui.h>
 #include "Flags.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 struct Settings {
     float gradient_height{40.f};
@@ -14,7 +14,7 @@ struct Settings {
 
     float horizontal_margin{10.f};
 
-    ImGuiGradient::Flags flags{ImGuiGradient::Flag::None};
+    ImGG::Flags flags{ImGG::Flag::None};
 
     ImGuiColorEditFlags color_edit_flags{ImGuiColorEditFlags_None};
 
@@ -27,4 +27,4 @@ struct Settings {
     bool should_use_a_random_color_for_the_new_marks{false};
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

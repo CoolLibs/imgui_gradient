@@ -9,7 +9,7 @@
 #include "MarkId.hpp"
 #include "Settings.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 class GradientWidget {
 public:
@@ -57,4 +57,4 @@ private:
     MarkId   _mark_to_hide{};
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

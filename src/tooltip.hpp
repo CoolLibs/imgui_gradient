@@ -2,7 +2,7 @@
 
 #include <imgui/imgui.h>
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 inline void tooltip(const char* text)
 {
@@ -14,4 +14,4 @@ inline void tooltip(const char* text)
     }
 }
 
-} // namespace ImGuiGradient
+} // namespace ImGG

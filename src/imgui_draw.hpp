@@ -5,7 +5,7 @@
 #include "Settings.hpp"
 #include "internal.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 inline void draw_border(
     ImDrawList& draw_list,
@@ -34,4 +34,4 @@ void draw_mark(
     bool        mark_is_selected
 );
 
-} // namespace ImGuiGradient
+} // namespace ImGG

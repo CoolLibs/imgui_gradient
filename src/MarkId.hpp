@@ -4,7 +4,7 @@
 #include <list>
 #include "Mark.hpp"
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 namespace internal {
 // Thanks to https://stackoverflow.com/a/34143224
@@ -54,4 +54,4 @@ private:
     const Mark* _ptr{};
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

@@ -4,7 +4,7 @@
 
 // https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf page 260
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 namespace internal {
 
@@ -35,4 +35,4 @@ inline auto mirror_repeat_position(float position) -> RelativePosition
     return RelativePosition{1.f - (std::abs(modulo(position, 2.f) - 1.f))};
 }
 
-}} // namespace ImGuiGradient::internal
+}} // namespace ImGG::internal

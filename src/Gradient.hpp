@@ -4,9 +4,7 @@
 #include "Interpolation.hpp"
 #include "MarkId.hpp"
 
-// TODO(ASG) Rename namespace as ImGG
-
-namespace ImGuiGradient {
+namespace ImGG {
 
 class Gradient {
 public:
@@ -46,4 +44,4 @@ private:
     friend class MarkId;
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

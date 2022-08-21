@@ -2,7 +2,7 @@
 
 #include <cstddef> // Includes size_t
 
-namespace ImGuiGradient {
+namespace ImGG {
 
 /// Controls how a position that is outside of the [0, 1] range is mapped back into that range.
 /// This is like the OpenGL texture wrap modes; see https://learnopengl.com/Getting-started/Textures section "Texture Wrapping".
@@ -18,4 +18,4 @@ enum class WrapMode : size_t { // We use size_t so that we can use the WrapMode 
     MirrorRepeat,
 };
 
-} // namespace ImGuiGradient
+} // namespace ImGG

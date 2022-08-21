@@ -15,8 +15,8 @@ auto main(int argc, char* argv[]) -> int
         exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )
     {
-        auto gradient  = ImGuiGradient::GradientWidget{};
-        auto gradient2 = ImGuiGradient::GradientWidget{};
+        auto gradient  = ImGG::GradientWidget{};
+        auto gradient2 = ImGG::GradientWidget{};
         quick_imgui::loop("imgui_gradient tests", [&]() {
             ImGui::Begin("Framerate");
             ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
@@ -31,25 +31,25 @@ auto main(int argc, char* argv[]) -> int
             ImGui::Begin("Programmatic Actions");
             if (gradient.gradient().is_empty())
             {
-                ImGuiGradient::button_disabled("Remove a mark", "gradient is empty");
+                ImGG::button_disabled("Remove a mark", "gradient is empty");
             }
             else
             {
                 if (ImGui::Button("Remove a mark"))
                 {
-                    gradient.gradient().remove_mark(ImGuiGradient::MarkId{gradient.gradient().get_marks().front()});
+                    gradient.gradient().remove_mark(ImGG::MarkId{gradient.gradient().get_marks().front()});
                 }
             }
             if (ImGui::Button("Add a mark"))
             {
-                gradient.gradient().add_mark(ImGuiGradient::Mark{ImGuiGradient::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});
+                gradient.gradient().add_mark(ImGG::Mark{ImGG::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});
             };
             static auto position{0.f};
             if (ImGui::Button("Set mark position") && !gradient.gradient().is_empty())
             {
                 gradient.gradient().set_mark_position(
-                    ImGuiGradient::MarkId{gradient.gradient().get_marks().front()},
-                    ImGuiGradient::RelativePosition{position}
+                    ImGG::MarkId{gradient.gradient().get_marks().front()},
+                    ImGG::RelativePosition{position}
                 );
             };
             ImGui::SameLine();
@@ -59,7 +59,7 @@ auto main(int argc, char* argv[]) -> int
             static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
             if (ImGui::Button("Set mark color") && !gradient.gradient().is_empty())
             {
-                gradient.gradient().set_mark_color(ImGuiGradient::MarkId{gradient.gradient().get_marks().front()}, color);
+                gradient.gradient().set_mark_color(ImGG::MarkId{gradient.gradient().get_marks().front()}, color);
             };
             ImGui::SameLine();
             ImGui::ColorEdit4(
@@ -68,11 +68,11 @@ auto main(int argc, char* argv[]) -> int
                 ImGuiColorEditFlags_NoTooltip |
                     ImGuiColorEditFlags_NoInputs
             );
-            static ImGuiGradient::Settings settings{};
-            static ImGuiGradient::WrapMode wrap_mode{};
-            ImGuiGradient::wrap_mode_selector("Position Mode", wrap_mode);
-            ImGuiGradient::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode);
-            ImGuiGradient::random_mode_checkbox("Randomize new marks' color", settings.should_use_a_random_color_for_the_new_marks);
+            static ImGG::Settings settings{};
+            static ImGG::WrapMode wrap_mode{};
+            ImGG::wrap_mode_selector("Position Mode", wrap_mode);
+            ImGG::gradient_interpolation_mode_selector("Interpolation Mode", settings.interpolation_mode);
+            ImGG::random_mode_checkbox("Randomize new marks' color", settings.should_use_a_random_color_for_the_new_marks);
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
@@ -114,15 +114,15 @@ auto main(int argc, char* argv[]) -> int
 TEST_CASE("Interpolation modes")
 {
     // Gradient from black to white
-    ImGuiGradient::Gradient gradient{{
-        ImGuiGradient::Mark{ImGuiGradient::RelativePosition{0.f}, ImGuiGradient::ColorRGBA{0.f, 0.f, 0.f, 1.f}},
-        ImGuiGradient::Mark{ImGuiGradient::RelativePosition{1.f}, ImGuiGradient::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
+    ImGG::Gradient gradient{{
+        ImGG::Mark{ImGG::RelativePosition{0.f}, ImGG::ColorRGBA{0.f, 0.f, 0.f, 1.f}},
+        ImGG::Mark{ImGG::RelativePosition{1.f}, ImGG::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     }};
 
-    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Linear).x) == 0.25f);
-    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Linear).x) == 0.75f);
-    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.25f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
-    CHECK(doctest::Approx(gradient.at(ImGuiGradient::RelativePosition{0.75f}, ImGuiGradient::Interpolation::Constant).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}, ImGG::Interpolation::Linear).x) == 0.25f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}, ImGG::Interpolation::Linear).x) == 0.75f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}, ImGG::Interpolation::Constant).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}, ImGG::Interpolation::Constant).x) == 1.f);
 }
 
 TEST_CASE("Wrap modes")
@@ -130,42 +130,42 @@ TEST_CASE("Wrap modes")
     SUBCASE("clamp_position() when position in the range [0,1]")
     {
         const float position   = 0.3f;
-        const auto  repeat_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  repeat_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.3f);
     }
     SUBCASE("clamp_position() when position in the range [-1,0]")
     {
         const float position  = -0.4f;
-        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  clamp_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
     }
     SUBCASE("clamp_position() when position is < -1")
     {
         const float position  = -1.4f;
-        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  clamp_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
     }
     SUBCASE("clamp_position() when position > 1")
     {
         const float position  = 1.9f;
-        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  clamp_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(clamp_pos.get()) == 1.f);
     }
     SUBCASE("clamp_position() when position = 1")
     {
         const float position  = 1.f;
-        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  clamp_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(clamp_pos.get()) == 1.f);
     }
     SUBCASE("clamp_position() when position = 0")
     {
         const float position  = 0.f;
-        const auto  clamp_pos = ImGuiGradient::internal::clamp_position(position);
+        const auto  clamp_pos = ImGG::internal::clamp_position(position);
 
         CHECK(doctest::Approx(clamp_pos.get()) == 0.f);
     }
@@ -173,56 +173,56 @@ TEST_CASE("Wrap modes")
     SUBCASE("repeat_position() when position in the range [0,1]")
     {
         const float position   = 0.2f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.2f);
     }
     SUBCASE("repeat_position() when position in the range [-1,0]")
     {
         const float position   = -0.3f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.7f);
     }
     SUBCASE("repeat_position() when position is < -1")
     {
         const float position   = -1.4f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.6f);
     }
     SUBCASE("repeat_position() when position > 1")
     {
         const float position   = 1.8f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.8f);
     }
     SUBCASE("repeat_position() when position just before 1")
     {
         const float position   = .99f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == .99f);
     }
     SUBCASE("repeat_position() when position just after 1")
     {
         const float position   = 1.01f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == .01f);
     }
     SUBCASE("repeat_position() when position just before 0")
     {
         const float position   = -0.01f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.99f);
     }
     SUBCASE("repeat_position() when position just after 0")
     {
         const float position   = 0.01f;
-        const auto  repeat_pos = ImGuiGradient::internal::repeat_position(position);
+        const auto  repeat_pos = ImGG::internal::repeat_position(position);
 
         CHECK(doctest::Approx(repeat_pos.get()) == 0.01f);
     }
@@ -230,42 +230,42 @@ TEST_CASE("Wrap modes")
     SUBCASE("mirror_repeat_position() when position in the range [0,1]")
     {
         const float position          = 0.4f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 0.4f);
     }
     SUBCASE("mirror_repeat_position() when position in the range [-1,0]")
     {
         const float position          = -0.2f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 0.2f);
     }
     SUBCASE("mirror_repeat_position() when position is negative and < -1")
     {
         const float position          = -1.6f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 0.4f);
     }
     SUBCASE("mirror_repeat_position() when position > 1")
     {
         const float position          = 1.8f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 0.2f);
     }
     SUBCASE("mirror_repeat_position() when position = 1")
     {
         const float position          = 1.f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 1.f);
     }
     SUBCASE("mirror_repeat_position() when position = 0")
     {
         const float position          = 0.f;
-        const auto  mirror_repeat_pos = ImGuiGradient::internal::mirror_repeat_position(position);
+        const auto  mirror_repeat_pos = ImGG::internal::mirror_repeat_position(position);
 
         CHECK(doctest::Approx(mirror_repeat_pos.get()) == 0.f);
     }
@@ -274,7 +274,7 @@ TEST_CASE("Wrap modes")
     {
         const float x          = 0.f;
         const float mod        = 2.f;
-        const float modulo_res = ImGuiGradient::internal::modulo(x, mod);
+        const float modulo_res = ImGG::internal::modulo(x, mod);
 
         CHECK(doctest::Approx(modulo_res) == 0.f);
     }
@@ -282,7 +282,7 @@ TEST_CASE("Wrap modes")
     {
         const float x          = 1.f;
         const float mod        = 2.f;
-        const float modulo_res = ImGuiGradient::internal::modulo(x, mod);
+        const float modulo_res = ImGG::internal::modulo(x, mod);
 
         CHECK(doctest::Approx(modulo_res) == 1.f);
     }
