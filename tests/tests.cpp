@@ -54,8 +54,8 @@ auto main(int argc, char* argv[]) -> int
                 );
             };
             ImGui::SameLine();
-            ImGui::DragFloat("position to add a mark", &position, .0001f, /* speed */
-                             0.f, 1.f,                                    /* min and max */
+            ImGui::DragFloat("##260", &position, .0001f, /* speed */
+                             0.f, 1.f,                   /* min and max */
                              "%.4f" /* precision */);
             static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
             if (ImGui::Button("Set mark color") && !gradient.gradient().is_empty())
