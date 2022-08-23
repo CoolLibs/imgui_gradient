@@ -9,13 +9,24 @@ namespace ImGG {
 namespace internal {
 // Thanks to https://stackoverflow.com/a/34143224
 template<class T, class U>
-struct transfer_const {
+struct transfer_const_ptr {
     using type = typename std::remove_const<U>::type*;
 };
 template<class T, class U>
-struct transfer_const<const T&, U> {
+struct transfer_const_ptr<const T&, U> {
     using type = const U*;
 };
+
+template<class T, class U>
+struct transfer_const_iterator {
+    using type = typename std::remove_const<U>::type::iterator;
+};
+
+template<class T, class U>
+struct transfer_const_iterator<const T&, U> {
+    using type = typename U::const_iterator;
+};
+
 } // namespace internal
 
 /// Used to identify a Mark.
@@ -38,9 +49,8 @@ public:
     friend auto operator!=(const MarkId& a, const MarkId& b) -> bool { return !(a == b); };
 
 private:
-    friend class Gradient;
     template<typename GradientT>
-    auto find(GradientT&& gradient) const -> typename internal::transfer_const<GradientT, Mark>::type // Returns a `const Mark*` if GradientT is const and a mutable `Mark*` otherwise.
+    auto find(GradientT&& gradient) const -> typename internal::transfer_const_ptr<GradientT, Mark>::type // Returns a `const Mark*` if GradientT is const and a mutable `Mark*` otherwise.
     {
         const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
             return &mark == _ptr;
@@ -49,6 +59,18 @@ private:
                    ? &*it
                    : nullptr;
     }
+
+    template<typename GradientT>
+    /// If it is not in the list return an iterator invalid
+    auto find_iterator(GradientT&& gradient) const -> typename internal::transfer_const_iterator<GradientT, std::list<Mark>>::type // Returns a `const std::list<Mark>::iterator>` if GradientT is const and a mutable `std::list<Mark>::iterator>` otherwise.
+    {
+        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
+            return &mark == _ptr;
+        });
+        return it;
+    }
+
+    friend class Gradient;
 
 private:
     const Mark* _ptr{};

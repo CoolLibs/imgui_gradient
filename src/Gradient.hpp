@@ -13,12 +13,24 @@ public:
         : _marks{marks}
     {}
 
+    Gradient(const Gradient& gradient)
+        : _marks{gradient._marks} {};
+    Gradient& operator=(const Gradient& gradient)
+    {
+        *this = Gradient{gradient};
+        return *this;
+    };
+    Gradient(Gradient&&) noexcept   = default;
+    Gradient& operator=(Gradient&&) = default;
+
     /// Returns the color at the given position in the gradient.
     /// 0.f corresponds to the beginning of the gradient and 1.f to the end.
     auto at(RelativePosition) const -> ColorRGBA;
 
     auto find(MarkId) const -> const Mark*;
     auto find(MarkId) -> Mark*;
+    auto find_iterator(MarkId id) const -> std::list<Mark>::const_iterator;
+    auto find_iterator(MarkId id) -> std::list<Mark>::iterator;
     auto contains(MarkId id) const -> bool { return find(id); }
     auto is_empty() const -> bool;
 

@@ -17,6 +17,16 @@ auto Gradient::find(MarkId id) -> Mark*
     return id.find(*this);
 }
 
+auto Gradient::find_iterator(MarkId id) const -> std::list<Mark>::const_iterator
+{
+    return id.find_iterator(*this);
+}
+
+auto Gradient::find_iterator(MarkId id) -> std::list<Mark>::iterator
+{
+    return id.find_iterator(*this);
+}
+
 auto Gradient::is_empty() const -> bool
 {
     return _marks.empty();
