@@ -156,37 +156,42 @@ static void draw_gradient_bar(
     );
 }
 
-static void handle_interactions_with_hovered_mark(
+static auto handle_interactions_with_hovered_mark(
     MarkId& dragged_mark,
     MarkId& selected_mark,
     MarkId& mark_to_delete,
     MarkId  hovered_mark
-)
+) -> bool
 {
+    bool interacted{false};
     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         dragged_mark  = hovered_mark;
         selected_mark = hovered_mark;
+        interacted    = true;
     }
     if (ImGui::IsMouseDoubleClicked(ImGuiPopupFlags_MouseButtonLeft))
     {
         ImGui::OpenPopup("SelectedMarkColorPicker");
         selected_mark = hovered_mark;
+        interacted    = true;
     }
     if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
     {
         mark_to_delete = hovered_mark; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
+        interacted     = true;
     }
+    return interacted;
 }
 
 auto GradientWidget::draw_gradient_marks(
     MarkId&      mark_to_delete,
     const ImVec2 gradient_bar_position,
     const ImVec2 gradient_size
-) -> bool
+) -> internal::draw_gradient_marks_Result
 {
-    ImDrawList& draw_list         = *ImGui::GetWindowDrawList();
-    bool        hitbox_is_hovered = false;
+    auto        res       = internal::draw_gradient_marks_Result{};
+    ImDrawList& draw_list = *ImGui::GetWindowDrawList();
     for (const Mark& mark : _gradient.get_marks())
     {
         MarkId current_mark_id{mark};
@@ -201,8 +206,8 @@ auto GradientWidget::draw_gradient_marks(
             );
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
-                hitbox_is_hovered = true;
-                handle_interactions_with_hovered_mark(
+                res.hitbox_is_hovered     = true;
+                res.selected_mark_changed = handle_interactions_with_hovered_mark(
                     _dragged_mark,
                     _selected_mark,
                     mark_to_delete,
@@ -218,7 +223,7 @@ auto GradientWidget::draw_gradient_marks(
             0.f,
             gradient_size.y + space_between_gradient_bar_and_options}
     );
-    return hitbox_is_hovered;
+    return res;
 }
 
 static auto position_where_to_add_next_mark(const Gradient& gradient) -> float
@@ -323,6 +328,7 @@ auto GradientWidget::widget(
     const Settings&       settings
 ) -> bool
 {
+    auto modified{false};
     ImGui::PushID(label);
     ImGui::BeginGroup();
     if (!(settings.flags & Flag::NoLabel))
@@ -351,13 +357,14 @@ auto GradientWidget::widget(
     const auto wants_to_add_mark{ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)}; // We need to declare it before drawing the marks because we want to
                                                                                                           // test if the mouse is hovering the gradient bar not the marks.
     MarkId     mark_to_delete{};
-    const auto mark_hitbox_is_hovered = draw_gradient_marks( // We declare it here because even if we cannot add a mark we need to draw gradient marks.
+    const auto res                    = draw_gradient_marks( // We declare it here because even if we cannot add a mark we need to draw gradient marks.
         mark_to_delete,
         gradient_bar_position,
         gradient_size
     );
+    const auto mark_hitbox_is_hovered = res.hitbox_is_hovered;
+    modified |= res.selected_mark_changed;
 
-    auto modified{false};
     if (wants_to_add_mark && !mark_hitbox_is_hovered)
     {
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};

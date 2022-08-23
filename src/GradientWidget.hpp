@@ -12,6 +12,13 @@ namespace ImGG {
 /// A function that returns a random number between 0.f and 1.f whenever it is called.
 using RandomNumberGenerator = std::function<float()>;
 
+namespace internal {
+struct draw_gradient_marks_Result {
+    bool hitbox_is_hovered{false};
+    bool selected_mark_changed{false};
+};
+} // namespace internal
+
 class GradientWidget {
 public:
     GradientWidget() = default;
@@ -54,7 +61,7 @@ private:
         MarkId& mark_to_delete,
         ImVec2  gradient_bar_pos,
         ImVec2  size
-    ) -> bool;
+    ) -> internal::draw_gradient_marks_Result;
 
     auto mouse_dragging_interactions(
         ImVec2          gradient_bar_position,
