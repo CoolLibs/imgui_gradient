@@ -1,5 +1,6 @@
 #include "GradientWidget.hpp"
 #include <array>
+#include <iterator>
 #include <random>
 #include "button_disabled.hpp"
 #include "imgui_draw.hpp"
@@ -7,6 +8,28 @@
 #include "tooltip.hpp"
 
 namespace ImGG {
+
+static auto new_mark_id(const Gradient new_gradient, const Gradient old_gradient, MarkId old_mark_id) -> MarkId
+{
+    auto old_iterator = old_gradient.find_iterator(old_mark_id);
+    return old_iterator != old_gradient.get_marks().end()
+               ? MarkId{
+                     std::next(
+                         new_gradient.get_marks().begin(),
+                         std::distance(
+                             old_gradient.get_marks().begin(),
+                             old_iterator
+                         )
+                     )}
+               : MarkId{nullptr};
+}
+
+GradientWidget::GradientWidget(const GradientWidget& widget)
+    : _gradient{widget._gradient}
+    , _selected_mark{new_mark_id(_gradient, widget._gradient, widget._selected_mark)}
+    , _dragged_mark{new_mark_id(_gradient, widget._gradient, widget._dragged_mark)}
+    , _mark_to_hide{new_mark_id(_gradient, widget._gradient, widget._mark_to_hide)}
+{}
 
 static auto random_color(RandomNumberGenerator rng) -> ColorRGBA
 {

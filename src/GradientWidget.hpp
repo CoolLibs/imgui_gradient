@@ -18,6 +18,16 @@ public:
     explicit GradientWidget(const std::list<Mark>& marks)
         : _gradient{marks}
     {}
+    GradientWidget(const GradientWidget&);
+
+    GradientWidget& operator=(const GradientWidget& widget)
+    {
+        *this = GradientWidget{widget};
+        return *this;
+    }
+
+    GradientWidget(GradientWidget&&) noexcept   = default;
+    GradientWidget& operator=(GradientWidget&&) = default;
 
     auto gradient() const -> const Gradient& { return _gradient; }
     auto gradient() -> Gradient& { return _gradient; }
