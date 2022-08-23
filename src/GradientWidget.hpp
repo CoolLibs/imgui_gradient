@@ -63,8 +63,8 @@ private:
 
 private:
     Gradient _gradient{};
-    MarkId   _dragged_mark{};
     MarkId   _selected_mark{};
+    MarkId   _dragged_mark{};
     MarkId   _mark_to_hide{};
 };
 
