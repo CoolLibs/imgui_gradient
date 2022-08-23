@@ -13,16 +13,6 @@ public:
         : _marks{marks}
     {}
 
-    Gradient(const Gradient& gradient)
-        : _marks{gradient._marks} {};
-    Gradient& operator=(const Gradient& gradient)
-    {
-        *this = Gradient{gradient};
-        return *this;
-    };
-    Gradient(Gradient&&) noexcept   = default;
-    Gradient& operator=(Gradient&&) = default;
-
     /// Returns the color at the given position in the gradient.
     /// 0.f corresponds to the beginning of the gradient and 1.f to the end.
     auto at(RelativePosition) const -> ColorRGBA;

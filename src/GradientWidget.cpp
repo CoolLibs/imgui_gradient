@@ -11,7 +11,7 @@ namespace ImGG {
 
 static auto new_mark_id(const Gradient new_gradient, const Gradient old_gradient, MarkId old_mark_id) -> MarkId
 {
-    auto old_iterator = old_gradient.find_iterator(old_mark_id);
+    const auto old_iterator = old_gradient.find_iterator(old_mark_id);
     return old_iterator != old_gradient.get_marks().end()
                ? MarkId{
                      std::next(
@@ -21,7 +21,7 @@ static auto new_mark_id(const Gradient new_gradient, const Gradient old_gradient
                              old_iterator
                          )
                      )}
-               : MarkId{nullptr};
+               : MarkId{};
 }
 
 GradientWidget::GradientWidget(const GradientWidget& widget)

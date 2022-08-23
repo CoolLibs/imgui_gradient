@@ -18,11 +18,12 @@ public:
     explicit GradientWidget(const std::list<Mark>& marks)
         : _gradient{marks}
     {}
+
     GradientWidget(const GradientWidget&);
 
     GradientWidget& operator=(const GradientWidget& widget)
     {
-        *this = GradientWidget{widget};
+        *this = GradientWidget{widget}; // Construct and then move-assign
         return *this;
     }
 
