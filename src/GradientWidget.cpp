@@ -460,6 +460,7 @@ auto GradientWidget::widget(
             auto position = selected_mark->position; // Make a copy, we can't modify the position directly because we need to pass through set_mark_position() because it has some invariants to presere (sorting the marks)
             if (position.imgui_widget("##3", gradient_size.x * 0.25f))
             {
+                _dragged_mark.reset();
                 gradient().set_mark_position(_selected_mark, position);
                 modified = true;
             }
