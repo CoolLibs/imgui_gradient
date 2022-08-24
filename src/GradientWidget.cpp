@@ -521,6 +521,7 @@ auto GradientWidget::widget(
                     space_under_bar}
         );
     }
+    ImGui::PopID();
     ImGui::EndGroup();
     ImGui::SetCursorScreenPos(
         internal::gradient_position(0.f) +
@@ -530,7 +531,12 @@ auto GradientWidget::widget(
                 ? ImGui::GetStyle().ItemSpacing.y * 2.f
                 : ImGui::GetStyle().ItemSpacing.y * 3.f}
     );
-    ImGui::PopID();
+    ImGuiContext& g = *GImGui;
+
+    if (modified)
+    {
+        ImGui::MarkItemEdited(g.ActiveId);
+    }
     return modified;
 }
 
