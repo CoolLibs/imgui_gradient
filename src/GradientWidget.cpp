@@ -174,7 +174,8 @@ static auto handle_interactions_with_hovered_mark(
     {
         ImGui::OpenPopup("SelectedMarkColorPicker");
         selected_mark = hovered_mark;
-        interacted    = true;
+        dragged_mark.reset();
+        interacted = true;
     }
     if (ImGui::IsMouseReleased(ImGuiPopupFlags_MouseButtonMiddle))
     {
