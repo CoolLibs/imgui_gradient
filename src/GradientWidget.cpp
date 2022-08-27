@@ -371,7 +371,7 @@ auto GradientWidget::widget(
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
         add_mark_with_chosen_mode({position, WrapMode::Clamp}, rng, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
-        ImGui::OpenPopup("SelectedMarkColorPicker");
+        // ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
     modified |= mouse_dragging_interactions(gradient_bar_position, gradient_size, settings);
