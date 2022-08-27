@@ -105,7 +105,7 @@ static auto mark_invisible_button(
     const auto button_size = ImVec2{
         mark_square_size * 3.f,
         gradient_height + mark_square_size * 2.f};
-    ImGui::InvisibleButton("mark", button_size);
+    ImGui::InvisibleButton("mark", button_size, ImGuiButtonFlags_MouseButtonMiddle | ImGuiButtonFlags_MouseButtonLeft);
     return ImGui::IsItemHovered();
 }
 

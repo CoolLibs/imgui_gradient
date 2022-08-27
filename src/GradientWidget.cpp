@@ -50,6 +50,8 @@ void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_p
             ? random_color(rng)
             : _gradient.at(relative_pos)};
     _selected_mark = _gradient.add_mark(mark);
+
+    ImGui::ActivateItem(ImGui::GetCurrentWindow()->GetID("gradient"));
 }
 
 static auto button_with_tooltip(
@@ -181,6 +183,8 @@ static auto handle_interactions_with_hovered_mark(
     {
         mark_to_delete = hovered_mark; // When we middle click to delete a non selected mark it is impossible to remove this mark in the loop
         interacted     = true;
+        // const ImGuiID id = ImGui::GetCurrentWindow()->GetID("gradient");
+        // ImGui::SetActiveID(g.LastItemData.ID, ImGui::GetCurrentWindow());
     }
     return interacted;
 }
@@ -371,7 +375,7 @@ auto GradientWidget::widget(
         const auto position{(ImGui::GetIO().MousePos.x - gradient_bar_position.x) / gradient_size.x};
         add_mark_with_chosen_mode({position, WrapMode::Clamp}, rng, settings.should_use_a_random_color_for_the_new_marks);
         modified = true;
-        ImGui::OpenPopup("SelectedMarkColorPicker");
+        // ImGui::OpenPopup("SelectedMarkColorPicker");
     }
 
     modified |= mouse_dragging_interactions(gradient_bar_position, gradient_size, settings);
@@ -413,12 +417,21 @@ auto GradientWidget::widget(
                                         (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace));
 
         const auto wants_to_delete = delete_button_pressed || delete_key_pressed;
+        ImGui::Button("PLOP");
+        static bool b = false;
+        if (b)
+        {
+            ImGui::ActivateItem(ImGui::GetCurrentWindow()->GetID("PLOP"));
+            b = false;
+        }
         if (wants_to_delete && _gradient.contains(_selected_mark))
         {
             const MarkId new_selected_mark = next_selected_mark(_gradient.get_marks(), _selected_mark);
             gradient().remove_mark(_selected_mark);
             _selected_mark = new_selected_mark;
             modified       = true;
+            ImGui::ActivateItem(ImGui::GetCurrentWindow()->GetID("PLOP"));
+            b = true;
         }
     }
 
@@ -521,8 +534,8 @@ auto GradientWidget::widget(
                     space_under_bar}
         );
     }
-    ImGui::PopID();
     ImGui::EndGroup();
+    ImGui::PopID();
     ImGui::SetCursorScreenPos(
         internal::gradient_position(0.f) +
         ImVec2{
@@ -537,6 +550,9 @@ auto GradientWidget::widget(
     {
         ImGui::MarkItemEdited(g.ActiveId);
     }
+    ImGui::Text(ImGui::IsItemActive() ? "true" : "false");
+    // ImGui::Begin("fgdfbfdg");
+    // ImGui::End();
     return modified;
 }
 
