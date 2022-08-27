@@ -37,6 +37,8 @@ public:
     GradientWidget(GradientWidget&&) noexcept   = default;
     GradientWidget& operator=(GradientWidget&&) = default;
 
+    friend auto operator==(const GradientWidget& a, const GradientWidget& b) -> bool { return a.gradient() == b.gradient(); }
+
     auto gradient() const -> const Gradient& { return _gradient; }
     auto gradient() -> Gradient& { return _gradient; }
 
