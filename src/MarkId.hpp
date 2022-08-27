@@ -49,25 +49,22 @@ public:
     friend auto operator!=(const MarkId& a, const MarkId& b) -> bool { return !(a == b); };
 
 private:
+    /// If it is not in the list returns an invalid iterator
     template<typename GradientT>
-    auto find(GradientT&& gradient) const -> typename internal::transfer_const_ptr<GradientT, Mark>::type // Returns a `const Mark*` if GradientT is const and a mutable `Mark*` otherwise.
+    auto find_iterator(GradientT&& gradient) const -> typename internal::transfer_const_iterator<GradientT, std::list<Mark>>::type // Returns a `const std::list<Mark>::iterator>` if GradientT is const and a mutable `std::list<Mark>::iterator>` otherwise.
     {
-        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
+        return std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
             return &mark == _ptr;
         });
-        return it != gradient._marks.end()
-                   ? &*it
-                   : nullptr;
     }
 
     template<typename GradientT>
-    /// If it is not in the list return an iterator invalid
-    auto find_iterator(GradientT&& gradient) const -> typename internal::transfer_const_iterator<GradientT, std::list<Mark>>::type // Returns a `const std::list<Mark>::iterator>` if GradientT is const and a mutable `std::list<Mark>::iterator>` otherwise.
+    auto find(GradientT&& gradient) const -> typename internal::transfer_const_ptr<GradientT, Mark>::type // Returns a `const Mark*` if GradientT is const and a mutable `Mark*` otherwise.
     {
-        const auto it = std::find_if(gradient._marks.begin(), gradient._marks.end(), [&](const Mark& mark) {
-            return &mark == _ptr;
-        });
-        return it;
+        const auto it = find_iterator(gradient);
+        return it != gradient._marks.end()
+                   ? &*it
+                   : nullptr;
     }
 
     friend class Gradient;
