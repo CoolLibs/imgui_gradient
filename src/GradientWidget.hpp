@@ -4,6 +4,7 @@
 
 #include <functional>
 #include "Gradient.hpp"
+#include "HoverChecker.hpp"
 #include "MarkId.hpp"
 #include "Settings.hpp"
 
@@ -76,6 +77,8 @@ private:
     MarkId   _selected_mark{};
     MarkId   _dragged_mark{};
     MarkId   _mark_to_hide{};
+
+    internal::HoverChecker _hover_checker{};
 };
 
 } // namespace ImGG

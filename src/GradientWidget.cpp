@@ -35,6 +35,7 @@ GradientWidget::GradientWidget(const GradientWidget& widget)
     , _selected_mark{new_mark_id(_gradient, widget._gradient, widget._selected_mark)}
     , _dragged_mark{new_mark_id(_gradient, widget._gradient, widget._dragged_mark)}
     , _mark_to_hide{new_mark_id(_gradient, widget._gradient, widget._mark_to_hide)}
+    , _hover_checker{widget._hover_checker}
 {}
 
 static auto random_color(RandomNumberGenerator rng) -> ColorRGBA
@@ -136,11 +137,10 @@ static void draw_gradient_bar(
 )
 {
     ImDrawList& draw_list = *ImGui::GetWindowDrawList();
-    draw_border(
-        draw_list,
+    draw_border({
         gradient_bar_position,
-        gradient_bar_position + gradient_size
-    );
+        gradient_bar_position + gradient_size,
+    });
     if (!gradient.is_empty())
     {
         draw_gradient(
@@ -323,6 +323,42 @@ static auto next_selected_mark(const std::list<Mark>& gradient, MarkId mark) -> 
     };
 }
 
+static auto compute_number_of_lines_under_bar(Settings const& settings) -> float
+{
+    float res{0.f};
+
+    if (!(settings.flags & Flag::NoResetButton))
+    {
+        res += 1.f;
+    }
+
+    if (!(settings.flags & Flag::NoAddButton) ||
+        !(settings.flags & Flag::NoRemoveButton) ||
+        !(settings.flags & Flag::NoPositionSlider) ||
+        !(settings.flags & Flag::NoColorEdit))
+    {
+        res += 1.f;
+    }
+
+    return res;
+}
+
+static auto compute_border_rect(const char* label, Settings const& settings, ImVec2 gradient_bar_position, ImVec2 gradient_size) -> ImRect
+{
+    const float space_over_bar = !(settings.flags & Flag::NoLabel)
+                                     ? ImGui::CalcTextSize(label).y + ImGui::GetStyle().ItemSpacing.y * 3.f
+                                     : ImGui::GetStyle().ItemSpacing.y * 2.f;
+
+    const float            number_of_lines_under_bar              = compute_number_of_lines_under_bar(settings);
+    static constexpr float space_between_gradient_bar_and_options = 20.f;
+    const float            space_under_bar                        = (internal::line_height() + ImGui::GetStyle().ItemSpacing.y * 2.f) * number_of_lines_under_bar + space_between_gradient_bar_and_options;
+
+    return ImRect{
+        gradient_bar_position - ImVec2{settings.horizontal_margin + 4.f, space_over_bar},
+        gradient_bar_position + gradient_size + ImVec2{settings.horizontal_margin + 4.f, space_under_bar},
+    };
+}
+
 auto GradientWidget::widget(
     const char*           label,
     RandomNumberGenerator rng,
@@ -330,6 +366,7 @@ auto GradientWidget::widget(
 ) -> bool
 {
     auto modified{false};
+
     ImGui::PushID(label);
     ImGui::BeginGroup();
     if (!(settings.flags & Flag::NoLabel))
@@ -340,16 +377,14 @@ auto GradientWidget::widget(
 
     const auto gradient_bar_position = ImVec2{internal::gradient_position(settings.horizontal_margin)};
     const auto gradient_size         = ImVec2{
-        // When the window is smaller than gradient width we compute a relative width
-        // To avoid a width equal to zero and library crash the minimum width value is 1.f
-        std::max(
-                    1.f,
-                    std::min(
-                        ImGui::GetContentRegionAvail().x - settings.horizontal_margin * 2.f,
-                        settings.gradient_width
-                    )
+        std::max( // To avoid a width equal to zero and library crash the minimum width value is 1.f
+            1.f,
+            std::min( // When the window is smaller than gradient width we compute a relative width
+                ImGui::GetContentRegionAvail().x - settings.horizontal_margin * 2.f,
+                settings.gradient_width
+            )
                 ),
-        settings.gradient_height};
+                settings.gradient_height};
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);
@@ -439,6 +474,8 @@ auto GradientWidget::widget(
         }
     }
 
+    bool force_dont_deselect_mark = false;
+
     const auto selected_mark = gradient().find(_selected_mark);
     if (selected_mark)
     {
@@ -450,6 +487,7 @@ auto GradientWidget::widget(
                 ImGui::SameLine();
             }
             modified |= color_button(*selected_mark, is_there_a_tooltip, settings.color_edit_flags);
+            force_dont_deselect_mark = ImGui::IsItemActive(); // The color popup can go outside the border, but we don't want to deselect the mark when we click on it
         }
 
         if (!(settings.flags & Flag::NoPositionSlider))
@@ -488,40 +526,32 @@ auto GradientWidget::widget(
         );
     }
 
-    const auto space_over_bar = !(settings.flags & Flag::NoLabel)
-                                    ? ImGui::CalcTextSize(label).y + ImGui::GetStyle().ItemSpacing.y * 3.f
-                                    : ImGui::GetStyle().ItemSpacing.y * 2.f;
+    { // Border
+        const ImRect border_rect = compute_border_rect(label, settings, gradient_bar_position, gradient_size);
 
-    auto space_under_bar{0.f};
-    if (!(settings.flags & Flag::NoBorder))
-    {
-        auto number_of_line_under_bar{0.f};
-        if (!(settings.flags & Flag::NoResetButton))
+        // Draw border
+        if (!(settings.flags & Flag::NoBorder))
+            draw_border(border_rect);
+
+        // Deselect mark if we click outside the border
         {
-            number_of_line_under_bar += 1.f;
+            // Check if bounding box hovered
+            ImGui::ItemAdd(border_rect, ImGui::GetID("gradient border"));
+            _hover_checker.update();
+
+            // Check if one of the widgets is active
+            if (ImGui::IsPopupOpen("SelectedMarkColorPicker") ||
+                force_dont_deselect_mark)
+            {
+                _hover_checker.force_consider_hovered();
+            }
+
+            // Deselect mark if clicking while not hovered
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !_hover_checker.is_item_hovered())
+                _selected_mark = {};
         }
-        if (!(settings.flags & Flag::NoAddButton) ||
-            !(settings.flags & Flag::NoRemoveButton) ||
-            !(settings.flags & Flag::NoPositionSlider) ||
-            !(settings.flags & Flag::NoColorEdit))
-        {
-            number_of_line_under_bar += 1.f;
-        }
-        static constexpr float space_between_gradient_bar_and_options = 20.f;
-        space_under_bar =
-            (internal::line_height() + ImGui::GetStyle().ItemSpacing.y * 2.f) * number_of_line_under_bar + space_between_gradient_bar_and_options;
-        ImDrawList& draw_list{*ImGui::GetWindowDrawList()};
-        draw_border(
-            draw_list,
-            gradient_bar_position -
-                ImVec2{settings.horizontal_margin + 4.f, space_over_bar},
-            gradient_bar_position +
-                gradient_size +
-                ImVec2{
-                    settings.horizontal_margin + 4.f,
-                    space_under_bar}
-        );
     }
+
     ImGui::PopID();
     ImGui::EndGroup();
     ImGui::SetCursorScreenPos(

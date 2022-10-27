@@ -7,22 +7,18 @@
 
 namespace ImGG {
 
-inline void draw_border(
-    ImDrawList& draw_list,
-    ImVec2      top_left_corner,
-    ImVec2      bottom_rigth_corner
-)
+inline void draw_border(ImRect border_rect)
 {
     static constexpr float rounding{1.f};
     static constexpr float thickness{2.f};
-    draw_list.AddRect(top_left_corner, bottom_rigth_corner, internal::border_color(), rounding, ImDrawFlags_None, thickness);
+    ImGui::GetWindowDrawList()->AddRect(border_rect.GetTL(), border_rect.GetBR(), internal::border_color(), rounding, ImDrawFlags_None, thickness);
 }
 
 void draw_gradient(
     ImDrawList&     draw_list,
     const Gradient& gradient,
     ImVec2          gradient_position,
-    ImVec2          size // {width, height}
+    ImVec2          size
 );
 
 void draw_marks(
