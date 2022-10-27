@@ -5,7 +5,6 @@
 
 def all_flags():
     return {
-        "ImGG::Flag::None":                       ["isNone"],
         "ImGG::Flag::NoTooltip":                  ["isNoTooltip"],
         "ImGG::Flag::NoResetButton":              ["isNoResetButton"],
         "ImGG::Flag::NoLabel":                    ["isNoLabel"],
@@ -18,6 +17,7 @@ def all_flags():
         "ImGG::Flag::NoAddAndRemoveButtons":      ["isNoAddAndRemoveButtons"],
         "ImGG::Flag::NoMarkOptions":              ["isNoMarkOptions"],
     }
+
 
 def checkboxes_for_all_flags():
     out = f"""
@@ -39,7 +39,7 @@ if ({value})
     options|={key};
 }}
 """
-    out+= f"""
+    out += f"""
     return options;
 }}"""
     return out

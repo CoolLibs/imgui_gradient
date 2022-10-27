@@ -12,13 +12,6 @@ auto checkboxes_for_all_flags() -> ImGG::Flags
 {
     ImGG::Flags options = ImGG::Flag::None;
 
-    static auto isNone = false;
-    ImGui::Checkbox("ImGG::Flag::None", &isNone);
-    if (isNone)
-    {
-        options |= ImGG::Flag::None;
-    }
-
     static auto isNoTooltip = false;
     ImGui::Checkbox("ImGG::Flag::NoTooltip", &isNoTooltip);
     if (isNoTooltip)
