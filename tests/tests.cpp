@@ -12,8 +12,8 @@ auto main(int argc, char* argv[]) -> int
     const int  exit_code              = doctest::Context{}.run(); // Run all unit tests
     const bool should_run_imgui_tests = argc < 2 || strcmp(argv[1], "-nogpu") != 0;
     if (
-        should_run_imgui_tests &&
-        exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
+        should_run_imgui_tests
+        && exit_code == 0 // Only open the window if the tests passed; this makes it easier to notice when some tests fail
     )
     {
         auto gradient  = ImGG::GradientWidget{};
@@ -75,8 +75,7 @@ auto main(int argc, char* argv[]) -> int
             ImGui::ColorEdit4(
                 "##colorpicker1",
                 reinterpret_cast<float*>(&color),
-                ImGuiColorEditFlags_NoTooltip |
-                    ImGuiColorEditFlags_NoInputs
+                ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs
             );
             static ImGG::WrapMode wrap_mode{};
             ImGG::wrap_mode_widget("Position Mode", &wrap_mode);

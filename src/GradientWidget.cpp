@@ -151,8 +151,7 @@ static void draw_gradient_bar(
         );
     }
     ImGui::SetCursorScreenPos(
-        gradient_bar_position +
-        ImVec2{0.f, gradient_size.y}
+        gradient_bar_position + ImVec2{0.f, gradient_size.y}
     );
 }
 
@@ -219,10 +218,7 @@ auto GradientWidget::draw_gradient_marks(
     }
     static constexpr float space_between_gradient_bar_and_options = 20.f;
     ImGui::SetCursorScreenPos(
-        gradient_bar_position +
-        ImVec2{
-            0.f,
-            gradient_size.y + space_between_gradient_bar_and_options}
+        gradient_bar_position + ImVec2{0.f, gradient_size.y + space_between_gradient_bar_and_options}
     );
     return res;
 }
@@ -332,10 +328,10 @@ static auto compute_number_of_lines_under_bar(Settings const& settings) -> float
         res += 1.f;
     }
 
-    if (!(settings.flags & Flag::NoAddButton) ||
-        !(settings.flags & Flag::NoRemoveButton) ||
-        !(settings.flags & Flag::NoPositionSlider) ||
-        !(settings.flags & Flag::NoColorEdit))
+    if (!(settings.flags & Flag::NoAddButton)
+        || !(settings.flags & Flag::NoRemoveButton)
+        || !(settings.flags & Flag::NoPositionSlider)
+        || !(settings.flags & Flag::NoColorEdit))
     {
         res += 1.f;
     }
@@ -422,8 +418,7 @@ auto GradientWidget::widget(
     // Remove mark_to_delete if it exists
     if (_gradient.contains(mark_to_delete))
     {
-        if (_gradient.contains(_selected_mark) &&
-            _selected_mark == mark_to_delete)
+        if (_gradient.contains(_selected_mark) && _selected_mark == mark_to_delete)
         {
             _selected_mark = next_selected_mark(_gradient.get_marks(), _selected_mark);
         }
@@ -436,17 +431,17 @@ auto GradientWidget::widget(
     if (!_gradient.is_empty())
     {
         const auto window_is_hovered{ImGui::IsWindowHovered(
-            ImGuiHoveredFlags_ChildWindows |
-            ImGuiHoveredFlags_AllowWhenBlockedByActiveItem
+            ImGuiHoveredFlags_ChildWindows
+            | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem
         )};
 
         const auto delete_button_pressed = is_there_remove_button
                                                ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip)
                                                : false;
 
-        const auto delete_key_pressed = window_is_hovered &&
-                                        !ImGui::GetIO().WantTextInput &&
-                                        (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace));
+        const auto delete_key_pressed = window_is_hovered
+                                        && !ImGui::GetIO().WantTextInput
+                                        && (ImGui::IsKeyPressed(ImGuiKey_Delete) || ImGui::IsKeyPressed(ImGuiKey_Backspace));
 
         const auto wants_to_delete = delete_button_pressed || delete_key_pressed;
         if (wants_to_delete && _gradient.contains(_selected_mark))
@@ -461,8 +456,7 @@ auto GradientWidget::widget(
     const auto is_there_add_button{!(settings.flags & Flag::NoAddButton)};
     if (is_there_add_button)
     {
-        if (is_there_remove_button &&
-            !_gradient.is_empty())
+        if (is_there_remove_button && !_gradient.is_empty())
         {
             ImGui::SameLine();
         }
@@ -540,8 +534,8 @@ auto GradientWidget::widget(
             _hover_checker.update();
 
             // Check if one of the widgets is active
-            if (ImGui::IsPopupOpen("SelectedMarkColorPicker") ||
-                force_dont_deselect_mark)
+            if (ImGui::IsPopupOpen("SelectedMarkColorPicker")
+                || force_dont_deselect_mark)
             {
                 _hover_checker.force_consider_hovered();
             }
@@ -555,12 +549,13 @@ auto GradientWidget::widget(
     ImGui::PopID();
     ImGui::EndGroup();
     ImGui::SetCursorScreenPos(
-        internal::gradient_position(0.f) +
-        ImVec2{
+        internal::gradient_position(0.f)
+        + ImVec2{
             0.f,
             !(settings.flags & Flag::NoLabel)
                 ? ImGui::GetStyle().ItemSpacing.y * 2.f
-                : ImGui::GetStyle().ItemSpacing.y * 3.f}
+                : ImGui::GetStyle().ItemSpacing.y * 3.f,
+        }
     );
     ImGuiContext& g = *GImGui;
 

@@ -19,8 +19,8 @@ struct Mark {
 
     friend auto operator==(const Mark& a, const Mark& b) -> bool
     {
-        return a.position == b.position &&
-               a.color == b.color;
+        return a.position == b.position
+               && a.color == b.color;
     };
 };
 
