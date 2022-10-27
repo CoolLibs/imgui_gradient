@@ -6,7 +6,7 @@ target_compile_features(imgui_gradient PUBLIC cxx_std_11)
 
 # ---Add source files---
 target_include_directories(imgui_gradient PUBLIC include)
-file(GLOB SRC_FILES src/*.cpp)
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 target_sources(imgui_gradient PRIVATE ${SRC_FILES})
 
 # Set warning level
