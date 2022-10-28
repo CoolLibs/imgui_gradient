@@ -26,6 +26,7 @@ public:
 
     auto add_mark(const Mark&) -> MarkId;
     void remove_mark(MarkId);
+    void clear();
     void set_mark_position(MarkId, RelativePosition);
     void set_mark_color(MarkId, ColorRGBA);
     auto interpolation_mode() const -> Interpolation;

@@ -49,6 +49,11 @@ void Gradient::remove_mark(MarkId mark)
     }
 }
 
+void Gradient::clear()
+{
+    _marks.clear();
+}
+
 void Gradient::set_mark_position(const MarkId mark, const RelativePosition position)
 {
     auto* const ptr = find(mark);
