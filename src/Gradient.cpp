@@ -83,6 +83,27 @@ auto Gradient::interpolation_mode() -> Interpolation&
     return _interpolation_mode;
 }
 
+void Gradient::spread_marks_evenly()
+{
+    if (_marks.empty())
+        return;
+
+    if (_marks.size() == 1)
+    {
+        _marks.begin()->position.set(0.5f);
+        return;
+    }
+
+    const float f = 1.f / static_cast<float>(_marks.size() - (_interpolation_mode == Interpolation::Constant ? 0 : 1));
+
+    float i = _interpolation_mode == Interpolation::Constant ? 1.f : 0.f;
+    for (auto& mark : _marks)
+    {
+        mark.position.set(f * i);
+        i += 1.f;
+    }
+}
+
 auto Gradient::get_marks() const -> const std::list<Mark>&
 {
     return _marks;

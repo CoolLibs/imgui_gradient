@@ -87,6 +87,9 @@ auto main(int argc, char* argv[]) -> int
             }
             ImGG::random_mode_widget("Randomize new marks' color", &settings.should_use_a_random_color_for_the_new_marks);
 
+            if (ImGui::Button("Spread Marks Evenly"))
+                gradient.gradient().spread_marks_evenly();
+
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
             settings.flags            = flags;
@@ -127,6 +130,42 @@ auto main(int argc, char* argv[]) -> int
 }
 
 // Check out doctest's documentation: https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md
+
+TEST_CASE("Spread marks evenly")
+{
+    ImGG::Gradient gradient;
+    auto const&    marks = gradient.get_marks();
+
+    for (int i = 0; i < 2; ++i)
+    {
+        // Test with both interpolation modes
+        gradient.interpolation_mode() = i == 0 ? ImGG::Interpolation::Linear : ImGG::Interpolation::Constant;
+        gradient.clear();
+        // ---
+
+        // With 0 marks
+        gradient.spread_marks_evenly(); // Test that this doesn't crash.
+
+        // With 1 mark
+        gradient.add_mark({ImGG::RelativePosition{0.3f}, ImGG::ColorRGBA{}});
+        gradient.spread_marks_evenly();
+        CHECK(marks.begin()->position.get() == doctest::Approx{0.5f});
+
+        // With 2 marks
+        gradient.add_mark({ImGG::RelativePosition{0.8f}, ImGG::ColorRGBA{}});
+        gradient.spread_marks_evenly();
+        if (gradient.interpolation_mode() == ImGG::Interpolation::Linear)
+        {
+            CHECK(marks.begin()->position.get() == doctest::Approx{0.f});
+            CHECK(std::next(marks.begin())->position.get() == doctest::Approx{1.f});
+        }
+        else
+        {
+            CHECK(marks.begin()->position.get() == doctest::Approx{0.5f});
+            CHECK(std::next(marks.begin())->position.get() == doctest::Approx{1.f});
+        }
+    }
+}
 
 TEST_CASE("Interpolation modes")
 {
