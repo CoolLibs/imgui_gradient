@@ -60,7 +60,7 @@ auto random_mode_widget(
     );
     if (should_show_tooltip)
     {
-        tooltip("When checked, the new marks will use a random color instead of keeping the one the gradient had at that position.");
+        tooltip("The new marks will use a random color instead of keeping the one the gradient had at that position.");
     }
     return modified;
 }
