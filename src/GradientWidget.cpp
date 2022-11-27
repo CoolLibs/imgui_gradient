@@ -516,7 +516,7 @@ auto GradientWidget::widget(
             *selected_mark,
             picker_popup_size,
             is_there_a_tooltip,
-            settings.flags
+            settings.color_edit_flags
         );
     }
 
