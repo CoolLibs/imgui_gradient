@@ -4,6 +4,7 @@
 
 namespace ImGG {
 
+/// sRGB, Straight Alpha
 using ColorRGBA = ImVec4;
 
 inline auto operator==(const ColorRGBA& a, const ColorRGBA& b) -> bool

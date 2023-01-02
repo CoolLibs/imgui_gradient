@@ -6,10 +6,17 @@
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Compatibility](#compatibility)
 - [Basic usage](#basic-usage)
 - [Tutorial](#tutorial)
+  - [Including](#including)
+  - [Sampling the gradient](#sampling-the-gradient)
+  - [Interpolation](#interpolation)
+  - [Settings](#settings)
+  - [Color randomization](#color-randomization)
 - [For maintainers](#for-maintainers)
+  - [Running the tests](#running-the-tests)
 
 
 ## Compatibility
@@ -84,6 +91,9 @@ To create a widget that changes the interpolation mode, use:
 ```cpp
 ImGG::interpolation_mode_widget("Interpolation Mode", &widget.gradient().interpolation_mode());
 ```
+
+> NB: Our linear interpolation is done in the CIELAB color space, which gives more accurate results. We also use premultiplied alpha during the interpolation for the same reason.
+> BUT the colors we output are all in sRGB space with straight alpha, for ease of use.
 
 ### Settings
 

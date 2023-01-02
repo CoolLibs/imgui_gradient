@@ -1,4 +1,5 @@
 #include "Gradient.hpp"
+#include "color_conversions.hpp"
 #include "imgui_internal.hpp"
 
 namespace ImGG {
@@ -118,7 +119,7 @@ struct SurroundingMarks {
     const Mark* upper{nullptr};
 };
 
-/// Returns the marks positionned just before and after `position`, or nullptr if there is none.
+/// Returns the marks positioned just before and after `position`, or nullptr if there is none.
 static auto get_marks_surrounding(const RelativePosition position, const std::list<Mark>& marks) -> SurroundingMarks
 {
     const Mark* lower{nullptr};
@@ -145,11 +146,12 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
     {
         const float mix_factor = (position.get() - lower.position.get())
                                  / (upper.position.get() - lower.position.get());
-        return ImLerp(
-            lower.color,
-            upper.color,
+        // Do the interpolation in Lab space with premultiplied alpha because it looks much better.
+        return internal::sRGB_Straight_from_CIELAB_Premultiplied(ImLerp(
+            internal::CIELAB_Premultiplied_from_sRGB_Straight(lower.color),
+            internal::CIELAB_Premultiplied_from_sRGB_Straight(upper.color),
             mix_factor
-        );
+        ));
     }
 
     case Interpolation::Constant:
