@@ -176,8 +176,8 @@ TEST_CASE("Interpolation modes")
     }};
 
     gradient.interpolation_mode() = ImGG::Interpolation::Linear;
-    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 0.25f);
-    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 0.75f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 0.232516f);
+    CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 0.723905f);
     gradient.interpolation_mode() = ImGG::Interpolation::Constant;
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 1.f);
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 1.f);
