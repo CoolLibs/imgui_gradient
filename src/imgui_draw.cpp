@@ -1,6 +1,7 @@
 #include "Gradient.hpp"
 #include "Interpolation.hpp"
 #include "Settings.hpp"
+#include "color_conversions.hpp"
 #include "internal.hpp"
 
 namespace ImGG {
@@ -8,32 +9,61 @@ namespace ImGG {
 static void draw_uniform_square(
     ImDrawList&  draw_list,
     const ImVec2 top_left_corner,
-    const ImVec2 bottom_rigth_corner,
+    const ImVec2 bottom_right_corner,
     const ImU32& color
 )
 {
     static constexpr auto rounding{1.f};
     draw_list.AddRectFilled(
         top_left_corner,
-        bottom_rigth_corner,
+        bottom_right_corner,
         color,
         rounding,
         ImDrawFlags_Closed
     );
 }
 
-static void draw_gradient_between_two_colors(
+static void draw_naive_gradient_between_two_colors(
     ImDrawList&  draw_list,
-    const ImVec2 top_left_corner,
-    const ImVec2 bottom_rigth_corner,
-    const ImU32& color_left, const ImU32& color_right
+    ImVec2 const top_left_corner,
+    ImVec2 const bottom_right_corner,
+    ImU32 const& color_left, ImU32 const& color_right
 )
 {
     draw_list.AddRectFilledMultiColor(
         top_left_corner,
-        bottom_rigth_corner,
+        bottom_right_corner,
         color_left, color_right, color_right, color_left
     );
+}
+
+// We draw two "naive" gradients to reduce the visual artifacts.
+// The problem is that ImGui does its color interpolation in sRGB space which doesn't look the best.
+// We use Lab for better-looking results.
+static void draw_gradient_between_two_colors(
+    ImDrawList&   draw_list,
+    ImVec2 const  top_left_corner,
+    ImVec2 const  bottom_right_corner,
+    ImVec4 const& color_left, ImVec4 const& color_right
+)
+{
+    auto const color_middle = internal::sRGB_Straight_from_CIELAB_Premultiplied(
+        (
+            internal::CIELAB_Premultiplied_from_sRGB_Straight(color_left)
+            + internal::CIELAB_Premultiplied_from_sRGB_Straight(color_right)
+        )
+        * ImVec4{0.5f, 0.5f, 0.5f, 0.5f}
+    );
+    auto const color_left_as_ImU32   = ImGui::ColorConvertFloat4ToU32(color_left);
+    auto const color_middle_as_ImU32 = ImGui::ColorConvertFloat4ToU32(color_middle);
+    auto const color_right_as_ImU32  = ImGui::ColorConvertFloat4ToU32(color_right);
+
+    auto const middle_x             = (top_left_corner.x + bottom_right_corner.x) * 0.5f;
+    auto const bottom_middle_corner = ImVec2{middle_x, bottom_right_corner.y};
+    auto const top_middle_corner    = ImVec2{middle_x, top_left_corner.y};
+
+    draw_naive_gradient_between_two_colors(draw_list, top_left_corner, bottom_middle_corner, color_left_as_ImU32, color_middle_as_ImU32);
+    draw_naive_gradient_between_two_colors(draw_list, top_middle_corner, bottom_right_corner, color_middle_as_ImU32, color_right_as_ImU32);
 }
 
 void draw_gradient(
@@ -49,7 +79,7 @@ void draw_gradient(
     {
         const Mark& mark = *mark_iterator;
 
-        const auto color_right = ImGui::ColorConvertFloat4ToU32(mark.color);
+        const auto color_right = mark.color;
 
         const auto from{current_starting_x};
         const auto to{gradient_position.x + mark.position.get() * (size.x)};
@@ -57,9 +87,9 @@ void draw_gradient(
         {
             if (gradient.interpolation_mode() == Interpolation::Linear)
             {
-                const ImU32 color_left = (mark_iterator != gradient.get_marks().begin())
-                                             ? ImGui::ColorConvertFloat4ToU32(std::prev(mark_iterator)->color)
-                                             : color_right;
+                const auto color_left = (mark_iterator != gradient.get_marks().begin())
+                                            ? std::prev(mark_iterator)->color
+                                            : color_right;
                 draw_gradient_between_two_colors(
                     draw_list,
                     ImVec2{from, gradient_position.y},
@@ -73,7 +103,7 @@ void draw_gradient(
                     draw_list,
                     ImVec2{from, gradient_position.y},
                     ImVec2{to, gradient_position.y + size.y},
-                    color_right
+                    ImGui::ColorConvertFloat4ToU32(color_right)
                 );
             }
             else
