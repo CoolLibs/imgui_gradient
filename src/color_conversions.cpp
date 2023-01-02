@@ -1,7 +1,7 @@
 #include "color_conversions.hpp"
 #include <cmath>
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui/imgui_internal.h>
+#include "imgui_internal.hpp"
 
 namespace ImGG { namespace internal {
 
