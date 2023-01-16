@@ -367,7 +367,7 @@ auto GradientWidget::widget(
     ImGui::BeginGroup();
     if (!(settings.flags & Flag::NoLabel))
     {
-        ImGui::Text("%s", label);
+        ImGui::TextUnformatted(label);
         ImGui::Dummy(ImVec2{0.f, 1.5f});
     }
 

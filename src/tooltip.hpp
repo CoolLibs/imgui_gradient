@@ -9,7 +9,7 @@ inline void tooltip(const char* text)
     if (ImGui::IsItemHovered())
     {
         ImGui::BeginTooltip();
-        ImGui::Text("%s", text);
+        ImGui::TextUnformatted(text);
         ImGui::EndTooltip();
     }
 }
