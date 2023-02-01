@@ -189,7 +189,7 @@ jobs:
         submodules: recursive
 
     - name: Configure CMake
-      run: cmake ./tests -B ${{github.workspace}}/build -DWARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT=ON -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -D CMAKE_CXX_COMPILER=$(brew --prefix llvm@14)/bin/clang++
+      run: cmake ./tests -B ${{github.workspace}}/build -DWARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT=ON -D CMAKE_BUILD_TYPE=Debug -D CMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -D CMAKE_CXX_COMPILER=$(brew --prefix llvm)/bin/clang++
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config Debug --target ${{env.TARGET}}
@@ -207,7 +207,7 @@ jobs:
         submodules: recursive
 
     - name: Configure CMake
-      run: cmake ./tests -B ${{github.workspace}}/build -DWARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -D CMAKE_CXX_COMPILER=$(brew --prefix llvm@14)/bin/clang++
+      run: cmake ./tests -B ${{github.workspace}}/build -DWARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT=ON -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=$(brew --prefix llvm)/bin/clang -D CMAKE_CXX_COMPILER=$(brew --prefix llvm)/bin/clang++
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config Release --target ${{env.TARGET}}
