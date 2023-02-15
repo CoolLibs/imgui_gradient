@@ -6,7 +6,6 @@
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Compatibility](#compatibility)
 - [Basic usage](#basic-usage)
 - [Tutorial](#tutorial)
