@@ -2,7 +2,7 @@
 
 [Dear ImGui](https://github.com/ocornut/imgui) extension that adds a *gradient* widget.
 
-![Animation](https://user-images.githubusercontent.com/77100260/185783220-4fc5d84e-88e8-4f58-8976-f42bce1f5335.gif)
+![Animation](https://user-images.githubusercontent.com/45451201/218996538-5f5f80d2-3cbe-4f5c-8c26-a107970bd97b.gif)
 
 ## Table of Contents
 
