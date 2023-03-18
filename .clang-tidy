@@ -1,7 +1,7 @@
 ---
 Checks: '
   *,
-  -google-readability-namespace-comments,
+  -misc-non-private-member-variables-in-classes,
   -*braces-around-statements
   -readability-implicit-bool-conversion
   -readability-identifier-length,
