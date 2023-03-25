@@ -428,8 +428,8 @@ auto GradientWidget::widget(
     ImGui::EndGroup();
     const auto is_there_a_tooltip{!(settings.flags & Flag::NoTooltip)};
     const auto is_there_remove_button{!(settings.flags & Flag::NoRemoveButton)};
-    if (!_gradient.is_empty())
-    {
+    { // "Remove" button
+
         const auto window_is_hovered{ImGui::IsWindowHovered(
             ImGuiHoveredFlags_ChildWindows
             | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem
@@ -456,7 +456,7 @@ auto GradientWidget::widget(
     const auto is_there_add_button{!(settings.flags & Flag::NoAddButton)};
     if (is_there_add_button)
     {
-        if (is_there_remove_button && !_gradient.is_empty())
+        if (is_there_remove_button)
         {
             ImGui::SameLine();
         }
