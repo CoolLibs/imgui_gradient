@@ -28,17 +28,17 @@ inline auto border_color() -> ImU32
 
 inline auto mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
+    return ImGui::GetColorU32(ImGuiCol_Button);
 }
 
 inline auto hovered_mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_DragDropTarget);
+    return ImGui::GetColorU32(ImGuiCol_ButtonHovered);
 }
 
 inline auto selected_mark_color() -> ImU32
 {
-    return ImGui::GetColorU32(ImGuiCol_DragDropTarget);
+    return ImGui::GetColorU32(ImGuiCol_ButtonActive);
 }
 
 }} // namespace ImGG::internal
