@@ -22,6 +22,9 @@ struct Settings {
     /// If true, the new mark color will be a random color,
     /// otherwise it will be the one that the gradient already has at the new mark position.
     bool should_use_a_random_color_for_the_new_marks{false};
+
+    const char* plus_button_text  = "+";
+    const char* minus_button_text = "-";
 };
 
 } // namespace ImGG

@@ -67,27 +67,27 @@ static auto button_with_tooltip(
     return clicked;
 }
 
-static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip) -> bool
+static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip, const char* minus_text) -> bool
 {
     if (disable)
     {
-        button_disabled("-", reason_for_disabling, internal::button_size());
+        button_disabled(minus_text, reason_for_disabling, internal::button_size());
         return false;
     }
     else
     {
         return button_with_tooltip(
-            "-",
+            minus_text,
             "Removes the selected mark.\nYou can also middle click on it,\nor drag it down.",
             should_show_tooltip
         );
     }
 }
 
-static auto add_button(const bool should_show_tooltip) -> bool
+static auto add_button(const bool should_show_tooltip, const char* plus_text) -> bool
 {
     return button_with_tooltip(
-        "+",
+        plus_text,
         "Add a mark here\nor click on the gradient to choose its position.",
         should_show_tooltip
     );
@@ -436,7 +436,7 @@ auto GradientWidget::widget(
         )};
 
         const auto delete_button_pressed = is_there_remove_button
-                                               ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip)
+                                               ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip, settings.minus_button_text)
                                                : false;
 
         const auto delete_key_pressed = window_is_hovered
@@ -460,7 +460,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        if (add_button(is_there_a_tooltip))
+        if (add_button(is_there_a_tooltip, settings.plus_button_text))
         {
             const auto position = RelativePosition{position_where_to_add_next_mark(_gradient), WrapMode::Clamp};
             add_mark_with_chosen_mode(position, rng, settings.should_use_a_random_color_for_the_new_marks);
