@@ -185,9 +185,10 @@ static auto handle_interactions_with_hovered_mark(
 }
 
 auto GradientWidget::draw_gradient_marks(
-    MarkId&      mark_to_delete,
-    const ImVec2 gradient_bar_position,
-    const ImVec2 gradient_size
+    MarkId&         mark_to_delete,
+    const ImVec2    gradient_bar_position,
+    const ImVec2    gradient_size,
+    Settings const& settings
 ) -> internal::draw_gradient_marks_Result
 {
     auto        res       = internal::draw_gradient_marks_Result{};
@@ -202,7 +203,8 @@ auto GradientWidget::draw_gradient_marks(
                 gradient_bar_position + ImVec2{mark.position.get(), 1.f} * gradient_size,
                 ImGui::ColorConvertFloat4ToU32(mark.color),
                 gradient_size.y,
-                _selected_mark == current_mark_id
+                _selected_mark == current_mark_id,
+                settings
             );
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
             {
@@ -392,7 +394,8 @@ auto GradientWidget::widget(
     const auto res                    = draw_gradient_marks( // We declare it here because even if we cannot add a mark we need to draw gradient marks.
         mark_to_delete,
         gradient_bar_position,
-        gradient_size
+        gradient_size,
+        settings
     );
     const auto mark_hitbox_is_hovered = res.hitbox_is_hovered;
     modified |= res.selected_mark_changed;

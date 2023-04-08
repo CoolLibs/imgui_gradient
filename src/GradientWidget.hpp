@@ -61,9 +61,10 @@ private:
     void add_mark_with_chosen_mode(RelativePosition relative_pos, RandomNumberGenerator rng, bool add_a_random_color);
 
     auto draw_gradient_marks(
-        MarkId& mark_to_delete,
-        ImVec2  gradient_bar_pos,
-        ImVec2  size
+        MarkId&         mark_to_delete,
+        ImVec2          gradient_bar_pos,
+        ImVec2          size,
+        Settings const& settings
     ) -> internal::draw_gradient_marks_Result;
 
     auto mouse_dragging_interactions(

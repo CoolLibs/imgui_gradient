@@ -5,6 +5,11 @@
 
 namespace ImGG {
 
+inline auto fully_opaque(ImU32 col) -> ImU32
+{
+    return col | 0xFF000000;
+}
+
 struct Settings {
     float gradient_width{500.f};
     float gradient_height{40.f}; // Must be strictly positive
@@ -25,6 +30,11 @@ struct Settings {
 
     const char* plus_button_text  = "+";
     const char* minus_button_text = "-";
+
+    ImU32 mark_color                  = fully_opaque(ImGui::GetColorU32(ImGuiCol_Button));
+    ImU32 mark_hovered_color          = fully_opaque(ImGui::GetColorU32(ImGuiCol_ButtonHovered));
+    ImU32 mark_selected_color         = fully_opaque(ImGui::GetColorU32(ImGuiCol_ButtonActive));
+    ImU32 mark_selected_hovered_color = fully_opaque(ImGui::GetColorU32(ImGuiCol_ButtonActive));
 };
 
 } // namespace ImGG

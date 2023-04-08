@@ -139,17 +139,6 @@ static auto mark_invisible_button(
     return ImGui::IsItemHovered();
 }
 
-static auto mark_drawing_color(
-    const ImVec2 position_to_draw_mark,
-    const float  mark_square_size,
-    const float  gradient_height
-) -> ImU32
-{
-    return mark_invisible_button(position_to_draw_mark, mark_square_size, gradient_height)
-               ? internal::hovered_mark_color()
-               : internal::mark_color();
-}
-
 static void draw_mark(
     ImDrawList&  draw_list,
     const ImVec2 position_to_draw_mark,
@@ -189,30 +178,30 @@ static void draw_mark(
 }
 
 void draw_marks(
-    ImDrawList&  draw_list,
-    const ImVec2 position_to_draw_mark,
-    const ImU32  mark_color,
-    const float  gradient_height,
-    const bool   mark_is_selected
+    ImDrawList&     draw_list,
+    const ImVec2    position_to_draw_mark,
+    const ImU32     mark_color,
+    const float     gradient_height,
+    const bool      mark_is_selected,
+    Settings const& settings
 )
 {
     static constexpr auto mark_square_size{6.f};
+
+    bool const is_hovered = mark_invisible_button(position_to_draw_mark, mark_square_size, gradient_height);
 
     draw_mark(
         draw_list,
         position_to_draw_mark,
         mark_square_size,
-        mark_drawing_color(position_to_draw_mark, mark_square_size, gradient_height)
+        is_hovered
+            ? (mark_is_selected
+                   ? settings.mark_selected_hovered_color
+                   : settings.mark_hovered_color)
+            : (mark_is_selected
+                   ? settings.mark_selected_color
+                   : settings.mark_color)
     );
-    if (mark_is_selected)
-    {
-        draw_mark(
-            draw_list,
-            position_to_draw_mark,
-            mark_square_size,
-            internal::selected_mark_color()
-        );
-    }
 
     static constexpr auto square_size{3.f};
     static constexpr auto mark_top_left_corner =

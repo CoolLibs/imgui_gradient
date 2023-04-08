@@ -22,11 +22,12 @@ void draw_gradient(
 );
 
 void draw_marks(
-    ImDrawList& draw_list,
-    ImVec2      mark_position,
-    ImU32       mark_color,
-    float       gradient_height,
-    bool        mark_is_selected
+    ImDrawList&     draw_list,
+    ImVec2          mark_position,
+    ImU32           mark_color,
+    float           gradient_height,
+    bool            mark_is_selected,
+    Settings const& settings
 );
 
 } // namespace ImGG
