@@ -54,18 +54,6 @@ void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_p
     _selected_mark = _gradient.add_mark(mark);
 }
 
-static auto button_with_tooltip(
-    const char* label,
-    const char* tooltip_message,
-    const bool  should_show_tooltip = true
-) -> bool
-{
-    const bool clicked = ImGui::Button(label, internal::button_size());
-    if (should_show_tooltip)
-        tooltip(tooltip_message);
-    return clicked;
-}
-
 static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip, Settings const& settings) -> bool
 {
     bool b = false;
