@@ -5,7 +5,7 @@
 #include <random>
 #include "../generated/checkboxes_for_all_flags.inl"
 #include "../src/Utils.hpp" // to test wrap mode functions
-#include "../src/button_disabled.hpp"
+#include "../src/maybe_disabled.hpp"
 
 auto main(int argc, char* argv[]) -> int
 {
@@ -39,17 +39,12 @@ auto main(int argc, char* argv[]) -> int
             ImGui::DragFloat("Distance to delete mark by dragging down", &settings.distance_to_delete_mark_by_dragging_down);
             ImGui::End();
             ImGui::Begin("Programmatic Actions");
-            if (gradient.gradient().is_empty())
-            {
-                ImGG::button_disabled("Remove a mark", "gradient is empty");
-            }
-            else
-            {
+            ImGG::maybe_disabled(gradient.gradient().is_empty(), "Gradient is empty", [&]() {
                 if (ImGui::Button("Remove a mark"))
                 {
                     gradient.gradient().remove_mark(ImGG::MarkId{gradient.gradient().get_marks().front()});
                 }
-            }
+            });
             if (ImGui::Button("Add a mark"))
             {
                 gradient.gradient().add_mark(ImGG::Mark{ImGG::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});

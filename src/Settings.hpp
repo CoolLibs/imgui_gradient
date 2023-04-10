@@ -1,7 +1,9 @@
 #pragma once
 
 #include <imgui/imgui.h>
+#include <functional>
 #include "Flags.hpp"
+#include "internal.hpp"
 
 namespace ImGG {
 
@@ -28,8 +30,12 @@ struct Settings {
     /// otherwise it will be the one that the gradient already has at the new mark position.
     bool should_use_a_random_color_for_the_new_marks{false};
 
-    const char* plus_button_text  = "+";
-    const char* minus_button_text = "-";
+    std::function<bool()> plus_button_widget = []() {
+        return ImGui::Button("+", internal::button_size());
+    };
+    std::function<bool()> minus_button_widget = []() {
+        return ImGui::Button("-", internal::button_size());
+    };
 
     ImU32 mark_color                  = fully_opaque(ImGui::GetColorU32(ImGuiCol_Button));
     ImU32 mark_hovered_color          = fully_opaque(ImGui::GetColorU32(ImGuiCol_ButtonHovered));

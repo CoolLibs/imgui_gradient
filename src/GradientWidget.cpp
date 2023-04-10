@@ -2,9 +2,10 @@
 #include <array>
 #include <iterator>
 #include <random>
-#include "button_disabled.hpp"
+#include "Settings.hpp"
 #include "imgui_draw.hpp"
 #include "internal.hpp"
+#include "maybe_disabled.hpp"
 #include "tooltip.hpp"
 
 namespace ImGG {
@@ -61,36 +62,27 @@ static auto button_with_tooltip(
 {
     const bool clicked = ImGui::Button(label, internal::button_size());
     if (should_show_tooltip)
-    {
         tooltip(tooltip_message);
-    }
     return clicked;
 }
 
-static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip, const char* minus_text) -> bool
+static auto delete_button(const bool disable, const char* reason_for_disabling, const bool should_show_tooltip, Settings const& settings) -> bool
 {
-    if (disable)
-    {
-        button_disabled(minus_text, reason_for_disabling, internal::button_size());
-        return false;
-    }
-    else
-    {
-        return button_with_tooltip(
-            minus_text,
-            "Removes the selected mark.\nYou can also middle click on it,\nor drag it down.",
-            should_show_tooltip
-        );
-    }
+    bool b = false;
+    maybe_disabled(disable, reason_for_disabling, [&]() {
+        b |= settings.minus_button_widget();
+    });
+    if (!disable && should_show_tooltip)
+        tooltip("Removes the selected mark.\nYou can also middle click on it,\nor drag it down.");
+    return b;
 }
 
-static auto add_button(const bool should_show_tooltip, const char* plus_text) -> bool
+static auto add_button(const bool should_show_tooltip, Settings const& settings) -> bool
 {
-    return button_with_tooltip(
-        plus_text,
-        "Add a mark here\nor click on the gradient to choose its position.",
-        should_show_tooltip
-    );
+    bool const b = settings.plus_button_widget();
+    if (should_show_tooltip)
+        tooltip("Add a mark here\nor click on the gradient to choose its position.");
+    return b;
 }
 
 static auto color_button(
@@ -439,7 +431,7 @@ auto GradientWidget::widget(
         )};
 
         const auto delete_button_pressed = is_there_remove_button
-                                               ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip, settings.minus_button_text)
+                                               ? delete_button(!_gradient.contains(_selected_mark), "There is no mark selected", is_there_a_tooltip, settings)
                                                : false;
 
         const auto delete_key_pressed = window_is_hovered
@@ -463,7 +455,7 @@ auto GradientWidget::widget(
         {
             ImGui::SameLine();
         }
-        if (add_button(is_there_a_tooltip, settings.plus_button_text))
+        if (add_button(is_there_a_tooltip, settings))
         {
             const auto position = RelativePosition{position_where_to_add_next_mark(_gradient), WrapMode::Clamp};
             add_mark_with_chosen_mode(position, rng, settings.should_use_a_random_color_for_the_new_marks);
