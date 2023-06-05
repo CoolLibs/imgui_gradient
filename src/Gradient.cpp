@@ -84,7 +84,7 @@ auto Gradient::interpolation_mode() -> Interpolation&
     return _interpolation_mode;
 }
 
-void Gradient::spread_marks_evenly()
+void Gradient::distribute_marks_evenly()
 {
     if (_marks.empty())
         return;

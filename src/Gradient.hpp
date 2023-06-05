@@ -32,7 +32,7 @@ public:
     auto interpolation_mode() const -> Interpolation;
     auto interpolation_mode() -> Interpolation&;
 
-    void spread_marks_evenly();
+    void distribute_marks_evenly();
 
     auto get_marks() const -> const std::list<Mark>&;
 
