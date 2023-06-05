@@ -126,7 +126,7 @@ auto main(int argc, char* argv[]) -> int
 
 // Check out doctest's documentation: https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md
 
-TEST_CASE("Spread marks evenly")
+TEST_CASE("Distribute marks evenly")
 {
     ImGG::Gradient gradient;
     auto const&    marks = gradient.get_marks();
@@ -139,16 +139,16 @@ TEST_CASE("Spread marks evenly")
         // ---
 
         // With 0 marks
-        gradient.spread_marks_evenly(); // Test that this doesn't crash.
+        gradient.distribute_marks_evenly(); // Test that this doesn't crash.
 
         // With 1 mark
         gradient.add_mark({ImGG::RelativePosition{0.3f}, ImGG::ColorRGBA{}});
-        gradient.spread_marks_evenly();
+        gradient.distribute_marks_evenly();
         CHECK(marks.begin()->position.get() == doctest::Approx{0.5f});
 
         // With 2 marks
         gradient.add_mark({ImGG::RelativePosition{0.8f}, ImGG::ColorRGBA{}});
-        gradient.spread_marks_evenly();
+        gradient.distribute_marks_evenly();
         if (gradient.interpolation_mode() == ImGG::Interpolation::Linear)
         {
             CHECK(marks.begin()->position.get() == doctest::Approx{0.f});
