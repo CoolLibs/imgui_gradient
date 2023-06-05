@@ -82,8 +82,8 @@ auto main(int argc, char* argv[]) -> int
             }
             ImGG::random_mode_widget("Randomize new marks' color", &settings.should_use_a_random_color_for_the_new_marks);
 
-            if (ImGui::Button("Spread Marks Evenly"))
-                gradient.gradient().spread_marks_evenly();
+            if (ImGui::Button("Equalize"))
+                gradient.gradient().distribute_marks_evenly();
 
             ImGui::End();
             ImGui::Begin("imgui_gradient tests");
