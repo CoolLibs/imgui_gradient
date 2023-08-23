@@ -1,6 +1,6 @@
 #pragma once
 
-#include <imgui/imgui.h> // Include ImVec4
+#include <imgui.h> // Include ImVec4
 
 namespace ImGG {
 

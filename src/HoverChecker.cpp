@@ -1,5 +1,5 @@
 #include "HoverChecker.hpp"
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include <algorithm>
 
 namespace ImGG { namespace internal {

@@ -13,6 +13,7 @@ endif()
 
 # Maybe enable warnings as errors
 set(WARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT OFF CACHE BOOL "ON iff you want to treat warnings as errors")
+
 if(WARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT)
     if(MSVC)
         target_compile_options(${PROJECT_NAME} PRIVATE /WX)
@@ -36,12 +37,15 @@ target_link_libraries(${PROJECT_NAME} PRIVATE doctest::doctest)
 
 # ---Ignore .vscode/settings.json in Git---
 find_package(Git QUIET)
+
 if(GIT_FOUND)
     get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
-    if (EXISTS "${PARENT_DIR}/.git")
+
+    if(EXISTS "${PARENT_DIR}/.git")
         execute_process(COMMAND ${GIT_EXECUTABLE} update-index --assume-unchanged .vscode/settings.json
             WORKING_DIRECTORY ${PARENT_DIR}
             RESULT_VARIABLE ERRORS)
+
         if(NOT ERRORS EQUAL "0")
             message("Git assume-unchanged failed: ${ERRORS}")
         endif()
@@ -60,5 +64,5 @@ FetchContent_Declare(
     GIT_TAG b1c961bbf81b85704daed4562baf535a86709d7f
 )
 FetchContent_MakeAvailable(quick_imgui)
-target_include_directories(imgui_gradient PRIVATE ${quick_imgui_SOURCE_DIR}/lib)
+target_include_directories(imgui_gradient PRIVATE ${quick_imgui_SOURCE_DIR}/lib/imgui)
 target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)

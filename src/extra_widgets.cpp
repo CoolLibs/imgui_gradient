@@ -1,5 +1,5 @@
 #include "extra_widgets.hpp"
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include <array>
 #include "imgui_internal.hpp"
 #include "tooltip.hpp"

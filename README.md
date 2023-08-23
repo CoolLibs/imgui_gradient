@@ -44,7 +44,7 @@ In order to access the gradient data (without the GUI state), you can get the `I
 
 ### Including
 
-To add this library to your project, simply add these three lines to your *CMakeLists.txt* and replace `folder/containing/imgui` with the path to the parent folder containing *imgui*:
+To add this library to your project, simply add these three lines to your *CMakeLists.txt* and replace `folder/containing/imgui` with the path to the folder containing the *imgui* headers:
 ```cmake
 add_subdirectory(path/to/imgui_gradient)
 target_include_directories(imgui_gradient SYSTEM PRIVATE folder/containing/imgui)
