@@ -61,7 +61,7 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
-    GIT_TAG b1c961bbf81b85704daed4562baf535a86709d7f
+    GIT_TAG 288ae3862f888d89520647d5e085d124cecb198a
 )
 FetchContent_MakeAvailable(quick_imgui)
 target_include_directories(imgui_gradient PRIVATE ${quick_imgui_SOURCE_DIR}/lib/imgui)
