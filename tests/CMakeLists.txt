@@ -61,8 +61,8 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
-    GIT_TAG 288ae3862f888d89520647d5e085d124cecb198a
+    GIT_TAG 3646064043be374332724af2deda8c3820bb7296
 )
 FetchContent_MakeAvailable(quick_imgui)
-target_include_directories(imgui_gradient PRIVATE ${quick_imgui_SOURCE_DIR}/lib/imgui)
-target_link_libraries(${PROJECT_NAME} PRIVATE quick_imgui::quick_imgui)
+cmake_policy(SET CMP0079 NEW)
+target_link_libraries(imgui_gradient PUBLIC quick_imgui::quick_imgui)
