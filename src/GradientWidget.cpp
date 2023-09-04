@@ -6,7 +6,6 @@
 #include "imgui_draw.hpp"
 #include "internal.hpp"
 #include "maybe_disabled.hpp"
-#include "tooltip.hpp"
 
 namespace ImGG {
 
@@ -61,7 +60,7 @@ static auto delete_button(const bool disable, const char* reason_for_disabling, 
         b |= settings.minus_button_widget();
     });
     if (!disable && should_show_tooltip)
-        tooltip("Removes the selected mark.\nYou can also middle click on it,\nor drag it down.");
+        ImGui::SetItemTooltip("%s", "Removes the selected mark.\nYou can also middle click on it,\nor drag it down.");
     return b;
 }
 
@@ -69,7 +68,7 @@ static auto add_button(const bool should_show_tooltip, Settings const& settings)
 {
     bool const b = settings.plus_button_widget();
     if (should_show_tooltip)
-        tooltip("Add a mark here\nor click on the gradient to choose its position.");
+        ImGui::SetItemTooltip("%s", "Add a mark here\nor click on the gradient to choose its position.");
     return b;
 }
 

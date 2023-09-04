@@ -1,5 +1,5 @@
 #include "maybe_disabled.hpp"
-#include "tooltip.hpp"
+#include <imgui.h>
 
 namespace ImGG {
 
@@ -18,7 +18,7 @@ void maybe_disabled(
 
         ImGui::EndDisabled();
         ImGui::EndGroup();
-        tooltip(reason_to_disable);
+        ImGui::SetItemTooltip("%s", reason_to_disable);
     }
     else
     {

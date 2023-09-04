@@ -2,7 +2,6 @@
 #include <imgui.h>
 #include <array>
 #include "imgui_internal.hpp"
-#include "tooltip.hpp"
 
 namespace ImGG {
 
@@ -40,7 +39,7 @@ static auto selector_with_tooltip(
             }
             if (should_show_tooltip)
             {
-                tooltip(tooltips[n]);
+                ImGui::SetItemTooltip("%s", tooltips[n]);
             }
         }
         ImGui::EndCombo();
@@ -60,7 +59,7 @@ auto random_mode_widget(
     );
     if (should_show_tooltip)
     {
-        tooltip("The new marks will use a random color instead of keeping the one the gradient had at that position.");
+        ImGui::SetItemTooltip("%s", "The new marks will use a random color instead of keeping the one the gradient had at that position.");
     }
     return modified;
 }
