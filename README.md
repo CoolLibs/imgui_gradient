@@ -91,7 +91,7 @@ To create a widget that changes the interpolation mode, use:
 ImGG::interpolation_mode_widget("Interpolation Mode", &widget.gradient().interpolation_mode());
 ```
 
-> NB: Our linear interpolation is done in the CIELAB color space, which gives more accurate results. We also use premultiplied alpha during the interpolation for the same reason.
+> NB: Our linear interpolation is done in the [Oklab](https://bottosson.github.io/posts/oklab/) color space, which gives more accurate results. We also use premultiplied alpha during the interpolation for the same reason.
 > BUT the colors we output are all in sRGB space with straight alpha, for ease of use.
 
 ### Settings

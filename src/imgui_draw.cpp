@@ -47,10 +47,10 @@ static void draw_gradient_between_two_colors(
     ImVec4 const& color_left, ImVec4 const& color_right
 )
 {
-    auto const color_middle = internal::sRGB_Straight_from_CIELAB_Premultiplied(
+    auto const color_middle = internal::sRGB_Straight_from_Oklab_Premultiplied(
         (
-            internal::CIELAB_Premultiplied_from_sRGB_Straight(color_left)
-            + internal::CIELAB_Premultiplied_from_sRGB_Straight(color_right)
+            internal::Oklab_Premultiplied_from_sRGB_Straight(color_left)
+            + internal::Oklab_Premultiplied_from_sRGB_Straight(color_right)
         )
         * ImVec4{0.5f, 0.5f, 0.5f, 0.5f}
     );

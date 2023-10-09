@@ -147,9 +147,9 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
         const float mix_factor = (position.get() - lower.position.get())
                                  / (upper.position.get() - lower.position.get());
         // Do the interpolation in Lab space with premultiplied alpha because it looks much better.
-        return internal::sRGB_Straight_from_CIELAB_Premultiplied(ImLerp(
-            internal::CIELAB_Premultiplied_from_sRGB_Straight(lower.color),
-            internal::CIELAB_Premultiplied_from_sRGB_Straight(upper.color),
+        return internal::sRGB_Straight_from_Oklab_Premultiplied(ImLerp(
+            internal::Oklab_Premultiplied_from_sRGB_Straight(lower.color),
+            internal::Oklab_Premultiplied_from_sRGB_Straight(upper.color),
             mix_factor
         ));
     }
