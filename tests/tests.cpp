@@ -134,7 +134,7 @@ TEST_CASE("Distribute marks evenly")
     for (int i = 0; i < 2; ++i)
     {
         // Test with both interpolation modes
-        gradient.interpolation_mode() = i == 0 ? ImGG::Interpolation::Linear : ImGG::Interpolation::Constant;
+        gradient.interpolation_mode() = i == 0 ? ImGG::Interpolation::Linear_Light : ImGG::Interpolation::Constant;
         gradient.clear();
         // ---
 
@@ -149,7 +149,7 @@ TEST_CASE("Distribute marks evenly")
         // With 2 marks
         gradient.add_mark({ImGG::RelativePosition{0.8f}, ImGG::ColorRGBA{}});
         gradient.distribute_marks_evenly();
-        if (gradient.interpolation_mode() == ImGG::Interpolation::Linear)
+        if (gradient.interpolation_mode() == ImGG::Interpolation::Linear_Light)
         {
             CHECK(marks.begin()->position.get() == doctest::Approx{0.f});
             CHECK(std::next(marks.begin())->position.get() == doctest::Approx{1.f});
@@ -170,7 +170,7 @@ TEST_CASE("Interpolation modes")
         ImGG::Mark{ImGG::RelativePosition{1.f}, ImGG::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     }};
 
-    gradient.interpolation_mode() = ImGG::Interpolation::Linear;
+    gradient.interpolation_mode() = ImGG::Interpolation::Linear_Light;
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.25f}).x) == 0.131499f);
     CHECK(doctest::Approx(gradient.at(ImGG::RelativePosition{0.75f}).x) == 0.681341f);
     gradient.interpolation_mode() = ImGG::Interpolation::Constant;
