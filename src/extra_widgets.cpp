@@ -89,12 +89,14 @@ auto wrap_mode_widget(const char* label, WrapMode* wrap_mode, const bool should_
 
 auto interpolation_mode_widget(const char* label, Interpolation* interpolation_mode, const bool should_show_tooltip) -> bool
 {
-    static constexpr std::array<const char*, 2> items = {
-        "Linear",
+    static constexpr std::array<const char*, 3> items = {
+        "Linear (Light)",
+        "Linear (Paint)",
         "Constant",
     };
-    static constexpr std::array<const char*, 2> tooltips = {
-        "Linear interpolation between two marks",
+    static constexpr std::array<const char*, 3> tooltips = {
+        "Linear interpolation between two marks, using traditional computer color mixing.",
+        "Linear interpolation between two marks, emulating paint pigments mixing.",
         "Constant color between two marks",
     };
 
@@ -102,7 +104,7 @@ auto interpolation_mode_widget(const char* label, Interpolation* interpolation_m
         label,
         reinterpret_cast<size_t*>(interpolation_mode),
         items,
-        "Constant",
+        "Linear (Light)",
         tooltips,
         should_show_tooltip
     );

@@ -3,6 +3,7 @@
 #include "Settings.hpp"
 #include "color_conversions.hpp"
 #include "internal.hpp"
+#include "mixbox/mixbox.h"
 
 namespace ImGG {
 
@@ -44,16 +45,34 @@ static void draw_gradient_between_two_colors(
     ImDrawList&   draw_list,
     ImVec2 const  top_left_corner,
     ImVec2 const  bottom_right_corner,
-    ImVec4 const& color_left, ImVec4 const& color_right
+    ImVec4 const& color_left, ImVec4 const& color_right,
+    bool use_paint_blending
 )
 {
-    auto const color_middle = internal::sRGB_Straight_from_Oklab_Premultiplied(
-        (
-            internal::Oklab_Premultiplied_from_sRGB_Straight(color_left)
-            + internal::Oklab_Premultiplied_from_sRGB_Straight(color_right)
-        )
-        * ImVec4{0.5f, 0.5f, 0.5f, 0.5f}
-    );
+    auto const color_middle = [&] {
+        if (use_paint_blending)
+        {
+            auto res = ImVec4{};
+            mixbox_lerp_float(
+                color_left.x, color_left.y, color_left.z,
+                color_right.x, color_right.y, color_right.z,
+                0.5f,
+                &res.x, &res.y, &res.z
+            );
+            res.w = (color_left.w + color_right.w) * 0.5f;
+            return res;
+        }
+        else // NOLINT(*-else-after-return)
+        {
+            return internal::sRGB_Straight_from_Oklab_Premultiplied(
+                (
+                    internal::Oklab_Premultiplied_from_sRGB_Straight(color_left)
+                    + internal::Oklab_Premultiplied_from_sRGB_Straight(color_right)
+                )
+                * ImVec4{0.5f, 0.5f, 0.5f, 0.5f}
+            );
+        }
+    }();
     auto const color_left_as_ImU32   = ImGui::ColorConvertFloat4ToU32(color_left);
     auto const color_middle_as_ImU32 = ImGui::ColorConvertFloat4ToU32(color_middle);
     auto const color_right_as_ImU32  = ImGui::ColorConvertFloat4ToU32(color_right);
@@ -85,7 +104,8 @@ void draw_gradient(
         const auto to{gradient_position.x + mark.position.get() * (size.x)};
         if (mark.position.get() != 0.f)
         {
-            if (gradient.interpolation_mode() == Interpolation::Linear)
+            if (gradient.interpolation_mode() == Interpolation::Linear_Light
+                || gradient.interpolation_mode() == Interpolation::Linear_Paint)
             {
                 const auto color_left = (mark_iterator != gradient.get_marks().begin())
                                             ? std::prev(mark_iterator)->color
@@ -94,7 +114,8 @@ void draw_gradient(
                     draw_list,
                     ImVec2{from, gradient_position.y},
                     ImVec2{to, gradient_position.y + size.y},
-                    color_left, color_right
+                    color_left, color_right,
+                    gradient.interpolation_mode() == Interpolation::Linear_Paint
                 );
             }
             else if (gradient.interpolation_mode() == Interpolation::Constant)

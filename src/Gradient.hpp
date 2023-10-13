@@ -48,7 +48,7 @@ private:
         Mark{RelativePosition{1.f}, ColorRGBA{1.f, 1.f, 1.f, 1.f}},
     };
     /// Controls how the colors are interpolated between two marks.
-    Interpolation _interpolation_mode{Interpolation::Linear};
+    Interpolation _interpolation_mode{Interpolation::Linear_Light};
 
     friend class MarkId;
 };

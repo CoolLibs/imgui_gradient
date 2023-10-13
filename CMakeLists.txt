@@ -31,3 +31,8 @@ if(WARNINGS_AS_ERRORS_FOR_IMGUI_GRADIENT)
         target_compile_options(imgui_gradient PRIVATE -Werror)
     endif()
 endif()
+
+# Mixbox
+target_sources(imgui_gradient PRIVATE lib/mixbox/mixbox.cpp)
+target_include_directories(imgui_gradient PRIVATE lib)
+install(FILES "lib/mixbox/LICENSE" DESTINATION "license/mixbox")

@@ -1,6 +1,7 @@
 #include "Gradient.hpp"
 #include "color_conversions.hpp"
 #include "imgui_internal.hpp"
+#include "mixbox/mixbox.h"
 
 namespace ImGG {
 
@@ -142,7 +143,7 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
 {
     switch (interpolation_mode)
     {
-    case Interpolation::Linear:
+    case Interpolation::Linear_Light:
     {
         const float mix_factor = (position.get() - lower.position.get())
                                  / (upper.position.get() - lower.position.get());
@@ -152,6 +153,22 @@ static auto interpolate(const Mark& lower, const Mark& upper, const RelativePosi
             internal::Oklab_Premultiplied_from_sRGB_Straight(upper.color),
             mix_factor
         ));
+    }
+
+    case Interpolation::Linear_Paint:
+    {
+        const float mix_factor = (position.get() - lower.position.get())
+                                 / (upper.position.get() - lower.position.get());
+        // Use mixbox for the interpolation
+        auto res = ColorRGBA{};
+        mixbox_lerp_float(
+            lower.color.x, lower.color.y, lower.color.z,
+            upper.color.x, upper.color.y, upper.color.z,
+            mix_factor,
+            &res.x, &res.y, &res.z
+        );
+        res.w = ImLerp(lower.color.w, upper.color.w, mix_factor);
+        return res;
     }
 
     case Interpolation::Constant:
