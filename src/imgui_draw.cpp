@@ -19,8 +19,7 @@ static void draw_uniform_square(
         top_left_corner,
         bottom_right_corner,
         color,
-        rounding,
-        ImDrawFlags_Closed
+        rounding
     );
 }
 
