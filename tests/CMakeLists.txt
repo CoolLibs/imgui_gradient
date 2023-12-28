@@ -61,7 +61,7 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
-    GIT_TAG 3646064043be374332724af2deda8c3820bb7296
+    GIT_TAG 3b13c9e999ecf3e7a19f2642d4ae120e55552477
 )
 FetchContent_MakeAvailable(quick_imgui)
 cmake_policy(SET CMP0079 NEW)
