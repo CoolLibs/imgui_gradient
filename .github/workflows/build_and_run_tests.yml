@@ -49,11 +49,6 @@ jobs:
               os: macos-latest,
               cmake_configure_args: -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++,
             }
-          - {
-              name: MacOS GCC,
-              os: macos-latest,
-              cmake_configure_args: -D CMAKE_C_COMPILER=gcc-13 -D CMAKE_CXX_COMPILER=g++-13,
-            }
         build_type:
           - Debug
           - Release
@@ -66,6 +61,10 @@ jobs:
       - name: Set up MSVC # NOTE: required to find cl.exe and clang.exe when using the Ninja generator. And we need to use Ninja in order for ccache to be able to cache stuff on Windows.
         if: runner.os == 'Windows' && matrix.config.name != 'Windows GCC'
         uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mesa-common-dev
 
       - name: ccache
         uses: hendrikmuhs/ccache-action@main
