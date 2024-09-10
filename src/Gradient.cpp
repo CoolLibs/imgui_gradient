@@ -127,11 +127,11 @@ static auto get_marks_surrounding(const RelativePosition position, const std::li
     const Mark* upper{nullptr};
     for (const Mark& mark : marks)
     {
-        if (mark.position > position && (!upper || mark.position < upper->position))
+        if (mark.position >= position && (!upper || mark.position < upper->position))
         {
             upper = &mark;
         }
-        if (mark.position < position && (!lower || mark.position > lower->position))
+        if (mark.position <= position && (!lower || mark.position > lower->position))
         {
             lower = &mark;
         }
