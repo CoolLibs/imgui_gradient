@@ -162,6 +162,37 @@ TEST_CASE("Distribute marks evenly")
     }
 }
 
+TEST_CASE("Evaluating at 0 and 1")
+{
+    // Gradient from black to white
+    ImGG::Gradient gradient{{
+        ImGG::Mark{ImGG::RelativePosition{0.f}, ImGG::ColorRGBA{0.f, 0.f, 0.f, 1.f}},
+        ImGG::Mark{ImGG::RelativePosition{1.f}, ImGG::ColorRGBA{1.f, 1.f, 1.f, 1.f}},
+    }};
+
+    CHECK(doctest::Approx(gradient.at({0.f, ImGG::WrapMode::Clamp}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.f, ImGG::WrapMode::Clamp}).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at({0.f, ImGG::WrapMode::Repeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.f, ImGG::WrapMode::Repeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({0.f, ImGG::WrapMode::MirrorRepeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.f, ImGG::WrapMode::MirrorRepeat}).x) == 1.f);
+
+    CHECK(doctest::Approx(gradient.at({-0.000001f, ImGG::WrapMode::Clamp}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({0.000001f, ImGG::WrapMode::Clamp}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.0000001f, ImGG::WrapMode::Clamp}).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at({0.9999999f, ImGG::WrapMode::Clamp}).x) == 1.f);
+
+    CHECK(doctest::Approx(gradient.at({-0.000001f, ImGG::WrapMode::Repeat}).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at({0.000001f, ImGG::WrapMode::Repeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.0000001f, ImGG::WrapMode::Repeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({0.9999999f, ImGG::WrapMode::Repeat}).x) == 1.f);
+
+    CHECK(doctest::Approx(gradient.at({-0.000001f, ImGG::WrapMode::MirrorRepeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({0.000001f, ImGG::WrapMode::MirrorRepeat}).x) == 0.f);
+    CHECK(doctest::Approx(gradient.at({1.0000001f, ImGG::WrapMode::MirrorRepeat}).x) == 1.f);
+    CHECK(doctest::Approx(gradient.at({0.9999999f, ImGG::WrapMode::MirrorRepeat}).x) == 1.f);
+}
+
 TEST_CASE("Interpolation modes")
 {
     // Gradient from black to white

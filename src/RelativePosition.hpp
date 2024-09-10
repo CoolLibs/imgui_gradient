@@ -32,6 +32,8 @@ public:
 
     friend auto operator<(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() < b.get(); }
     friend auto operator>(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() > b.get(); }
+    friend auto operator<=(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() <= b.get(); }
+    friend auto operator>=(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() >= b.get(); }
     friend auto operator==(const RelativePosition& a, const RelativePosition& b) -> bool { return a.get() == b.get(); }
     friend auto operator!=(const RelativePosition& a, const RelativePosition& b) -> bool { return !(a == b); }
 
