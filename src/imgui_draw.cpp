@@ -100,7 +100,7 @@ void draw_gradient(
         const auto color_right = mark.color;
 
         const auto from{current_starting_x};
-        const auto to{gradient_position.x + mark.position.get() * (size.x)};
+        const auto to{gradient_position.x + mark.position.get() * size.x};
         if (mark.position.get() != 0.f)
         {
             if (gradient.interpolation_mode() == Interpolation::Linear_Light
@@ -111,8 +111,8 @@ void draw_gradient(
                                             : color_right;
                 draw_gradient_between_two_colors(
                     draw_list,
-                    ImVec2{from, gradient_position.y},
-                    ImVec2{to, gradient_position.y + size.y},
+                    ImVec2{from - 0.55f, gradient_position.y},        // We extend the rectangle by 0.55 on each side, otherwise there can be small gaps that appear between rectangles
+                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/CoolLibs/imgui_gradient/issues/5)
                     color_left, color_right,
                     gradient.interpolation_mode() == Interpolation::Linear_Paint
                 );
@@ -121,8 +121,8 @@ void draw_gradient(
             {
                 draw_uniform_square(
                     draw_list,
-                    ImVec2{from, gradient_position.y},
-                    ImVec2{to, gradient_position.y + size.y},
+                    ImVec2{from - 0.55f, gradient_position.y},        // We extend the rectangle by 0.55 on each side, otherwise there can be small gaps that appear between rectangles
+                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/CoolLibs/imgui_gradient/issues/5)
                     ImGui::ColorConvertFloat4ToU32(color_right)
                 );
             }
@@ -154,7 +154,8 @@ static auto mark_invisible_button(
     ImGui::SetCursorScreenPos(position_to_draw_mark - ImVec2{mark_square_size * 1.5f, gradient_height});
     const auto button_size = ImVec2{
         mark_square_size * 3.f,
-        gradient_height + mark_square_size * 2.f};
+        gradient_height + mark_square_size * 2.f
+    };
     ImGui::InvisibleButton("mark", button_size, ImGuiButtonFlags_MouseButtonMiddle | ImGuiButtonFlags_MouseButtonLeft);
     return ImGui::IsItemHovered();
 }
@@ -180,7 +181,8 @@ static void draw_mark(
     const auto mark_bottom_right_corner =
         ImVec2{
             mark_square_size + 1.f,
-            2.f * mark_square_size};
+            2.f * mark_square_size
+        };
     draw_uniform_square(
         draw_list,
         position_to_draw_mark + mark_top_left_corner,
