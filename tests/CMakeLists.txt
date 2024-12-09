@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.20)
 project(imgui_gradient-tests)
 
 add_executable(${PROJECT_NAME} tests.cpp)
