@@ -208,7 +208,7 @@ void draw_marks(
     Settings const& settings
 )
 {
-    static constexpr auto mark_square_size{6.f};
+    float const mark_square_size = 0.3f * ImGui::GetFontSize();
 
     bool const is_hovered = mark_invisible_button(position_to_draw_mark, mark_square_size, gradient_height);
 
@@ -225,11 +225,9 @@ void draw_marks(
                    : settings.mark_color)
     );
 
-    static constexpr auto square_size{3.f};
-    static constexpr auto mark_top_left_corner =
-        ImVec2{-square_size, square_size};
-    static constexpr auto mark_bottom_right_corner =
-        ImVec2{square_size, square_size * square_size};
+    auto const square_size{0.15f * ImGui::GetFontSize()};
+    auto const mark_top_left_corner     = ImVec2{-square_size, square_size};
+    auto const mark_bottom_right_corner = ImVec2{square_size, square_size * 3};
     draw_uniform_square(
         draw_list,
         position_to_draw_mark + mark_top_left_corner,
