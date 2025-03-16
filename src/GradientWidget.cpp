@@ -22,7 +22,8 @@ static auto new_mark_id(const Gradient& new_gradient, const Gradient& old_gradie
             std::next(
                 new_gradient.get_marks().begin(),
                 dist
-            )};
+            )
+        };
     }
     else
     {
@@ -49,7 +50,8 @@ void GradientWidget::add_mark_with_chosen_mode(const RelativePosition relative_p
         relative_pos,
         add_a_random_color
             ? random_color(rng)
-            : _gradient.at(relative_pos)};
+            : _gradient.at(relative_pos)
+    };
     _selected_mark = _gradient.add_mark(mark);
 }
 
@@ -358,10 +360,11 @@ auto GradientWidget::widget(
             1.f,
             std::min( // When the window is smaller than gradient width we compute a relative width
                 ImGui::GetContentRegionAvail().x - settings.horizontal_margin * 2.f,
-                settings.gradient_width
+                settings.gradient_width * ImGui::GetFontSize() / 20.f
             )
                 ),
-                settings.gradient_height};
+                settings.gradient_height * ImGui::GetFontSize() / 20.f
+    };
 
     ImGui::BeginGroup();
     ImGui::InvisibleButton("gradient_editor", gradient_size);
