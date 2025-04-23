@@ -179,6 +179,7 @@ auto GradientWidget::draw_gradient_marks(
         MarkId current_mark_id{mark};
         if (_mark_to_hide != current_mark_id)
         {
+            ImGui::PushID(current_mark_id.as_imgui_id());
             draw_marks(
                 draw_list,
                 gradient_bar_position + ImVec2{mark.position.get(), 1.f} * gradient_size,
@@ -197,6 +198,7 @@ auto GradientWidget::draw_gradient_marks(
                     current_mark_id
                 );
             }
+            ImGui::PopID();
         }
     }
     static constexpr float space_between_gradient_bar_and_options = 20.f;

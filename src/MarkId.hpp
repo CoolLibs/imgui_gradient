@@ -48,6 +48,8 @@ public:
     friend auto operator==(const MarkId& a, const MarkId& b) -> bool { return a._ptr == b._ptr; };
     friend auto operator!=(const MarkId& a, const MarkId& b) -> bool { return !(a == b); };
 
+    auto as_imgui_id() const -> void const* { return _ptr; }
+
 private:
     /// If it is not in the list returns an invalid iterator
     template<typename GradientT>
