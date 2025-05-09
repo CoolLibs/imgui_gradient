@@ -60,7 +60,7 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
     quick_imgui
-    GIT_REPOSITORY https://github.com/CoolLibs/quick_imgui
+    GIT_REPOSITORY https://github.com/Coollab-Art/quick_imgui
     GIT_TAG 904d6b9141bd7226a6e36ded6394c6706e004b7f
 )
 FetchContent_MakeAvailable(quick_imgui)
