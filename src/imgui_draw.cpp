@@ -112,7 +112,7 @@ void draw_gradient(
                 draw_gradient_between_two_colors(
                     draw_list,
                     ImVec2{from - 0.55f, gradient_position.y},        // We extend the rectangle by 0.55 on each side, otherwise there can be small gaps that appear between rectangles
-                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/CoolLibs/imgui_gradient/issues/5)
+                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/Coollab-Art/imgui_gradient/issues/5)
                     color_left, color_right,
                     gradient.interpolation_mode() == Interpolation::Linear_Paint
                 );
@@ -122,7 +122,7 @@ void draw_gradient(
                 draw_uniform_square(
                     draw_list,
                     ImVec2{from - 0.55f, gradient_position.y},        // We extend the rectangle by 0.55 on each side, otherwise there can be small gaps that appear between rectangles
-                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/CoolLibs/imgui_gradient/issues/5)
+                    ImVec2{to + 0.55f, gradient_position.y + size.y}, // (for some gradient width and some mark positions) (see https://github.com/Coollab-Art/imgui_gradient/issues/5)
                     ImGui::ColorConvertFloat4ToU32(color_right)
                 );
             }
