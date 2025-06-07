@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 project(imgui_gradient-tests)
 
 add_executable(${PROJECT_NAME} tests.cpp)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_11)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 
 # Set warning level
 if(MSVC)
@@ -61,7 +61,7 @@ include(FetchContent)
 FetchContent_Declare(
     quick_imgui
     GIT_REPOSITORY https://github.com/Coollab-Art/quick_imgui
-    GIT_TAG 904d6b9141bd7226a6e36ded6394c6706e004b7f
+    GIT_TAG fb65f53c36e48a12ff2a4f0c843ab40f639311ff
 )
 FetchContent_MakeAvailable(quick_imgui)
 cmake_policy(SET CMP0079 NEW)
