@@ -134,6 +134,7 @@ static void draw_gradient_bar(
     ImGui::SetCursorScreenPos(
         gradient_bar_position + ImVec2{0.f, gradient_size.y}
     );
+    ImGui::Dummy({0.f, 0.f}); // Needed by ImGui after a SetCursorScreenPos
 }
 
 static auto handle_interactions_with_hovered_mark(
@@ -205,6 +206,7 @@ auto GradientWidget::draw_gradient_marks(
     ImGui::SetCursorScreenPos(
         gradient_bar_position + ImVec2{0.f, gradient_size.y + space_between_gradient_bar_and_options}
     );
+    ImGui::Dummy({0.f, 0.f}); // Needed by ImGui after a SetCursorScreenPos
     return res;
 }
 
@@ -544,6 +546,7 @@ auto GradientWidget::widget(
                 : ImGui::GetStyle().ItemSpacing.y * 3.f,
         }
     );
+    ImGui::Dummy({0.f, 0.f}); // Needed by ImGui after a SetCursorScreenPos
     ImGuiContext& g = *GImGui;
 
     if (modified)

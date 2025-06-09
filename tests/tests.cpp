@@ -18,108 +18,113 @@ auto main(int argc, char* argv[]) -> int
     {
         auto gradient  = ImGG::GradientWidget{};
         auto gradient2 = ImGG::GradientWidget{};
-        quick_imgui::loop("imgui_gradient tests", [&]() {
-            ImGui::ShowDemoWindow();
-            ImGui::Begin("Framerate");
-            ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
-            ImGui::End();
-            ImGui::Begin("Flags");
-            const auto flags = checkboxes_for_all_flags();
-            ImGui::End();
-            ImGui::Begin("Options");
-            static auto custom_generator = false;
-            ImGui::Checkbox("Use our custom generator", &custom_generator);
-            ImGui::End();
-            ImGui::Begin("Settings");
-            static ImGG::Settings settings{};
-            ImGui::PushItemWidth(100.f);
-            ImGui::DragFloat("Gradient width", &settings.gradient_width);
-            ImGui::DragFloat("Gradient height", &settings.gradient_height);
-            ImGui::DragFloat("Horizontal margin", &settings.horizontal_margin);
-            ImGui::DragFloat("Distance to delete mark by dragging down", &settings.distance_to_delete_mark_by_dragging_down);
-            ImGui::End();
-            ImGui::Begin("Programmatic Actions");
-            ImGG::maybe_disabled(gradient.gradient().is_empty(), "Gradient is empty", [&]() {
-                if (ImGui::Button("Remove a mark"))
-                {
-                    gradient.gradient().remove_mark(ImGG::MarkId{gradient.gradient().get_marks().front()});
-                }
-            });
-            if (ImGui::Button("Add a mark"))
+        quick_imgui::loop(
+            "imgui_gradient tests",
             {
-                gradient.gradient().add_mark(ImGG::Mark{ImGG::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});
-            };
-            static auto position{0.f};
-            if (ImGui::Button("Set mark position") && !gradient.gradient().is_empty())
-            {
-                gradient.gradient().set_mark_position(
-                    ImGG::MarkId{gradient.gradient().get_marks().front()},
-                    ImGG::RelativePosition{position}
-                );
-            };
-            ImGui::SameLine();
-            ImGui::DragFloat("##260", &position, .0001f, /* speed */
-                             0.f, 1.f,                   /* min and max */
-                             "%.4f" /* precision */);
-            static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
-            if (ImGui::Button("Set mark color") && !gradient.gradient().is_empty())
-            {
-                gradient.gradient().set_mark_color(ImGG::MarkId{gradient.gradient().get_marks().front()}, color);
-            };
-            ImGui::SameLine();
-            ImGui::ColorEdit4(
-                "##colorpicker1",
-                reinterpret_cast<float*>(&color),
-                ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs
-            );
-            static ImGG::WrapMode wrap_mode{};
-            ImGG::wrap_mode_widget("Position Mode", &wrap_mode);
-            static ImGG::Interpolation interpolation_mode{};
-            if (ImGG::interpolation_mode_widget("Interpolation Mode", &interpolation_mode))
-            {
-                gradient.gradient().interpolation_mode()  = interpolation_mode;
-                gradient2.gradient().interpolation_mode() = interpolation_mode;
-            }
-            ImGG::random_mode_widget("Randomize new marks' color", &settings.should_use_a_random_color_for_the_new_marks);
+                .loop = [&]() {
+                    ImGui::ShowDemoWindow();
+                    ImGui::Begin("Framerate");
+                    ImGui::Text("%.3f FPS", ImGui::GetIO().Framerate);
+                    ImGui::End();
+                    ImGui::Begin("Flags");
+                    const auto flags = checkboxes_for_all_flags();
+                    ImGui::End();
+                    ImGui::Begin("Options");
+                    static auto custom_generator = false;
+                    ImGui::Checkbox("Use our custom generator", &custom_generator);
+                    ImGui::End();
+                    ImGui::Begin("Settings");
+                    static ImGG::Settings settings{};
+                    ImGui::PushItemWidth(100.f);
+                    ImGui::DragFloat("Gradient width", &settings.gradient_width);
+                    ImGui::DragFloat("Gradient height", &settings.gradient_height);
+                    ImGui::DragFloat("Horizontal margin", &settings.horizontal_margin);
+                    ImGui::DragFloat("Distance to delete mark by dragging down", &settings.distance_to_delete_mark_by_dragging_down);
+                    ImGui::End();
+                    ImGui::Begin("Programmatic Actions");
+                    ImGG::maybe_disabled(gradient.gradient().is_empty(), "Gradient is empty", [&]() {
+                        if (ImGui::Button("Remove a mark"))
+                        {
+                            gradient.gradient().remove_mark(ImGG::MarkId{gradient.gradient().get_marks().front()});
+                        }
+                    });
+                    if (ImGui::Button("Add a mark"))
+                    {
+                        gradient.gradient().add_mark(ImGG::Mark{ImGG::RelativePosition{0.5f}, ImVec4{0.f, 0.f, 0.f, 1.f}});
+                    };
+                    static auto position{0.f};
+                    if (ImGui::Button("Set mark position") && !gradient.gradient().is_empty())
+                    {
+                        gradient.gradient().set_mark_position(
+                            ImGG::MarkId{gradient.gradient().get_marks().front()},
+                            ImGG::RelativePosition{position}
+                        );
+                    };
+                    ImGui::SameLine();
+                    ImGui::DragFloat("##260", &position, .0001f, /* speed */
+                                     0.f, 1.f,                   /* min and max */
+                                     "%.4f" /* precision */);
+                    static auto color = ImVec4{0.f, 0.f, 0.f, 1.f};
+                    if (ImGui::Button("Set mark color") && !gradient.gradient().is_empty())
+                    {
+                        gradient.gradient().set_mark_color(ImGG::MarkId{gradient.gradient().get_marks().front()}, color);
+                    };
+                    ImGui::SameLine();
+                    ImGui::ColorEdit4(
+                        "##colorpicker1",
+                        reinterpret_cast<float*>(&color),
+                        ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs
+                    );
+                    static ImGG::WrapMode wrap_mode{};
+                    ImGG::wrap_mode_widget("Position Mode", &wrap_mode);
+                    static ImGG::Interpolation interpolation_mode{};
+                    if (ImGG::interpolation_mode_widget("Interpolation Mode", &interpolation_mode))
+                    {
+                        gradient.gradient().interpolation_mode()  = interpolation_mode;
+                        gradient2.gradient().interpolation_mode() = interpolation_mode;
+                    }
+                    ImGG::random_mode_widget("Randomize new marks' color", &settings.should_use_a_random_color_for_the_new_marks);
 
-            if (ImGui::Button("Equalize"))
-                gradient.gradient().distribute_marks_evenly();
+                    if (ImGui::Button("Equalize"))
+                        gradient.gradient().distribute_marks_evenly();
 
-            ImGui::End();
-            ImGui::Begin("imgui_gradient tests");
-            settings.flags            = flags;
-            settings.color_edit_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
-            if (custom_generator)
-            {
-                const auto custom_rng = []() {
-                    static auto rng          = std::default_random_engine{std::random_device{}()};
-                    static auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
-                    return distribution(rng);
-                };
-                gradient.widget(
-                    "Gradient",
-                    custom_rng,
-                    settings
-                );
-                gradient2.widget(
-                    "Gradient2",
-                    custom_rng,
-                    settings
-                );
+                    ImGui::End();
+                    ImGui::Begin("imgui_gradient tests");
+                    settings.flags            = flags;
+                    settings.color_edit_flags = ImGuiColorEditFlags_Float | ImGuiColorEditFlags_HDR;
+                    if (custom_generator)
+                    {
+                        const auto custom_rng = []() {
+                            static auto rng          = std::default_random_engine{std::random_device{}()};
+                            static auto distribution = std::uniform_real_distribution<float>{0.f, 1.f};
+                            return distribution(rng);
+                        };
+                        gradient.widget(
+                            "Gradient",
+                            custom_rng,
+                            settings
+                        );
+                        gradient2.widget(
+                            "Gradient2",
+                            custom_rng,
+                            settings
+                        );
+                    }
+                    else
+                    {
+                        gradient.widget(
+                            "Gradient",
+                            settings
+                        );
+                        gradient2.widget(
+                            "Gradient2",
+                            settings
+                        );
+                    }
+                    ImGui::End();
+                },
             }
-            else
-            {
-                gradient.widget(
-                    "Gradient",
-                    settings
-                );
-                gradient2.widget(
-                    "Gradient2",
-                    settings
-                );
-            }
-            ImGui::End();
-        });
+        );
     }
     return exit_code;
 }
